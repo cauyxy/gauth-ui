@@ -62,7 +62,7 @@ Then export it from `src/index.ts` and import its CSS in `src/styles.css`. `rule
 
 ## The look does not change here by accident
 
-The components were moved from the gauthx apps with identical computed styles. A change to how a component looks is a design decision: get the owner's OK, then change the component, its guideline and the token together.
+A change to how a component looks is a design decision: get the owner's OK, then change the component, its guideline and the token together. The components started as copies of the gauthx ones; `docs/from-gauthx.md` lists every difference since.
 
 ## Two groups
 

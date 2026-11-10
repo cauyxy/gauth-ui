@@ -19,11 +19,12 @@ async function build(candidates: string[]) {
 }
 
 it('gives the tokens as utilities, and nothing from Tailwind\'s own palette', async () => {
-  const css = await build(['bg-ink', 'text-muted', 'text-sm', 'rounded-2xl', 'bg-red-500', 'shadow-lg', 'text-subtle'])
+  const css = await build(['bg-ink', 'text-muted', 'text-sm', 'rounded-2xl', 'font-control', 'bg-red-500', 'shadow-lg', 'text-subtle'])
   expect(css).toContain('.bg-ink')
   expect(css).toMatch(/--color-ink:\s*#21252e/)
   expect(css).toContain('.text-muted')
   expect(css).toContain('.rounded-2xl')
+  expect(css).toMatch(/\.font-control\s*\{[^}]*font-weight:\s*var\(--font-weight-control\)/)
   expect(css).not.toContain('.bg-red-500')
   expect(css).not.toContain('.shadow-lg')
   expect(css).not.toContain('.text-subtle')

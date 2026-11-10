@@ -5,7 +5,8 @@
  *
  *   pnpm build && node compare/run.ts [path to the gauthx checkout, default ../gauthx] [folder for screenshots]
  *
- * A change that must not alter the look reports 0 differences. A token change reports exactly the values it changed.
+ * The two differ on purpose now (see docs/from-gauthx.md), so read the list: a change here should add only the
+ * properties it meant to change. This is a tool for the switch, not a regression test of this package.
  */
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
