@@ -46,20 +46,70 @@ button {
   box-sizing: border-box;
 }
 
+/* Keyframes for the --gx-animate-* tokens. A keyframe says where a movement starts; the element's own style is where it ends. */
 @keyframes gx-fade-in {
   from {
     opacity: 0;
   }
 }
-/* Popovers grow out of what opened them. */
+@keyframes gx-fade-out {
+  to {
+    opacity: 0;
+  }
+}
 @keyframes gx-pop-in {
   from {
     opacity: 0;
     transform: scale(0.96);
   }
 }
+@keyframes gx-pop-out {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@keyframes gx-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@keyframes gx-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes gx-mark-right {
+  40% {
+    transform: scale(1.015);
+  }
+}
+@keyframes gx-mark-retry {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
 @keyframes gx-pulse {
   50% {
     opacity: 0.5;
+  }
+}
+@keyframes gx-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes gx-sweep {
+  from {
+    left: -33%;
+  }
+  to {
+    left: 100%;
   }
 }

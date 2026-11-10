@@ -2,19 +2,16 @@
   display: block;
   border-radius: var(--gx-radius-lg);
   background-color: color-mix(in oklab, var(--gx-color-ink) 7%, transparent);
-  animation: gx-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .gx-skeleton {
-    animation: none;
-  }
+  animation: var(--gx-animate-pulse);
 }
 
 .gx-page-skeleton {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  animation: gx-fade-in 0.2s ease-out 0.15s both;
+  /* It waits 150 ms, so a page whose data is already on the way never flashes it. */
+  animation: var(--gx-animate-fade-in);
+  animation-delay: var(--gx-dur-fast);
 }
 .gx-page-skeleton__title {
   display: flex;

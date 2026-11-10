@@ -105,6 +105,27 @@
   --gx-h-lg: 2.5rem; /* 40px */
   --gx-h-xl: 2.75rem; /* 44px. Student controls and touch targets */
 
+  /* Motion: every duration is multiplied by --gx-ms, which is 0 when the person asks for reduced motion. */
+  --gx-ms: 1;
+  --gx-dur-fast: calc(150ms * var(--gx-ms)); /* Hover, color, a chevron's turn, a popover or tooltip opening */
+  --gx-dur-base: calc(200ms * var(--gx-ms)); /* A change in place: a picked answer, a fade */
+  --gx-dur-enter: calc(260ms * var(--gx-ms)); /* Content that arrives: a drawer, a revealed hint, a card */
+  --gx-dur-mark: calc(360ms * var(--gx-ms)); /* Feedback on an answer */
+  --gx-ease-standard: cubic-bezier(0.4, 0, 0.2, 1); /* A change in place */
+  --gx-ease-enter: cubic-bezier(0.22, 1, 0.36, 1); /* Content that arrives: fast at first, then it settles */
+
+  /* Animations: one name for each kind of movement. Their keyframes are in base.css. */
+  --gx-animate-fade-in: gx-fade-in var(--gx-dur-base) var(--gx-ease-enter) both; /* Content that appears in place */
+  --gx-animate-fade-out: gx-fade-out var(--gx-dur-fast) var(--gx-ease-standard) both; /* Content that leaves */
+  --gx-animate-pop-in: gx-pop-in var(--gx-dur-fast) var(--gx-ease-enter) both; /* A popover or menu that grows out of what opened it */
+  --gx-animate-rise-in: gx-rise-in var(--gx-dur-enter) var(--gx-ease-enter) both; /* A hint, a worked step or a card that is revealed */
+  --gx-animate-slide-in: gx-slide-in var(--gx-dur-enter) var(--gx-ease-enter) both; /* A drawer from the left edge */
+  --gx-animate-mark-right: gx-mark-right var(--gx-dur-mark) var(--gx-ease-enter); /* A right answer: one small swell */
+  --gx-animate-mark-retry: gx-mark-retry var(--gx-dur-mark) ease-in-out; /* A wrong answer: a short side-to-side nudge, never red */
+  --gx-animate-pulse: gx-pulse calc(2s * var(--gx-ms)) cubic-bezier(0.4, 0, 0.6, 1) infinite; /* A skeleton block while content loads */
+  --gx-animate-spin: gx-spin calc(1s * var(--gx-ms)) linear infinite; /* A spinner */
+  --gx-animate-sweep: gx-sweep calc(1.4s * var(--gx-ms)) ease-in-out infinite; /* The segment of a bar with no known end */
+
   /* Avatar fills: a name always lands on the same one. */
   --gx-avatar-1: linear-gradient(135deg, #6cc6de, #2685ae);
   --gx-avatar-2: linear-gradient(135deg, #a49deb, #6556c8);
@@ -113,4 +134,10 @@
   --gx-avatar-5: linear-gradient(135deg, #7b95f7, #2e5ce5);
   --gx-avatar-6: linear-gradient(135deg, #f7c26b, #d9822b);
   --gx-avatar-edge: inset 0 0 0 1px rgb(255 255 255 / 0.18), 0 1px 2px rgb(33 37 46 / 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --gx-ms: 0;
+  }
 }

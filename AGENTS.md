@@ -14,6 +14,8 @@ src/components/          one component per file, with its styles and test
 src/styles.css           imports all of the above; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
+compare/                 compares each component with the gauthx one it replaces (pnpm compare)
+docs/from-gauthx.md      what changes for gauthx when it switches to this package
 design/README.md         the design rules: content, color, type, surfaces
 design/components/       one guideline per component
 design/tokens.json       the tokens for the Design System artifact. Generated.
@@ -36,10 +38,10 @@ Then export it from `src/index.ts` and import its CSS in `src/styles.css`. `rule
 - **Class names:** `gx-<component>` for the root, `gx-<component>__<part>` for a part, `gx-<component>--<variant>` for a variant or size.
 - **State is an attribute** in a component: `aria-checked`, `aria-current`, `:disabled`, `data-*`. A class helper for links cannot set an attribute, so it gives a state class (`gx-segmented__option--on`).
 - **No cascade layers.** A component's class must win over a product's own element rules (`button { color: inherit }`), and a layered rule loses to any rule that is not in a layer. A Tailwind product puts the whole file in a layer when it imports it (`@import 'gauth-ui/styles.css' layer(components)`), so its utilities win: `className="w-full"` works.
-- **Tokens only.** Colors, type sizes and shadows are `var(--gx-*)`. No hex, no `rgb()`, no literal `font-size`. If a value is missing, add a token to `tokens.css` and run `pnpm tokens`. Do not write the literal.
+- **Tokens only.** Colors, type sizes, shadows and durations are `var(--gx-*)`. No hex, no `rgb()`, no literal `font-size`. If a value is missing, add a token to `tokens.css` and run `pnpm tokens`. Do not write the literal.
 - **Hover goes inside `@media (hover: hover)`.**
 - **Reset what the browser adds.** A product without Tailwind has no CSS reset: a `<button>` sets its own `border`, `padding`, `background`, `font` and `margin`.
-- **A new animation that loops or moves an element stops under `prefers-reduced-motion`** (the Skeleton pulse, the Popover pop-in). Short color transitions and the PageSkeleton fade stay.
+- **Motion uses the motion tokens.** A duration is `var(--gx-dur-fast | base | enter | mark)`, an easing is `var(--gx-ease-standard | enter)`, and a named movement is `var(--gx-animate-*)`. No literal `150ms` or `2s`. Reduced motion is handled once: `--gx-ms` becomes 0, so do not write a `prefers-reduced-motion` query in a component. A loop then stops, so give its element a still state that reads correctly.
 
 ## Props
 

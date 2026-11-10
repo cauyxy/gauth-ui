@@ -84,6 +84,25 @@ Weights: 700 for titles and metrics, 600 for labels, rows and buttons, 400 for b
 - Controls have four heights: `--gx-h-sm` 30, `--gx-h-md` 34, `--gx-h-lg` 40, `--gx-h-xl` 44px. Staff pages use `md`; student pages and touch targets use `xl`.
 - Rows of cards share top and bottom edges. When one card is taller, the shorter one stretches and its action sits at the bottom.
 
+## Motion
+
+Motion says what changed and then stops. It is short, it never loops for decoration, and it never delays the next action.
+
+| Token       | Time   | Use                                                              |
+| ----------- | ------ | ---------------------------------------------------------------- |
+| `dur-fast`  | 150 ms | Hover, color, a chevron's turn, a popover or tooltip opening     |
+| `dur-base`  | 200 ms | A change in place: a picked answer, a fade                       |
+| `dur-enter` | 260 ms | Content that arrives: a drawer, a revealed hint, a card          |
+| `dur-mark`  | 360 ms | Feedback on an answer                                            |
+
+- Two easings: `ease-standard` for a change in place, `ease-enter` for content that arrives (fast at first, then it settles).
+- Named movements (`--gx-animate-*`, `animate-*` in Tailwind): `fade-in`, `fade-out`, `pop-in`, `rise-in`, `slide-in`, `pulse`, `spin`, `sweep`, `mark-right`, `mark-retry`.
+- Things leave faster than they arrive: an exit is `dur-fast`.
+- **A right answer** gets one small swell (`mark-right`). **A wrong answer** gets a short side-to-side nudge (`mark-retry`) in rose, never red, and the words "Not yet".
+- **Only three things loop:** a skeleton's pulse, a spinner, and the segment of a bar with no known end. Each one means "wait".
+- Hover changes color only. Text never moves or changes size on hover.
+- When a person asks for reduced motion, every duration is 0: changes are instant and loops stop.
+
 ## Components
 
 | Group    | Components                                                                                                              |

@@ -10,10 +10,11 @@
   outline: none;
   transform-origin: var(--radix-popover-content-transform-origin);
 }
-@media (prefers-reduced-motion: no-preference) {
-  .gx-popover {
-    animation: gx-pop-in 160ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
+.gx-popover[data-state='open'] {
+  animation: var(--gx-animate-pop-in);
+}
+.gx-popover[data-state='closed'] {
+  animation: gx-pop-out var(--gx-dur-fast) var(--gx-ease-standard) both;
 }
 .gx-popover__arrow {
   fill: var(--gx-color-white);

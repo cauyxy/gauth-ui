@@ -16,6 +16,24 @@ The Tailwind theme clears every color that is not a token, so a class with an ol
 
 The hairline had four strengths (8, 10, 12 and 20%). It now has two: `edge` (12%) and `edge-strong` (20%). `shadow-card` and `shadow-pop` take `edge`, so their 1px outline is a little firmer.
 
+## Motion
+
+gauthx spells each animation by hand (`animate-[fade-in_200ms_ease-out]`), at ten different durations. This package has four durations, two easings and ten named movements.
+
+| gauthx                                                    | gauth-ui                    | Change                         |
+| --------------------------------------------------------- | --------------------------- | ------------------------------ |
+| `animate-[fade-in_200ms_ease-out]`                        | `animate-fade-in`           | easing only                    |
+| `animate-[pop-in_…]` at 160, 220 and 260 ms               | `animate-pop-in` (150 ms)   | one speed                      |
+| `animate-[reveal_240ms_ease-out]`, `slide-reveal` (300 ms) | `animate-rise-in` (260 ms)  | one speed                      |
+| `animate-[drawer-in_260ms_…]`                             | `animate-slide-in`          | none                           |
+| `animate-[answer-pop_320ms_ease-out]`                     | `animate-mark-right` (360 ms) | 40 ms longer                 |
+| `animate-[answer-shake_360ms_ease-in-out]`, `slide-shake` | `animate-mark-retry`        | none                           |
+| `animate-[build-slide_1.4s_ease-in-out_infinite]`         | `animate-sweep`             | none                           |
+| `animate-spin`, `animate-pulse`                           | the same names              | they now stop for reduced motion |
+| `duration-200`                                            | `duration-(--gx-dur-base)`  | none                           |
+
+`motion-safe:` and `motion-reduce:` are no longer needed on these: `--gx-ms` handles reduced motion. Popover and Tooltip now also fade out when they close, and Tooltip fades in. The `motion` package is declared in all four apps and imported nowhere.
+
 ## Renamed in code
 
 | gauthx                                         | gauth-ui                                        |

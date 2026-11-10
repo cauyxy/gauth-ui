@@ -16,8 +16,8 @@ export const JSON_FILE = `${ROOT}design/tokens.json`
 
 export type Token = { name: string; value: string; usage: string }
 
-/** The families Tailwind has a theme namespace for. Control heights and avatar fills stay `--gx-*` only. */
-const TAILWIND = ['font', 'container', 'color', 'radius', 'text', 'shadow'] as const
+/** The families Tailwind has a theme namespace for. Control heights, durations and avatar fills stay `--gx-*` only. */
+const TAILWIND = ['font', 'container', 'color', 'radius', 'text', 'shadow', 'ease', 'animate'] as const
 const CLEARED = ['--color-*', '--text-*', '--shadow-*', '--inset-shadow-*', '--drop-shadow-*']
 
 /** Every `--gx-name: value;` under `:root`, with the comment above its group (or at the end of its line) as its usage. */
@@ -39,7 +39,7 @@ export function parse(css: string): Token[] {
   return tokens
 }
 
-const familyOf = (name: string) => name.slice(0, name.indexOf('-'))
+const familyOf = (name: string) => name.split('-')[0]!
 
 export function themeCss(tokens: Token[]) {
   const mapped = tokens.filter((t) => (TAILWIND as readonly string[]).includes(familyOf(t.name)))
