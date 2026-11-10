@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   check:
@@ -17,3 +21,39 @@ jobs:
       - run: pnpm test
       - run: pnpm build
       - run: pnpm site:build
+      - name: Save the checked site
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-site-${{ github.sha }}
+          path: site/dist
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency: site
+    environment:
+      name: production
+      url: https://ui.gauthx.app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24 }
+      - uses: actions/download-artifact@v4
+        with:
+          name: docs-site-${{ github.sha }}
+          path: site/dist
+      - name: Deploy the checked site
+        run: npx --yes wrangler@4.152.0 deploy --config site/wrangler.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Check the site answers
+        run: >-
+          curl --fail --silent --show-error
+          --retry 10 --retry-delay 6 --retry-all-errors
+          --max-time 15 --retry-max-time 180
+          --output /dev/null https://ui.gauthx.app/
