@@ -2,6 +2,7 @@
 /* The rules in AGENTS.md that a machine can check. A component that breaks one fails here, not in review. */
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { snippetsOf } from '../gallery/snippet.ts'
 import { staleIcons } from '../scripts/icons.ts'
 import { parse, stale } from '../scripts/tokens.ts'
 
@@ -52,16 +53,35 @@ it('core does not import learning', () => {
     for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/from '\.\.\/learning\//)
 })
 
-it('the docs site has a page for every component, with one block of examples', () => {
-  const site = read('site/content.ts')
-  const gallery = readdirSync(`${ROOT}gallery`)
-    .filter((file) => file.endsWith('.tsx'))
-    .map((file) => read(`gallery/${file}`))
-    .join('\n')
-  for (const name of readdirSync(`${ROOT}design/components`)) {
-    expect(site, `${name} has no page on the site`).toContain(`'${name}'`)
-    expect(gallery.split(`<Section title="${name}">`).length - 1, `${name} needs one block of examples in gallery/`).toBe(1)
-  }
+describe('examples', () => {
+  const names = readdirSync(`${ROOT}design/components`)
+  const groups = read('gallery/examples.ts')
+
+  it.each(names)('%s has examples that a product can copy', (name) => {
+    expect(groups, `${name} is in no group of gallery/examples.ts, so the gallery and the docs site do not show it`).toContain(`'${name}'`)
+    expect(existsSync(`${ROOT}gallery/examples/${name}.tsx`), `gallery/examples/${name}.tsx`).toBe(true)
+    const snippets = snippetsOf(read(`gallery/examples/${name}.tsx`))
+    expect(snippets.length, 'at least one `export function`').toBeGreaterThan(0)
+    for (const { name: example, code } of snippets) {
+      /* Every component the code draws is imported from the package or written in the snippet itself. */
+      const known = new Set([...code.matchAll(/import \{([^}]*)\}/g)].flatMap((m) => m[1]!.split(',').map((n) => n.trim().replace(/^type /, ''))))
+      for (const m of code.matchAll(/^(?:export )?(?:function|const|type) (\w+)/gm)) known.add(m[1]!)
+      const drawn = [...new Set([...code.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/(?<![\w.])<([A-Z]\w*)/g)].map((m) => m[1]!))]
+      expect(drawn.filter((tag) => !known.has(tag)), `${name} ${example}: used and not in the snippet`).toEqual([])
+      expect(code, `${name} ${example}: the snippet uses the component`).toMatch(/from 'gauth-ui(?:\/math)?'/)
+      expect(code, `${name} ${example}: gallery classes are not for a product`).not.toMatch(/className="[^"]*\bg-/)
+    }
+  })
+
+  it('no example file is left without a component', () => {
+    expect(readdirSync(`${ROOT}gallery/examples`).map((f) => f.replace(/\.tsx$/, '')).sort()).toEqual([...names].sort())
+  })
+
+  it('the icon example shows every icon', async () => {
+    const { ICONS } = await import('./core/icons')
+    const shown = read('gallery/examples/IconButton.tsx').match(/const ICONS: IconName\[\] = \[([\s\S]*?)\]/)![1]!.match(/[a-z-]+/g)!
+    expect([...shown].sort()).toEqual(Object.keys(ICONS).sort())
+  })
 })
 
 describe('math', () => {

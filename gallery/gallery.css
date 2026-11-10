@@ -1,6 +1,8 @@
 /* The gallery page only. Not part of the package. It loads the package as a product on Tailwind does. */
 @import 'tailwindcss';
 @import '../src/styles.css';
+/* The examples are written as a product writes its pages: with Tailwind classes. */
+@source './examples';
 
 body {
   background: var(--gx-color-canvas);
@@ -44,36 +46,13 @@ body {
   font-size: var(--gx-text-sm);
   font-weight: var(--gx-font-weight-title);
 }
-.g-row {
+/* One example: what it returns sits in a row that wraps. An example that needs a column makes its own. */
+.g-example {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gx-space-4);
 }
-.g-col {
-  display: grid;
-  gap: var(--gx-space-4);
-  max-width: 34rem;
-}
-/* A line of words with formulas in it. */
-.g-math-line {
-  line-height: var(--gx-leading-body);
-}
-/* The icon set, each with its name. */
-.g-icons {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
-  gap: var(--gx-space-3);
-  margin-top: var(--gx-space-5);
-}
-.g-icon {
-  display: flex;
-  align-items: center;
-  gap: var(--gx-space-2);
-  color: var(--gx-color-muted);
-  font-size: var(--gx-text-xs);
-}
-.g-icon > svg {
-  flex: none;
-  color: var(--gx-color-ink);
+.g-example + .g-example {
+  margin-top: var(--gx-space-4);
 }

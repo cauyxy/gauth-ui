@@ -4,15 +4,18 @@ import { createRoot } from 'react-dom/client'
 import '../src/math/math.css'
 import '../gallery/gallery.css'
 import './site.css'
-import { SectionView } from '../gallery/section'
+import { examplesOf, GROUPS } from '../gallery/examples'
 import pkg from '../package.json'
+import { Button } from '../src/components/Button'
 import { Chip } from '../src/components/Chip'
+import { IconButton } from '../src/components/IconButton'
 import { Segmented } from '../src/components/Segmented'
 import { Select } from '../src/components/Select'
 import { Toaster } from '../src/components/Toast'
+import { Icon } from '../src/core/Icon'
 import { LocaleProvider } from '../src/core/locale'
 import type { Locale } from '../src/core/messages'
-import { GROUPS, GUIDELINES, PAGES, pathOf, type Page } from './content'
+import { GUIDELINES, PAGES, pathOf, type Page } from './content'
 import { Markdown } from './markdown'
 import { TokensPage } from './tokens'
 
@@ -42,50 +45,80 @@ function onLinkClick(event: MouseEvent) {
   go(href)
 }
 
-/** Every component, live: a card for each block of examples. The title of a card opens the component's page. */
+/** Every component, live: a card for each, with all its examples. The title of a card opens the component's page. */
 function Home() {
   return GROUPS.map((group) => (
     <section key={group.slug}>
       <h2 className="s-group">{group.title}</h2>
       <div className="s-grid">
-        <SectionView.Provider
-          value={({ title, of, children }) => (
-            <section className="s-card">
-              <h3>
-                <a href={pathOf(of)}>{title}</a>
-              </h3>
-              {children}
-            </section>
-          )}
-        >
-          <group.Examples />
-        </SectionView.Provider>
+        {group.names.map((name) => (
+          <section key={name} className="s-card">
+            <h3>
+              <a href={pathOf(name)}>{name}</a>
+            </h3>
+            {examplesOf(name).map((example) => (
+              <div key={example.name} className="s-card__example">
+                <example.Show />
+              </div>
+            ))}
+          </section>
+        ))}
       </div>
     </section>
   ))
 }
 
-/** One component: what it is, its examples, then its rules. The other blocks of its group are not drawn. */
-function Component({ name, slug }: { name: string; slug: string }) {
-  const group = GROUPS.find((g) => g.slug === slug)!
+/** The code of one example, closed until it is asked for, with a button that copies it. */
+function Code({ code }: { code: string }) {
+  const [open, setOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(false), 1500)
+    return () => clearTimeout(timer)
+  }, [copied])
+  return (
+    <>
+      <div className="s-example__bar">
+        <Button variant="ghost" size="sm" aria-expanded={open} onClick={() => setOpen(!open)}>
+          Code
+          <Icon name="chevron-down" size={16} />
+        </Button>
+      </div>
+      {open ? (
+        <div className="s-code" lang="en">
+          <pre>
+            <code>{code}</code>
+          </pre>
+          <IconButton size="sm" variant="outline" label={copied ? 'Copied' : 'Copy the code'} className="s-code__copy" onClick={() => void navigator.clipboard?.writeText(code).then(() => setCopied(true))}>
+            <Icon name={copied ? 'check' : 'copy'} />
+          </IconButton>
+        </div>
+      ) : null}
+    </>
+  )
+}
+
+/** One component: what it is, each example with its code, then its rules. */
+function Component({ name }: { name: string }) {
   const { lead, rules } = GUIDELINES[name]!
+  const examples = examplesOf(name)
   return (
     <>
       <div className="s-lead">
         <Markdown text={lead} />
       </div>
-      <SectionView.Provider
-        value={({ title, of, children }) =>
-          of === name ? (
-            <section className="s-preview">
-              {title === of ? null : <h2>{title}</h2>}
-              {children}
-            </section>
-          ) : null
-        }
-      >
-        <group.Examples />
-      </SectionView.Provider>
+      {examples.map((example) => (
+        <section key={example.name} className="s-example">
+          {examples.length > 1 ? <h2>{example.title}</h2> : null}
+          <div className="s-example__card">
+            <div className="s-preview">
+              <example.Show />
+            </div>
+            <Code code={example.code} />
+          </div>
+        </section>
+      ))}
       <div className="s-rules">
         <Markdown text={rules} />
       </div>
@@ -96,7 +129,7 @@ function Component({ name, slug }: { name: string; slug: string }) {
 function Body({ page }: { page: Page }) {
   if (page.kind === 'home') return <Home />
   if (page.kind === 'tokens') return <TokensPage />
-  if (page.kind === 'component') return <Component key={page.name} name={page.name} slug={page.slug} />
+  if (page.kind === 'component') return <Component key={page.name} name={page.name} />
   return <Markdown text={page.body} />
 }
 

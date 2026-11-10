@@ -4,7 +4,7 @@
  *   node site/shot.ts <folder for the screenshots> [address of a running site]
  *
  * Without an address it serves the site from this folder. It prints what a page must never have: an error in the console,
- * content wider than the window, a component's page with no example on it, or components without their styles.
+ * content wider than the window, a component's page with no example or an example with no code, or components without their styles.
  */
 import { mkdirSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -51,6 +51,8 @@ for (const [size, width] of [['desktop', 1280], ['phone', 375]] as const) {
     if (title !== name) problems.push(`${size} ${at}: the page shows "${title}"`)
     const preview = page.locator('.s-preview').first()
     if ((await preview.count()) === 0 || (await preview.evaluate((el) => el.querySelector('[class*="gx-"]') === null))) problems.push(`${size} ${at}: no example`)
+    const [examples, codes] = [await page.locator('.s-example').count(), await page.locator('.s-example__bar button').count()]
+    if (examples !== codes) problems.push(`${size} ${at}: ${examples} examples, ${codes} with code`)
   }
 
   /* The styles are there: the classes are names only until Tailwind has made their CSS from the tokens. */
@@ -60,6 +62,12 @@ for (const [size, width] of [['desktop', 1280], ['phone', 375]] as const) {
     return `${s.backgroundColor} ${s.height} ${s.fontWeight} ${s.borderRadius}`
   })
   if (ink !== 'rgb(33, 37, 46) 34px 500 8px') problems.push(`${size} ${at}: the ink button is drawn as "${ink}"`)
+
+  /* An example's code opens, and it is what a product writes: imports from the package. */
+  await page.locator('.s-example__bar button').first().click()
+  const code = (await page.locator('.s-code code').first().textContent()) ?? ''
+  if (!code.includes("import { Button } from 'gauth-ui'") || !code.includes('<Button variant="soft">Review</Button>')) problems.push(`${size} ${at}: the code of the first example is "${code.slice(0, 80)}"`)
+  await page.screenshot({ path: `${OUT}/${size}-code.png`, fullPage: true })
 
   if (size === 'desktop') {
     /* The floating components open on their own pages, and a toast shows once. */

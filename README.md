@@ -79,7 +79,7 @@ import { LocaleProvider } from 'gauth-ui'
 
 **Learning.** AiStatus · AnswerOption · Composer · FollowUps · Generating · LevelBar · LevelChip · LevelLadder · LevelMark · Message · Quote · ReplyActions · Reveal · StepProgress · WorkedSteps
 
-Each has a guideline in [`design/components/`](design/components). `pnpm gallery` shows them all on one page, in both languages.
+Each has a guideline in [`design/components/`](design/components) and examples with their code at [ui.gauthx.app](https://ui.gauthx.app). `pnpm gallery` shows them all on one page, in both languages.
 
 ## License
 

@@ -17,8 +17,9 @@ src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and 
 src/styles.css           what a product imports after Tailwind: the tokens, the theme, the base styles, and where Tailwind finds the classes; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
-gallery/                 a block of examples for each component, all on one page, in both languages (pnpm gallery); shot.ts, optical.ts and pixels.ts check it in Chrome
-site/                    the docs site (ui.gauthx.app): every component live on the first page, a page for each with its examples first, then the design rules and the tokens
+gallery/examples/        the examples: one file for each component, each `export function` one example a product can copy
+gallery/                 every example on one page, in both languages (pnpm gallery); shot.ts, optical.ts and pixels.ts check it in Chrome
+site/                    the docs site (ui.gauthx.app): every component live on the first page, a page for each with its examples and their code first, then the design rules and the tokens
 GLOSSARY.md              what each shared word means, in en and es
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
 scripts/icons.ts         the list of icons; copies their drawings from Lucide into src/core/icons.ts
@@ -29,15 +30,18 @@ design/components/       one guideline per component
 design/tokens.json       the tokens for the Design System artifact. Generated.
 ```
 
-## A component is three files
+## A component is four files
 
 ```
 src/components/Button.tsx          the component, with its styles as Tailwind classes
 src/components/Button.test.tsx     its test
 design/components/Button/README.md when to use it
+gallery/examples/Button.tsx        its examples
 ```
 
-A learning component has the same three files, under `src/learning/`. Then export it from `src/index.ts` and show it in `gallery/`. `rules.test.ts` fails when one of these is missing. `Button.tsx` is the reference for how the classes are written.
+A learning component has the same four files, with the first two under `src/learning/`. Then export it from `src/index.ts` and add its name to `GROUPS` in `gallery/examples.ts`. `rules.test.ts` fails when one of these is missing. `Button.tsx` is the reference for how the classes are written.
+
+**An example is code a product can copy.** Each `export function` in the example file is one example: the gallery and the docs site draw it, and the site shows its code with the imports written from `gauth-ui`. So an example imports only from `../../src`, `../../src/math` and `react`, keeps its own state, and lays itself out with Tailwind classes as a product would. A helper it needs (a list of options, a small drawing) is a `const` or `function` in the same file that is not exported; the site shows it with the example.
 
 ## Styles
 
@@ -123,4 +127,4 @@ Two things ship from `main`: the package on a version tag, the docs site after e
 
 **The docs site, to ui.gauthx.app.** `ci.yml` checks and builds every pull request and push to `main`. On `main`, the deploy job publishes that run's site artifact to Cloudflare as `gauth-ui-site`; a failed check blocks deployment. To redeploy manually, run `gh workflow run ci.yml --ref main`. It needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets for the account holding `gauthx.app`. The token must allow Workers Scripts Write on the account and zone/DNS access for the custom domain in `site/wrangler.jsonc`.
 
-The site has no content of its own. It reads `README.md`, `design/README.md`, `design/components/*/README.md`, `GLOSSARY.md`, `design/tokens.json` and the gallery, so a change to a rule or a component is on the site at the next deploy. The site is for looking at the components: the first page shows them all, and a component's page shows its examples before its rules. A new component gets one `<Section title="Name">` in `gallery/` and its name in `GROUPS` in `site/content.ts`; `rules.test.ts` fails when either is missing. `pnpm site` serves it locally.
+The site has no content of its own. It reads `README.md`, `design/README.md`, `design/components/*/README.md`, `GLOSSARY.md`, `design/tokens.json` and the gallery, so a change to a rule or a component is on the site at the next deploy. The site is for looking at the components: the first page shows them all, and a component's page shows each example, with its code one click away, before its rules. A new component gets `gallery/examples/<Name>.tsx` and its name in `GROUPS` in `gallery/examples.ts`; `rules.test.ts` fails when either is missing. `pnpm site` serves it locally.

@@ -233,6 +233,15 @@ html {
   font-size: var(--gx-text-sm);
   font-weight: var(--gx-font-weight-title);
 }
+.s-card__example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gx-space-4);
+}
+.s-card__example + .s-card__example {
+  margin-top: var(--gx-space-4);
+}
 .s-card > h3 > a {
   border-radius: var(--gx-radius-sm);
   outline: 0;
@@ -248,7 +257,7 @@ html {
   }
 }
 
-/* A component's page: what it is in one line, its examples in a frame, then its rules in small text. */
+/* A component's page: what it is in one line, each example in a frame with its code under it, then its rules in small text. */
 .s-lead {
   margin: calc(-1 * var(--gx-space-3)) 0 var(--gx-space-6);
   color: var(--gx-color-muted);
@@ -256,31 +265,64 @@ html {
 .s-lead .s-prose {
   color: inherit;
 }
-.s-preview {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 16rem;
-  margin-bottom: var(--gx-space-4);
-  padding: var(--gx-space-8) var(--gx-space-6);
+.s-example {
+  margin-bottom: var(--gx-space-6);
+}
+.s-example > h2 {
+  margin: 0 0 var(--gx-space-2);
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-title);
+}
+.s-example__card {
   border-radius: var(--gx-radius-2xl);
   background: var(--gx-color-white);
   box-shadow: var(--gx-shadow-edge);
 }
-.s-preview > h2 {
-  margin: 0 0 var(--gx-space-5);
-  font-size: var(--gx-text-sm);
-  font-weight: var(--gx-font-weight-title);
-}
-.s-preview > .g-row {
+/* What an example returns sits in a centered row that wraps. An example that needs a column makes its own. */
+.s-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
+  gap: var(--gx-space-4);
+  min-height: 12rem;
+  padding: var(--gx-space-8) var(--gx-space-6);
 }
-.s-preview > .g-col {
-  width: 100%;
-  margin-inline: auto;
+.s-example__bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--gx-space-1-5) var(--gx-space-2);
+  border-top: 1px solid var(--gx-color-line);
+}
+.s-example__bar svg {
+  transition: rotate var(--gx-dur-fast) var(--gx-ease-standard);
+}
+.s-example__bar [aria-expanded='true'] svg {
+  rotate: 180deg;
+}
+.s-code {
+  position: relative;
+  border-top: 1px solid var(--gx-color-line);
+}
+.s-code > pre {
+  max-height: 30rem;
+  margin: 0;
+  padding: var(--gx-space-4) var(--gx-space-5);
+  overflow: auto;
+  border-radius: 0 0 var(--gx-radius-2xl) var(--gx-radius-2xl);
+  background: var(--gx-color-surface);
+  font-family: var(--gx-font-mono);
+  font-size: var(--gx-text-xs);
+  line-height: var(--gx-leading-body);
+  tab-size: 2;
+}
+.s-code__copy {
+  position: absolute;
+  top: var(--gx-space-2);
+  right: var(--gx-space-2);
 }
 .s-rules {
-  margin-top: var(--gx-space-6);
+  margin-top: var(--gx-space-8);
 }
 .s-rules .s-prose {
   color: var(--gx-color-ink-soft);
@@ -398,7 +440,6 @@ html {
     gap: var(--gx-space-1);
   }
   .s-preview {
-    min-height: 14rem;
     padding: var(--gx-space-6) var(--gx-space-4);
   }
 }
