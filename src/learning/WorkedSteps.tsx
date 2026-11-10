@@ -4,7 +4,7 @@ import { cx } from '../core/cx'
 /** One line of work. `flag` marks it as the step that went wrong and says what happened ("Sign dropped here"). */
 export type WorkedStep = { text: ReactNode; flag?: ReactNode }
 
-/** A student's or a solution's steps, numbered, in mono. A flagged step is the one to look at again. */
+/** A student's or a solution's steps, numbered. Plain text is in mono; a formula is a `Tex`. A flagged step is the one to look at again. */
 export function WorkedSteps({ steps, className }: { steps: readonly WorkedStep[]; className?: string }) {
   return (
     <ol className={cx('gx-worked-steps', className)}>

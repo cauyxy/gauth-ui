@@ -6,8 +6,8 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   build: {
-    lib: { entry: 'src/index.ts', formats: ['es'], fileName: 'index' },
-    rollupOptions: { external: [/^react($|\/)/, /^react-dom($|\/)/, /^radix-ui($|\/)/] },
+    lib: { entry: { index: 'src/index.ts', math: 'src/math/index.ts' }, formats: ['es'] },
+    rollupOptions: { external: [/^react($|\/)/, /^react-dom($|\/)/, /^radix-ui($|\/)/, /^katex($|\/)/] },
   },
   test: { environment: 'jsdom', globals: true, setupFiles: ['./vitest.setup.ts'], css: false },
 })

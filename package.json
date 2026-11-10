@@ -18,7 +18,12 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./math": {
+      "types": "./dist/math/index.d.ts",
+      "import": "./dist/math.js"
+    },
     "./styles.css": "./dist/styles.css",
+    "./math.css": "./dist/math.css",
     "./tokens.css": "./dist/tokens.css",
     "./theme.css": "./dist/theme.css"
   },
@@ -44,6 +49,7 @@
     "react-dom": ">=19"
   },
   "dependencies": {
+    "katex": "^0.19.1",
     "radix-ui": "^1.8.1"
   },
   "devDependencies": {

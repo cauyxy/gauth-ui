@@ -73,6 +73,9 @@ gauthx spells each animation by hand (`animate-[fade-in_200ms_ease-out]`), at te
 - Import the styles in CSS as `@import 'gauth-ui/styles.css' layer(components);` so utilities on a component still win.
 - Keyboard focus is one ring everywhere: a 2px blue outline, 1 or 2px away from the control. `Button` drew it as a box shadow before; `Segmented` and `Switch` had none.
 - `Segmented` is one Tab stop: the arrow keys, Home and End move the pick. Before, Tab went through every option.
+- A formula is smaller: 1.1em, not KaTeX's 1.21em, so its numbers match the numbers in Google Sans. Places that set a size on `Tex` by hand (`text-base` in apps/teach `review.tsx`) need a look.
+- `Tex` now also writes MathML for screen readers (gauthx passed `output: 'html'`), and unreadable TeX is `attempted-ink`, not KaTeX's red.
+- `RichText` keeps the punctuation next to a formula on the formula's line.
 - `PageSkeleton` says "Loading" from the language list. Under `<LocaleProvider locale="es">` it says "Cargando".
 
 ## Built by hand in gauthx, a component here
@@ -89,6 +92,7 @@ Each row is a place where gauthx writes the classes itself today. The switch is 
 | Hand-written inputs on sign-in, sign-up and authoring               | `Field`, `Input`, `Textarea`, `Select`, `Checkbox` |
 | `MASTERY_COLOR`, `MASTERY_INK`, `MASTERY_SOFT` in `packages/task`   | the level tokens; delete the second copy   |
 | Level names and "Not yet" written in each page                      | `useLocale().messages`                     |
+| `@gauthx/math`: `Tex`, `RichText`, `MATH`, `wordsIn`, `closedMath`, `unescapeDollars` | the same names from `gauth-ui/math`; import `gauth-ui/math.css` once, in CSS |
 
 ## Stays in gauthx
 

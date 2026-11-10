@@ -3,6 +3,7 @@
  *   dist/styles.css   src/styles.css with every @import inlined (tokens, base, all components)
  *   dist/tokens.css   the tokens alone
  *   dist/theme.css    the tokens as a Tailwind v4 theme
+ *   dist/math.css     KaTeX's styles (still an import of the katex package) and how a formula sits in Gauth text
  */
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
@@ -22,4 +23,5 @@ if (import.meta.main) {
   writeFileSync(`${ROOT}dist/styles.css`, inline(`${ROOT}src/styles.css`))
   copyFileSync(`${ROOT}src/styles/tokens.css`, `${ROOT}dist/tokens.css`)
   copyFileSync(`${ROOT}src/styles/theme.css`, `${ROOT}dist/theme.css`)
+  copyFileSync(`${ROOT}src/math/math.css`, `${ROOT}dist/math.css`)
 }

@@ -1,0 +1,35 @@
+/* gauth-ui/math.css: KaTeX's own styles and fonts, then how a formula sits in Gauth text. Import it after gauth-ui/styles.css. */
+@import 'katex/dist/katex.min.css';
+
+.gx-tex {
+  color: inherit;
+}
+/*
+ * KaTeX sets math at 1.21em, sized for a serif text face. Google Sans has taller numbers, so at 1.21em a "28" in a
+ * formula is 13% taller than the "28" in the words before it. At 1.1em the numbers have one height (within 2%).
+ */
+.gx-tex .katex {
+  font-size: 1.1em;
+  line-height: var(--gx-leading-title);
+}
+/* Words and units inside a formula ("5 cm", "and") are the same type as the words around it, at their size. */
+.gx-tex .katex .text {
+  font-family: var(--gx-font-sans);
+  font-size: calc(1em / 1.1);
+}
+
+/* On its own line, centered. A formula wider than the page scrolls in its own box; the page does not. */
+.gx-tex--display {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.gx-tex--display > .katex-display {
+  margin: var(--gx-space-3) 0;
+}
+
+/* A formula and the punctuation that touches it stay on one line. */
+.gx-rich-text__keep {
+  white-space: nowrap;
+}

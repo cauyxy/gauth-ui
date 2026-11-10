@@ -13,6 +13,7 @@ src/styles/base.css      page defaults, the fallback font, keyframes
 src/core/                cx, the icons, the language: messages.ts (every word, en and es) and locale.tsx
 src/components/          core components: one per file, with its styles and test
 src/learning/            learning components, same shape
+src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and math.css
 src/styles.css           imports all of the above; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
@@ -87,7 +88,9 @@ A change to how a component looks is a design decision: get the owner's OK, then
 
 learning imports core. core never imports learning.
 
-A learning component owns the shared vocabulary: the level names and colors, and words such as "Not yet". They come from `messages.ts`, so every product says the same thing. It takes content (a stem, a formula, a figure) as children and has no dependency on a math renderer or on a product's data types.
+A learning component owns the shared vocabulary: the level names and colors, and words such as "Not yet". They come from `messages.ts`, so every product says the same thing. It takes content (a stem, a formula, a figure) as children and has no dependency on a product's data types.
+
+**math** (`src/math/`) is a third, small group with its own entry: `gauth-ui/math` and `gauth-ui/math.css`. It holds `Tex` and `RichText`, on KaTeX. It is apart so that a product with no formulas does not load KaTeX and its fonts. core and learning do not import it: a formula comes to them as children.
 
 ## What does not belong here
 

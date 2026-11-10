@@ -51,3 +51,7 @@ body {
   gap: var(--gx-space-4);
   max-width: 34rem;
 }
+/* A line of words with formulas in it. */
+.g-math-line {
+  line-height: var(--gx-leading-body);
+}

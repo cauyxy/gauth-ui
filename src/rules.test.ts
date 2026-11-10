@@ -63,6 +63,29 @@ it('core does not import learning', () => {
     for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/from '\.\.\/learning\//)
 })
 
+describe('math', () => {
+  const css = read('src/math/math.css').replace(/\/\*[\s\S]*?\*\//g, '')
+
+  it('is its own entry: the main entry and its styles do not load KaTeX', () => {
+    expect(read('src/index.ts')).not.toContain('math')
+    expect(read('src/styles.css')).not.toContain('math')
+    for (const dir of ['components', 'learning', 'core'])
+      for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/katex|\.\.\/math\//)
+  })
+
+  it.each(['Tex', 'RichText'])('%s has its test, guideline and export', (name) => {
+    expect(existsSync(`${ROOT}src/math/${name}.test.tsx`)).toBe(true)
+    expect(existsSync(`${ROOT}design/components/${name}/README.md`)).toBe(true)
+    expect(read('src/math/index.ts')).toContain(`'./${name}'`)
+  })
+
+  it('styles use tokens only', () => {
+    expect(css.match(/#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab)\(/gi) ?? [], 'color literals').toEqual([])
+    const unknown = (css.match(/var\(--gx-[\w-]+/g) ?? []).map((v) => v.slice(4)).filter((v) => !tokens.has(v))
+    expect(unknown, 'tokens that do not exist').toEqual([])
+  })
+})
+
 describe.each(components)('%s', (name, dir) => {
   const cssPath = `src/${dir}/${kebab(name)}.css`
 

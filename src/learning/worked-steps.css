@@ -11,6 +11,8 @@
 /* Every step keeps room for the bar, so the numbers line up when one step is flagged. */
 .gx-worked-steps__step {
   display: flex;
+  /* The number stands on the baseline of its step, also when the step is a formula in another face. */
+  align-items: baseline;
   gap: var(--gx-space-3);
   padding: var(--gx-space-0-5) var(--gx-space-2);
   border-inline-start: 3px solid transparent;

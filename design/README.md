@@ -83,6 +83,14 @@ Line height has four steps: `leading-figure` 1 for a metric, `leading-title` 1.1
 - A column of numbers is right-aligned with tabular numbers.
 - No `-webkit-font-smoothing: antialiased`: on macOS it makes the stems thin and washed out.
 
+## Formulas
+
+- KaTeX draws every formula. `Tex` for one formula, `RichText` for words with formulas in them.
+- A formula in a line of words stands on their baseline, and its numbers are as tall as theirs. KaTeX's own size (1.21em) is for a serif text face; next to Google Sans it is 1.1em.
+- A formula is ink, or the color of the text it is in. Words and units inside a formula are Google Sans.
+- A formula on its own line is centered and scrolls in its own box when it is wider than the page.
+- The punctuation after a formula stays on the formula's line.
+
 ## Optical alignment
 
 Align what the eye sees, the ink, not the box. `node gallery/optical.ts` measures it in Chrome and fails when a place is off by half a pixel or more.
@@ -90,6 +98,7 @@ Align what the eye sees, the ink, not the box. `node gallery/optical.ts` measure
 - **A label in a control.** The control's middle lies between the middle of the capitals and the middle of the lowercase letters. Google Sans does this by itself at the four control heights, so a label needs no nudge. Do not set a `line-height` on a one-line label to "fix" it.
 - **A letter or number in a round mark** (an answer's letter, a step's number, initials): the capitals' middle is the mark's middle, both ways.
 - **A mark beside text** (a checkbox, a level mark, a spinner): its middle is on the first line of the text. When the text wraps, the mark stays on the first line; it does not move to the middle of the block.
+- **A formula in a line of words:** one baseline, and numbers of one height (within 5%).
 - **An icon at the end of a control.** An icon's strokes do not fill its 20px box, so the icon sits 2px closer to the edge than text does. `Button` and `Select` do this by themselves.
 - **Icons are drawn on one grid:** 20px box, 1.8px stroke, round ends, strokes inside the middle 10 to 14px. An icon from another set sits wrong next to them.
 
@@ -164,3 +173,9 @@ Learning: what an education product shows.
 | Skill levels | [LevelMark](components/LevelMark/README.md), [LevelChip](components/LevelChip/README.md), [LevelLadder](components/LevelLadder/README.md), [LevelBar](components/LevelBar/README.md) |
 | Questions    | [AnswerOption](components/AnswerOption/README.md), [Reveal](components/Reveal/README.md), [WorkedSteps](components/WorkedSteps/README.md), [StepProgress](components/StepProgress/README.md) |
 | Gauth AI     | [Composer](components/Composer/README.md), [Generating](components/Generating/README.md) |
+
+Math: formulas, from `gauth-ui/math`.
+
+| Group    | Components |
+| -------- | ---------- |
+| Formulas | [Tex](components/Tex/README.md), [RichText](components/RichText/README.md) |

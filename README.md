@@ -52,6 +52,18 @@ Add the theme to get the tokens as utilities (`bg-ink`, `text-muted`, `rounded-2
 
 Import the styles in CSS with `layer(components)`, not from JavaScript. A utility on a component then wins: `<Button className="w-full">`.
 
+## Formulas
+
+Formulas are drawn by KaTeX, from their own entry, so a product with no math does not load it:
+
+```tsx
+import 'gauth-ui/math.css'
+import { RichText, Tex } from 'gauth-ui/math'
+
+<RichText text="The legs are 6 and 8, so $c^2 = 100$." />
+<Tex display tex="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}" />
+```
+
 ## Language
 
 Components speak English by default. Set the language once, at the root:
@@ -67,6 +79,8 @@ import { LocaleProvider } from 'gauth-ui'
 ## Components
 
 **Core.** Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · Dialog · Dot · EmptyState · Field · IconBox · Input · Menu · Meter · PageTitle · Panel · Popover · Progress · Segmented · Select · Skeleton · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
+
+**Math** (`gauth-ui/math`). RichText · Tex
 
 **Learning.** AnswerOption · Composer · Generating · LevelBar · LevelChip · LevelLadder · LevelMark · Reveal · StepProgress · WorkedSteps
 
