@@ -86,6 +86,10 @@ import { LocaleProvider } from 'gauth-ui'
 
 Each has a guideline in [`design/components/`](design/components). `pnpm gallery` shows them all on one page, in both languages.
 
+## License
+
+All rights reserved. See `LICENSE`. The package is on npm so that Gauth products can install it; that gives no right to use it elsewhere.
+
 ## Credits
 
 The icons are from [Lucide](https://lucide.dev) (ISC). See `THIRD-PARTY-NOTICES.md`.
