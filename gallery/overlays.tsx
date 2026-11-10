@@ -5,12 +5,12 @@ import { EmptyState } from '../src/components/EmptyState'
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '../src/components/Menu'
 import { toast, Toaster } from '../src/components/Toast'
 import { Icon } from '../src/core/Icon'
+import { Section } from './section'
 
 export default function Overlays() {
   return (
     <>
-      <section className="g-section">
-        <h2>Dialog</h2>
+      <Section title="Dialog">
         <div className="g-row">
           <Dialog>
             <DialogTrigger asChild>
@@ -44,10 +44,9 @@ export default function Overlays() {
             </DialogContent>
           </Dialog>
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Menu</h2>
+      <Section title="Menu">
         <div className="g-row">
           <Menu>
             <MenuTrigger asChild>
@@ -65,10 +64,9 @@ export default function Overlays() {
             </MenuContent>
           </Menu>
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Toast</h2>
+      <Section title="Toast">
         <div className="g-row">
           <Button variant="outline" onClick={() => toast('Link copied')}>
             Copy link
@@ -81,10 +79,9 @@ export default function Overlays() {
           </Button>
         </div>
         <Toaster />
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>EmptyState</h2>
+      <Section title="EmptyState">
         <div className="g-row" style={{ alignItems: 'stretch' }}>
           <EmptyState title="No practice sent yet" description="Pick a skill the class needs." action={<Button>Send practice</Button>} />
           <EmptyState
@@ -94,10 +91,9 @@ export default function Overlays() {
           />
           <EmptyState icon={<Icon name="search" />} title="No students match “Devn”" />
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Callout</h2>
+      <Section title="Callout">
         <div className="g-col">
           <Callout>Scores update after each practice set.</Callout>
           <Callout tone="warn">2 students have no graded answers yet.</Callout>
@@ -107,7 +103,7 @@ export default function Overlays() {
             6 problems on HSG.SRT.B.5, checked against the answer key.
           </Callout>
         </div>
-      </section>
+      </Section>
     </>
   )
 }

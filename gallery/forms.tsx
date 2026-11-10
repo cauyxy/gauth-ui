@@ -4,6 +4,7 @@ import { Field } from '../src/components/Field'
 import { Input } from '../src/components/Input'
 import { Select } from '../src/components/Select'
 import { Textarea } from '../src/components/Textarea'
+import { Section } from './section'
 
 const DUE = [
   { value: 'thu', label: 'Thu, Nov 12' },
@@ -48,8 +49,7 @@ export default function Forms() {
 
   return (
     <>
-      <section className="g-section">
-        <h2>Field</h2>
+      <Section title="Field">
         <div className="g-col">
           <Field label="Class name" hint="Students see this name.">
             <Input value={className} onChange={setClassName} />
@@ -67,10 +67,9 @@ export default function Forms() {
             <Textarea value={note} onChange={setNote} />
           </Field>
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Input</h2>
+      <Section title="Input">
         <div className="g-col">
           <div className="g-row">
             <Input label="Class name, empty" value={emptyMd} onChange={setEmptyMd} placeholder="Geometry · Period 3" />
@@ -90,10 +89,9 @@ export default function Forms() {
             <Input variant="search" size="xl" label="Find a skill" value={findXl} onChange={setFindXl} placeholder="Find a skill" />
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Textarea</h2>
+      <Section title="Textarea">
         <div className="g-col">
           <Textarea label="Note to students, empty" value={noteEmpty} onChange={setNoteEmpty} placeholder="Show your work on Q3." />
           <Textarea label="Note to students, filled" value={note} onChange={setNote} />
@@ -101,10 +99,9 @@ export default function Forms() {
           <Textarea label="Feedback, error" aria-invalid={!feedback} value={feedback} onChange={setFeedback} placeholder="Name the step that went wrong." rows={2} />
           <Textarea size="xl" label="Explain your answer" value={noteXl} onChange={setNoteXl} placeholder="Explain how you found x." />
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Select</h2>
+      <Section title="Select">
         <div className="g-col">
           <div className="g-row">
             <Select label="Due" value={due} options={DUE} onChange={setDue} />
@@ -117,10 +114,9 @@ export default function Forms() {
             <Select size="xl" label="Class, disabled" value={period} options={PERIODS} onChange={setPeriod} disabled />
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Checkbox</h2>
+      <Section title="Checkbox">
         <div className="g-col">
           {STANDARDS.map((s) => (
             <Checkbox
@@ -142,7 +138,7 @@ export default function Forms() {
             <span>Maya Johnson</span>
           </div>
         </div>
-      </section>
+      </Section>
     </>
   )
 }

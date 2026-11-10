@@ -1,0 +1,327 @@
+/* The docs site only. Not part of the package. It is built with the package's own tokens and components. */
+html {
+  scroll-padding-top: var(--gx-space-6);
+}
+.s-shell {
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr);
+  grid-template-areas: 'top top' 'nav main';
+  max-width: var(--gx-container-page);
+  min-height: 100vh;
+  margin: 0 auto;
+}
+.s-top {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: var(--gx-space-3);
+  padding: var(--gx-space-4) var(--gx-space-6);
+  border-bottom: 1px solid var(--gx-color-line);
+  background: var(--gx-color-white);
+}
+.s-brand {
+  font-size: var(--gx-text-base);
+  font-weight: var(--gx-font-weight-strong);
+  letter-spacing: var(--gx-tracking-title);
+}
+.s-top__end {
+  margin-inline-start: auto;
+}
+
+.s-nav {
+  grid-area: nav;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: var(--gx-space-6) var(--gx-space-4) var(--gx-space-10);
+}
+.s-nav__group {
+  display: grid;
+  gap: var(--gx-space-0-5);
+  margin-bottom: var(--gx-space-6);
+}
+.s-nav__title {
+  padding: 0 var(--gx-space-3) var(--gx-space-1);
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-2xs);
+  font-weight: var(--gx-font-weight-control);
+  letter-spacing: var(--gx-tracking-label);
+  text-transform: uppercase;
+}
+.s-nav__link {
+  display: flex;
+  align-items: center;
+  min-height: var(--gx-h-md);
+  padding: 0 var(--gx-space-3);
+  border-radius: var(--gx-radius-lg);
+  color: var(--gx-color-ink-soft);
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-control);
+  outline: 0;
+  transition: background-color var(--gx-dur-fast) var(--gx-ease-standard);
+}
+.s-nav__link[aria-current='page'] {
+  background: var(--gx-color-surface);
+  color: var(--gx-color-ink);
+}
+.s-nav__link:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 1px;
+}
+@media (hover: hover) {
+  .s-nav__link:hover {
+    background: var(--gx-color-surface);
+  }
+}
+.s-jump {
+  display: none;
+}
+
+.s-main {
+  grid-area: main;
+  min-width: 0;
+  max-width: var(--gx-container-doc);
+  padding: var(--gx-space-8) var(--gx-space-6) var(--gx-space-10);
+}
+.s-title {
+  margin: 0 0 var(--gx-space-6);
+  font-size: var(--gx-text-3xl);
+  font-weight: var(--gx-font-weight-strong);
+  line-height: var(--gx-leading-title);
+  letter-spacing: var(--gx-tracking-display);
+  text-wrap: balance;
+}
+
+/* Markdown from the repository. */
+.s-prose {
+  color: var(--gx-color-ink);
+  font-size: var(--gx-text-base);
+  line-height: var(--gx-leading-body);
+}
+.s-prose > :first-child {
+  margin-top: 0;
+}
+.s-prose > :last-child {
+  margin-bottom: 0;
+}
+.s-prose h2,
+.s-tokens h2 {
+  margin: var(--gx-space-10) 0 var(--gx-space-3);
+  font-size: var(--gx-text-xl);
+  font-weight: var(--gx-font-weight-title);
+  line-height: var(--gx-leading-heading);
+  letter-spacing: var(--gx-tracking-title);
+}
+.s-prose h3 {
+  margin: var(--gx-space-6) 0 var(--gx-space-2);
+  font-size: var(--gx-text-base);
+  font-weight: var(--gx-font-weight-title);
+}
+.s-prose p,
+.s-prose ul,
+.s-prose ol {
+  max-width: var(--gx-container-read);
+  margin: 0 0 var(--gx-space-4);
+  text-wrap: pretty;
+}
+.s-prose ul,
+.s-prose ol {
+  padding-inline-start: var(--gx-space-5);
+}
+.s-prose li {
+  margin-bottom: var(--gx-space-2);
+}
+.s-prose li::marker {
+  color: var(--gx-color-faint);
+}
+.s-prose strong {
+  font-weight: var(--gx-font-weight-title);
+}
+.s-prose a {
+  color: var(--gx-color-blue);
+  text-decoration: underline;
+  text-decoration-color: var(--gx-color-blue-soft);
+  text-underline-offset: 3px;
+}
+.s-prose code {
+  padding: var(--gx-space-0-5) var(--gx-space-1);
+  border-radius: var(--gx-radius-sm);
+  background: var(--gx-color-surface);
+  font-family: var(--gx-font-mono);
+  font-size: 0.875em;
+}
+.s-prose pre {
+  max-width: var(--gx-container-read);
+  margin: 0 0 var(--gx-space-4);
+  padding: var(--gx-space-4);
+  overflow-x: auto;
+  border-radius: var(--gx-radius-xl);
+  background: var(--gx-color-surface);
+  font-size: var(--gx-text-sm);
+  line-height: var(--gx-leading-body);
+}
+.s-prose pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+.s-table {
+  margin: 0 0 var(--gx-space-4);
+  overflow-x: auto;
+}
+.s-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--gx-text-sm);
+}
+.s-prose th {
+  padding: var(--gx-space-2) var(--gx-space-4) var(--gx-space-2) 0;
+  border-bottom: 1px solid var(--gx-color-line);
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-2xs);
+  font-weight: var(--gx-font-weight-control);
+  letter-spacing: var(--gx-tracking-label);
+  text-align: start;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.s-prose td {
+  padding: var(--gx-space-2-5) var(--gx-space-4) var(--gx-space-2-5) 0;
+  border-bottom: 1px solid var(--gx-color-line);
+  vertical-align: top;
+}
+
+/* A components page: the names, then each block of examples with its guidelines under it. */
+.s-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gx-space-2);
+  margin-bottom: var(--gx-space-6);
+}
+.s-guideline {
+  margin-top: var(--gx-space-5);
+  padding-top: var(--gx-space-5);
+  border-top: 1px solid var(--gx-color-line);
+}
+.s-guideline > h3 {
+  margin: 0 0 var(--gx-space-2);
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-title);
+}
+.s-guideline .s-prose {
+  font-size: var(--gx-text-sm);
+}
+
+/* The tokens page. */
+.s-token-group > h3 {
+  margin: var(--gx-space-5) 0 var(--gx-space-3);
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-control);
+}
+.s-swatches,
+.s-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: var(--gx-space-4);
+}
+.s-swatch,
+.s-tile {
+  display: grid;
+  gap: var(--gx-space-0-5);
+  min-width: 0;
+}
+.s-swatch__color {
+  height: 3.5rem;
+  margin-bottom: var(--gx-space-1-5);
+  border-radius: var(--gx-radius-xl);
+  box-shadow: var(--gx-shadow-edge);
+}
+.s-swatch__name {
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-control);
+}
+.s-swatch__value {
+  overflow: hidden;
+  color: var(--gx-color-muted);
+  font-family: var(--gx-font-mono);
+  font-size: var(--gx-text-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.s-tile__shape {
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: var(--gx-space-1-5);
+  background: var(--gx-color-surface);
+  box-shadow: var(--gx-shadow-edge-strong);
+}
+.s-tile__shape--plain {
+  border-radius: var(--gx-radius-xl);
+  background: var(--gx-color-white);
+}
+.s-row {
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--gx-space-4);
+  padding: var(--gx-space-3) 0;
+  border-bottom: 1px solid var(--gx-color-line);
+}
+.s-row__name {
+  font-family: var(--gx-font-mono);
+  font-size: var(--gx-text-xs);
+}
+.s-row__specimen {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.s-row__usage {
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-sm);
+}
+.s-bar {
+  display: block;
+  height: var(--gx-space-3);
+  border-radius: var(--gx-radius-xs);
+  background: var(--gx-color-ink);
+}
+.s-control {
+  display: block;
+  width: 7rem;
+  border-radius: var(--gx-radius-lg);
+  box-shadow: var(--gx-shadow-edge-strong);
+}
+
+/* A phone: the list of pages becomes one select under the top bar. */
+@media (max-width: 860px) {
+  .s-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'top' 'jump' 'main';
+  }
+  .s-top {
+    flex-wrap: wrap;
+    padding-inline: var(--gx-space-4);
+  }
+  .s-nav {
+    display: none;
+  }
+  .s-jump {
+    grid-area: jump;
+    display: grid;
+    padding: var(--gx-space-4) var(--gx-space-4) 0;
+  }
+  .s-main {
+    padding: var(--gx-space-6) var(--gx-space-4) var(--gx-space-10);
+  }
+  .s-title {
+    font-size: var(--gx-text-2xl);
+  }
+  .s-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gx-space-1);
+  }
+}

@@ -1,0 +1,26 @@
+name: site
+# The docs site at ui.gauthx.app. It deploys only when someone runs this workflow by hand, from main.
+on:
+  workflow_dispatch:
+
+concurrency: site
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm site:build
+      - run: pnpm dlx wrangler@4.152.0 deploy --config site/wrangler.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Check the site answers
+        run: curl --fail --silent --show-error --retry 5 --retry-delay 5 --output /dev/null https://ui.gauthx.app/

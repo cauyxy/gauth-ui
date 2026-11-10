@@ -1,0 +1,7 @@
+{
+  // ui.gauthx.app: the docs site, static files only. `pnpm site:build` writes ./dist; the site workflow deploys it.
+  "name": "gauth-ui-site",
+  "compatibility_date": "2026-10-15",
+  "assets": { "directory": "./dist", "not_found_handling": "single-page-application" },
+  "routes": [{ "pattern": "ui.gauthx.app", "custom_domain": true }],
+}

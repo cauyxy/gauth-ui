@@ -15,6 +15,7 @@ import { Stat } from '../src/components/Stat'
 import { Switch } from '../src/components/Switch'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../src/components/Tooltip'
 import { Icon } from '../src/core/Icon'
+import { Section } from './section'
 
 const VIEWS = [
   { value: 'class', label: 'Class' },
@@ -27,8 +28,7 @@ export default function Core() {
   const [on, setOn] = useState(true)
   return (
     <>
-      <section className="g-section">
-        <h2>Button</h2>
+      <Section title="Button">
         <div className="g-row">
           <Button>Assign</Button>
           <Button variant="soft">Review</Button>
@@ -43,16 +43,14 @@ export default function Core() {
           <Button size="lg">Large</Button>
           <Button size="xl">Check answer</Button>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Segmented, Switch</h2>
+      </Section>
+      <Section title="Segmented, Switch">
         <div className="g-row">
           <Segmented label="View" value={view} options={VIEWS} onChange={setView} />
           <Switch checked={on} onChange={setOn} label="Show hints" />
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Chip, Avatar, Dot, IconBox</h2>
+      </Section>
+      <Section title="Chip, Avatar, Dot, IconBox">
         <div className="g-row">
           <Chip>Period 3</Chip>
           <Chip tone="blue">HSG.SRT.B.5</Chip>
@@ -69,9 +67,8 @@ export default function Core() {
             <Icon name="search" />
           </IconBox>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Panel, Stat</h2>
+      </Section>
+      <Section title="Panel, Stat">
         <div className="g-col">
           <Panel>
             <PanelHeader title="Needs support">
@@ -83,9 +80,8 @@ export default function Core() {
             </div>
           </Panel>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Tooltip, Popover</h2>
+      </Section>
+      <Section title="Tooltip, Popover">
         <div className="g-row">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -102,9 +98,8 @@ export default function Core() {
             </PopoverContent>
           </Popover>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Meter, Progress, Spinner, Skeleton</h2>
+      </Section>
+      <Section title="Meter, Progress, Spinner, Skeleton">
         <div className="g-col">
           <Meter value={62} />
           <Progress value={33} label="Practice set">
@@ -116,7 +111,7 @@ export default function Core() {
             <Skeleton style={{ height: '1rem', width: '12rem' }} />
           </div>
         </div>
-      </section>
+      </Section>
     </>
   )
 }

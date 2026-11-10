@@ -10,6 +10,7 @@ import { StepProgress } from '../src/learning/StepProgress'
 import { WorkedSteps } from '../src/learning/WorkedSteps'
 import { RichText } from '../src/math/RichText'
 import { Tex } from '../src/math/Tex'
+import { Section } from './section'
 
 /* One question for the whole page: a right triangle with legs 6 and 8. What is the length of the hypotenuse? */
 const QUESTION = 'Length of the hypotenuse'
@@ -24,43 +25,38 @@ export default function Learning() {
   const [pick, setPick] = useState<string | null>(null)
   return (
     <>
-      <section className="g-section">
-        <h2>LevelMark</h2>
+      <Section title="LevelMark">
         <div className="g-row">
           {LEVELS.toReversed().map((level) => (
             <LevelMark key={level} level={level} label />
           ))}
           <LevelMark level="mastered" size={20} label />
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>LevelChip</h2>
+      <Section title="LevelChip">
         <div className="g-row">
           {LEVELS.toReversed().map((level) => (
             <LevelChip key={level} level={level} />
           ))}
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>LevelLadder</h2>
+      <Section title="LevelLadder">
         <div className="g-col">
           <LevelLadder level="familiar" />
           <LevelLadder level="mastered" />
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>LevelBar</h2>
+      <Section title="LevelBar">
         <div className="g-col">
           <LevelBar label="Geometry · Period 3" counts={{ mastered: 9, proficient: 7, familiar: 6, attempted: 4, not_started: 2 }} />
           <LevelBar label="Geometry · Period 5" counts={{}} />
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>AnswerOption</h2>
+      <Section title="AnswerOption">
         <div className="g-col">
           <AnswerGroup label={QUESTION} value={pick} onChange={setPick}>
             {OPTIONS.map((o) => (
@@ -84,20 +80,18 @@ export default function Learning() {
             ))}
           </AnswerGroup>
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>Reveal</h2>
+      <Section title="Reveal">
         <div className="g-col">
           <Reveal kind="hint">Which side is across from the right angle? The Pythagorean theorem gives its square.</Reveal>
           <Reveal kind="why">
             <RichText text="The legs are 6 and 8, so $c^2 = 6^2 + 8^2 = 100$. The hypotenuse is $\sqrt{100}$, so $c = 10$." />
           </Reveal>
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>WorkedSteps</h2>
+      <Section title="WorkedSteps">
         <div className="g-col">
           <WorkedSteps
             steps={[
@@ -108,14 +102,13 @@ export default function Learning() {
             ]}
           />
         </div>
-      </section>
+      </Section>
 
-      <section className="g-section">
-        <h2>StepProgress</h2>
+      <Section title="StepProgress">
         <div className="g-col">
           <StepProgress done={2} total={6} label="Right triangles practice set" />
         </div>
-      </section>
+      </Section>
     </>
   )
 }

@@ -7,6 +7,7 @@ import { Table, TableCell, TableHead, TableRow } from '../src/components/Table'
 import { Tab, TabList, TabPanel, Tabs } from '../src/components/Tabs'
 import { Composer } from '../src/learning/Composer'
 import { Generating } from '../src/learning/Generating'
+import { Section } from './section'
 
 const ROSTER = [
   { student: 'Devon Wright', level: 'Attempted', last: 'Fri, Nov 6', action: 'Reteach' },
@@ -25,8 +26,7 @@ export default function Structure() {
   const [asked, setAsked] = useState('Why do the triangles have to be similar?')
   return (
     <>
-      <section className="g-section">
-        <h2>Breadcrumbs</h2>
+      <Section title="Breadcrumbs">
         <div className="g-row">
           <Breadcrumbs>
             <a href="#classes">Classes</a>
@@ -34,9 +34,8 @@ export default function Structure() {
             Needs support
           </Breadcrumbs>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>PageTitle</h2>
+      </Section>
+      <Section title="PageTitle">
         <div className="g-col" style={WIDE}>
           <PageTitle
             title="Needs support"
@@ -51,9 +50,8 @@ export default function Structure() {
             <Button>Send practice</Button>
           </PageTitle>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Tabs</h2>
+      </Section>
+      <Section title="Tabs">
         <div className="g-col">
           <Tabs value={tab} onChange={setTab}>
             <TabList aria-label="Geometry · Period 3">
@@ -72,9 +70,8 @@ export default function Structure() {
             </TabPanel>
           </Tabs>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Table</h2>
+      </Section>
+      <Section title="Table">
         <div className="g-col" style={WIDE}>
           <Table label="Needs support" columns="minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) 5.5rem">
             <TableHead>
@@ -101,15 +98,13 @@ export default function Structure() {
             ))}
           </Table>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Stepper</h2>
+      </Section>
+      <Section title="Stepper">
         <div className="g-col">
           <Stepper steps={['Standard', 'Problems', 'Review', 'Assign']} current={1} />
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Composer</h2>
+      </Section>
+      <Section title="Composer">
         <div className="g-col">
           <span style={muted}>{asked}</span>
           <Composer
@@ -123,9 +118,8 @@ export default function Structure() {
             }}
           />
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Generating</h2>
+      </Section>
+      <Section title="Generating">
         <div className="g-col">
           <Generating
             label="Building Form B"
@@ -136,7 +130,7 @@ export default function Structure() {
             ]}
           />
         </div>
-      </section>
+      </Section>
     </>
   )
 }

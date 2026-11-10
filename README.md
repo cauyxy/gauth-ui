@@ -95,4 +95,5 @@ pnpm typecheck
 pnpm build
 pnpm tokens     # after a change to src/styles/tokens.css
 pnpm gallery    # every component on one page
+pnpm site       # the docs site, locally
 ```

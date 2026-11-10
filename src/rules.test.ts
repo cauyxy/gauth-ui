@@ -63,6 +63,11 @@ it('core does not import learning', () => {
     for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/from '\.\.\/learning\//)
 })
 
+it('the docs site shows every component', () => {
+  const site = read('site/content.ts')
+  for (const name of readdirSync(`${ROOT}design/components`)) expect(site, `${name} is on no page of the site`).toContain(`'${name}'`)
+})
+
 describe('math', () => {
   const css = read('src/math/math.css').replace(/\/\*[\s\S]*?\*\//g, '')
 

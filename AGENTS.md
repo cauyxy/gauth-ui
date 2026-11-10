@@ -18,6 +18,7 @@ src/styles.css           imports all of the above; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
 gallery/                 every component on one page, in both languages (pnpm gallery); shot.ts and optical.ts check it in Chrome
+site/                    the docs site (ui.gauthx.app): the design rules, the tokens and the gallery's examples with each guideline
 GLOSSARY.md              what each shared word means, in en and es
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
 compare/                 compares each component with the gauthx one it replaces (pnpm compare)
@@ -109,4 +110,10 @@ node gallery/shot.ts <folder>    # screenshots of every component, both language
 
 ## Release
 
-Change `version` in `package.json`, merge, then push a tag `v<version>`. `release.yml` publishes to npm.
+Two things ship, each by hand, each from `main`.
+
+**The package, to npm.** Change `version` in `package.json`, merge, then push a tag `v<version>`. `release.yml` runs the checks through `prepublishOnly` and publishes. It needs the `NPM_TOKEN` repository secret.
+
+**The docs site, to ui.gauthx.app.** Run the `site` workflow (Actions → site → Run workflow, or `gh workflow run site`). It builds `site/` and deploys it to Cloudflare as the Worker `gauth-ui-site` (`site/wrangler.jsonc`). It needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets, the same account that holds the `gauthx.app` zone.
+
+The site has no content of its own. It reads `README.md`, `design/README.md`, `design/components/*/README.md`, `GLOSSARY.md`, `design/tokens.json` and the gallery, so a change to a rule or a component is on the site at the next deploy. A new component goes into `GROUPS` in `site/content.ts`; `rules.test.ts` fails when one is missing. `pnpm site` serves it locally.

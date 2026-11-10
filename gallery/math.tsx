@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { AnswerGroup, AnswerOption } from '../src/learning/AnswerOption'
 import { RichText } from '../src/math/RichText'
 import { Tex } from '../src/math/Tex'
+import { Section } from './section'
 
 const SIZES = ['sm', 'base', 'lg', '2xl'] as const
 const SLOPES = [
@@ -15,8 +16,7 @@ export default function Formulas() {
   const [pick, setPick] = useState<string | null>('a')
   return (
     <>
-      <section className="g-section">
-        <h2>Tex</h2>
+      <Section title="Tex">
         <div className="g-col">
           {SIZES.map((size) => (
             <div key={size} className="g-math-line" style={{ fontSize: `var(--gx-text-${size})` }}>
@@ -34,9 +34,8 @@ export default function Formulas() {
           <Tex display tex="(a + b)^6 = a^6 + 6a^5b + 15a^4b^2 + 20a^3b^3 + 15a^2b^4 + 6ab^5 + b^6 \quad \text{and} \quad (a - b)^6 = a^6 - 6a^5b + 15a^4b^2 - 20a^3b^3" />
           <Tex tex="\frac{1" />
         </div>
-      </section>
-      <section className="g-section">
-        <h2>RichText</h2>
+      </Section>
+      <Section title="RichText">
         <div className="g-col">
           <div className="g-math-line" style={{ fontSize: 'var(--gx-text-lg)' }}>
             <RichText text="A right triangle has legs $6$ and $8$. Use $a^2 + b^2 = c^2$ to find the hypotenuse $c$." />
@@ -48,9 +47,8 @@ export default function Formulas() {
             <RichText text="A ticket costs \$13. For $n$ tickets the total is $13n$ dollars." />
           </div>
         </div>
-      </section>
-      <section className="g-section">
-        <h2>Tex in answers</h2>
+      </Section>
+      <Section title="Tex in answers">
         <div className="g-col">
           <AnswerGroup label="Slope of the line" value={pick} onChange={setPick}>
             {SLOPES.map((o) => (
@@ -60,7 +58,7 @@ export default function Formulas() {
             ))}
           </AnswerGroup>
         </div>
-      </section>
+      </Section>
     </>
   )
 }
