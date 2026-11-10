@@ -109,7 +109,7 @@ Align what the eye sees, the ink, not the box. `node gallery/optical.ts` measure
 - **A mark beside text** (a checkbox, a level mark, a spinner): its middle is on the first line of the text. When the text wraps, the mark stays on the first line; it does not move to the middle of the block.
 - **A formula in a line of words:** one baseline, and numbers of one height (within 5%).
 - **An icon at the end of a control.** An icon's strokes do not fill its 20px box, so the icon sits 2px closer to the edge than text does. `Button` and `Select` do this by themselves.
-- **One icon family: Lucide.** 20px, a 1.8px stroke, round ends, never filled. `Icon` holds the icons the components and most pages need. A product that needs another one takes it from Lucide and draws it the same way: `size={20} strokeWidth={1.8} absoluteStrokeWidth`. An icon from another family sits wrong next to them.
+- **One icon family: Lucide.** 20px, a 1.8px stroke, round ends, never filled. `Icon` holds the icons the components and most pages need. A product that needs another one takes it from Lucide and draws it the same way: `strokeWidth={2.16}` (1.8px at 20px; like `Icon`, the stroke grows with the size). An icon from another family sits wrong next to them.
 
 ## Surfaces and layout
 

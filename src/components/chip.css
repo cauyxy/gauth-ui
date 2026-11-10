@@ -51,8 +51,9 @@
 
 /* The remove button: 20px, so the chip stays 24px high. The chip's end padding and the button's start margin shrink,
    so the cross has the same 8px on both sides that the text has at the start. */
+/* The space after the strokes of the x is between the space before a first letter (9px with its own side space) and before a first icon (under 8px). */
 .gx-chip--removable {
-  padding-inline-end: var(--gx-space-0-5);
+  padding-inline-end: calc(var(--gx-space-0-5) + 0.5px);
 }
 .gx-chip__remove {
   display: grid;

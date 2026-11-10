@@ -104,7 +104,7 @@ Each row is a place where gauthx writes the classes itself today. The switch is 
 - The keyframes its pages use by name: `drawer-in`, `fade-in`, `build-slide`, `pop-in`.
 - `overscroll-behavior-y: none` and `scrollbar-gutter: stable` on `html`.
 - `StandardCode`, `DemoTag`, `Diagram`, the shells and sign-in.
-- Icons: both are Lucide. `Icon` here holds 34 of them at one stroke (1.8px at 20px); a product draws any other Lucide icon with `size={20} strokeWidth={1.8} absoluteStrokeWidth`. gauthx and gauth-teacher use ten stroke widths today.
+- Icons: both are Lucide. `Icon` here holds 34 of them at one stroke (1.8px at 20px); a product draws any other Lucide icon with `strokeWidth={2.16}` (1.8px at 20px; like `Icon`, the stroke grows with the size). gauthx and gauth-teacher use ten stroke widths today.
 - `QuoteOnSelect` (the Quote button over selected text), `useStream`, the skill suggestion and the infinite canvas of gauth-teacher: one product's flows.
 - The logo and the app tiles (`@gauthx/icons`). They are not in this package: moving them makes the logo public on npm, and nobody has decided that.
 - The student `PRIMARY` and `SECONDARY` class strings, until someone picks how they map to `Button`.

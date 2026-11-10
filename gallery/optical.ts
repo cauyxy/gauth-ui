@@ -35,7 +35,7 @@ for (const width of [1120, 375]) {
   await page.waitForSelector('.g-section')
   await page.evaluate(() => document.fonts.ready)
   const found = await page.evaluate(() => {
-    const LABELS = '.gx-btn, .gx-chip, .gx-segmented__option, .gx-tabs__tab, .gx-level-chip, .gx-menu__item, .gx-table__head .gx-table__cell'
+    const LABELS = '.gx-btn, .gx-chip, .gx-chip-toggle, .gx-follow-ups__item, .gx-segmented__option, .gx-tabs__tab, .gx-level-chip, .gx-menu__item, .gx-table__head .gx-table__cell'
     const ROUND = '.gx-answer-option__mark, .gx-stepper__mark, .gx-avatar'
     const MARKS: [mark: string, row: string][] = [
       ['.gx-checkbox__box', '.gx-checkbox'],
@@ -45,8 +45,11 @@ for (const width of [1120, 375]) {
       ['.gx-answer-option__mark', '.gx-answer-option'],
       ['.gx-breadcrumbs__separator', '.gx-breadcrumbs__item'],
       ['svg', '.gx-btn'],
+      ['svg', '.gx-chip-toggle'],
+      [':scope > svg', '.gx-chip'],
     ]
-    const ENDS = '.gx-btn, .gx-select'
+    const ENDS = '.gx-btn, .gx-select, .gx-chip--removable'
+    const ICON_BUTTONS = '.gx-icon-btn, .gx-chip__remove, .gx-composer__send'
     const TOLERANCE = 0.5
 
     const canvas = document.createElement('canvas').getContext('2d')!
@@ -177,12 +180,24 @@ for (const width of [1120, 375]) {
       if (Math.abs(ratio - 1) > 0.05) say('size', holder, label, `its numbers are ${(ratio * 100).toFixed(0)}% of the height of the numbers in the words`)
     }
     if (!measured) out.push('none   no formula in a line of words was measured')
+    /* A button that is only an icon: the icon's box is in the middle of the button, both ways. */
+    for (const el of all(ICON_BUTTONS)) {
+      const svg = el.querySelector('svg')
+      if (!svg) continue
+      const [box, icon] = [el.getBoundingClientRect(), svg.getBoundingClientRect()]
+      const right = icon.left + icon.width / 2 - (box.left + box.width / 2)
+      const down = icon.top + icon.height / 2 - (box.top + box.height / 2)
+      if (Math.abs(right) >= TOLERANCE || Math.abs(down) >= TOLERANCE) say('round', el, el.getAttribute('aria-label') ?? '', `the icon is ${px(right)} right and ${px(down)} down of the middle`)
+    }
     for (const el of all(ENDS)) {
-      const svg = el.querySelector(':scope > svg:last-child, :scope > .gx-select__icon')
+      const svg = el.querySelector(':scope > svg:last-child, :scope > .gx-select__icon, :scope > .gx-chip__remove svg')
       const ink = inkOf(el)
       if (!svg) continue
       const box = el.getBoundingClientRect()
-      const before = ink ? ink.left - box.left : parseFloat(getComputedStyle(el.querySelector('select') ?? el).paddingLeft)
+      /* What the control starts with: an icon's strokes, or the text. */
+      const lead = el.querySelector(':scope > svg:first-child')
+      const start = lead && lead !== svg ? strokesOf(lead).left : ink?.left
+      const before = start !== undefined ? start - box.left : parseFloat(getComputedStyle(el.querySelector('select') ?? el).paddingLeft)
       const after = box.right - strokesOf(svg).right
       if (Math.abs(after - before) >= 1) say('end', el, ink?.text ?? '', `${before.toFixed(1)}px before the text, ${after.toFixed(1)}px after the icon`)
     }
