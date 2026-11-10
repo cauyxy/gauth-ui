@@ -51,6 +51,7 @@ function Cover({ tone }: { tone: 'violet' | 'blue' | 'good' }) {
 export default function Core() {
   const [view, setView] = useState<(typeof VIEWS)[number]['value']>('class')
   const [on, setOn] = useState(true)
+  const [aloud, setAloud] = useState(false)
   const [liked, setLiked] = useState(true)
   const [filters, setFilters] = useState<readonly string[]>(['Needs support'])
   const [skill, setSkill] = useState<string | null>('Worksheet')
@@ -113,10 +114,15 @@ export default function Core() {
           ))}
         </div>
       </Section>
-      <Section title="Segmented, Switch">
+      <Section title="Segmented">
         <div className="g-row">
           <Segmented label="View" value={view} options={VIEWS} onChange={setView} />
+        </div>
+      </Section>
+      <Section title="Switch">
+        <div className="g-row">
           <Switch checked={on} onChange={setOn} label="Show hints" />
+          <Switch checked={aloud} onChange={setAloud} label="Read aloud" />
         </div>
       </Section>
       <Section title="ChipToggle">
@@ -145,7 +151,7 @@ export default function Core() {
           </div>
         </div>
       </Section>
-      <Section title="Chip, Avatar, Dot, IconBox">
+      <Section title="Chip">
         <div className="g-row">
           <Chip>Period 3</Chip>
           <Chip tone="blue">HSG.SRT.B.5</Chip>
@@ -169,16 +175,36 @@ export default function Core() {
               {code}
             </Chip>
           ))}
+        </div>
+      </Section>
+      <Section title="Avatar">
+        <div className="g-row">
           <Avatar name="Maya Chen" />
           <Avatar name="Diego Ramirez" />
           <Avatar name="Aisha Khan" size={40} />
+        </div>
+      </Section>
+      <Section title="Dot">
+        <div className="g-row">
           <Dot />
+          <Dot color="var(--gx-color-good)" />
+          <Dot color="var(--gx-color-blue)" size={8} />
+        </div>
+      </Section>
+      <Section title="IconBox">
+        <div className="g-row">
           <IconBox>
             <Icon name="search" />
           </IconBox>
+          <IconBox>
+            <Icon name="users" />
+          </IconBox>
+          <IconBox>
+            <Icon name="calendar" />
+          </IconBox>
         </div>
       </Section>
-      <Section title="Panel, Stat">
+      <Section title="Panel">
         <div className="g-col">
           <Panel>
             <PanelHeader title="Needs support">
@@ -191,8 +217,15 @@ export default function Core() {
           </Panel>
         </div>
       </Section>
+      <Section title="Stat">
+        <div className="g-row">
+          <Stat label="Proficient" value="62%" sub="+8 pts" />
+          <Stat label="Turned in" value="24" sub="of 28" />
+          <Stat label="Needs support" value="5" />
+        </div>
+      </Section>
       <Section title="CoverCard">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(15rem, 1fr))', gap: 'var(--gx-space-4)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(12rem, 1fr))', gap: 'var(--gx-space-4)' }}>
           <CoverCard
             href="#CoverCard"
             cover={<Cover tone="violet" />}
@@ -218,7 +251,7 @@ export default function Core() {
           />
         </div>
       </Section>
-      <Section title="Tooltip, Popover">
+      <Section title="Tooltip">
         <div className="g-row">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -226,6 +259,10 @@ export default function Core() {
             </TooltipTrigger>
             <TooltipContent>Similar triangles have equal angles.</TooltipContent>
           </Tooltip>
+        </div>
+      </Section>
+      <Section title="Popover">
+        <div className="g-row">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="soft">Open</Button>
@@ -236,17 +273,30 @@ export default function Core() {
           </Popover>
         </div>
       </Section>
-      <Section title="Meter, Progress, Spinner, Skeleton">
+      <Section title="Meter">
         <div className="g-col">
           <Meter value={62} />
+          <Meter value={18} />
+        </div>
+      </Section>
+      <Section title="Progress">
+        <div className="g-col">
           <Progress value={33} label="Practice set">
             2 of 6
           </Progress>
           <Progress label="Building your set">Building</Progress>
-          <div className="g-row">
-            <Spinner />
-            <Skeleton style={{ height: '1rem', width: '12rem' }} />
-          </div>
+        </div>
+      </Section>
+      <Section title="Spinner">
+        <div className="g-row">
+          <Spinner />
+        </div>
+      </Section>
+      <Section title="Skeleton">
+        <div className="g-col">
+          <Skeleton style={{ height: '1rem', width: '12rem' }} />
+          <Skeleton style={{ height: '1rem', width: '18rem' }} />
+          <Skeleton style={{ height: '1rem', width: '9rem' }} />
         </div>
       </Section>
     </>

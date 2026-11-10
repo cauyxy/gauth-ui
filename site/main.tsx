@@ -1,18 +1,19 @@
-/* The docs site: the design rules, the tokens and every component, read from this repository. Built to site/dist. */
+/* The docs site: every component live, then the design rules and the tokens, read from this repository. Built to site/dist. */
 import { StrictMode, useEffect, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../src/styles.css'
 import '../src/math/math.css'
 import '../gallery/gallery.css'
 import './site.css'
-import { SectionNote } from '../gallery/section'
+import { SectionView } from '../gallery/section'
 import pkg from '../package.json'
 import { Chip } from '../src/components/Chip'
 import { Segmented } from '../src/components/Segmented'
 import { Select } from '../src/components/Select'
+import { Toaster } from '../src/components/Toast'
 import { LocaleProvider } from '../src/core/locale'
 import type { Locale } from '../src/core/messages'
-import { GROUPS, GUIDELINES, PAGES, type Page } from './content'
+import { GROUPS, GUIDELINES, PAGES, pathOf, type Page } from './content'
 import { Markdown } from './markdown'
 import { TokensPage } from './tokens'
 
@@ -20,7 +21,7 @@ const LANGUAGES = [
   { value: 'en', label: 'English' },
   { value: 'es', label: 'Español' },
 ] as const
-const NAV = ['Start', 'Design', 'Components'].map((group) => ({ group, pages: PAGES.filter((p) => p.group === group) }))
+const NAV = [...new Set(PAGES.map((p) => p.group))].map((group) => ({ group, pages: PAGES.filter((p) => p.group === group) }))
 
 /* The address is the state: a link changes it without a page load, and Back works. */
 const listen = (onChange: () => void) => {
@@ -42,39 +43,61 @@ function onLinkClick(event: MouseEvent) {
   go(href)
 }
 
-function Components({ slug }: { slug: string }) {
+/** Every component, live: a card for each block of examples. The title of a card opens the component's page. */
+function Home() {
+  return GROUPS.map((group) => (
+    <section key={group.slug}>
+      <h2 className="s-group">{group.title}</h2>
+      <div className="s-grid">
+        <SectionView.Provider
+          value={({ title, of, children }) => (
+            <section className="s-card">
+              <h3>
+                <a href={pathOf(of)}>{title}</a>
+              </h3>
+              {children}
+            </section>
+          )}
+        >
+          <group.Examples />
+        </SectionView.Provider>
+      </div>
+    </section>
+  ))
+}
+
+/** One component: what it is, its examples, then its rules. The other blocks of its group are not drawn. */
+function Component({ name, slug }: { name: string; slug: string }) {
   const group = GROUPS.find((g) => g.slug === slug)!
+  const { lead, rules } = GUIDELINES[name]!
   return (
     <>
-      <nav aria-label={group.title} className="s-names">
-        {group.names.map((name) => (
-          <a key={name} href={`#${name}`}>
-            <Chip>{name}</Chip>
-          </a>
-        ))}
-      </nav>
-      <SectionNote.Provider
-        value={(names) =>
-          names
-            .filter((name) => GUIDELINES[name])
-            .map((name) => (
-              /* The block itself carries the id of the first component it shows. */
-              <div key={name} id={name === names[0] ? undefined : name} className="s-guideline">
-                {names.length > 1 ? <h3>{name}</h3> : null}
-                <Markdown text={GUIDELINES[name]!} />
-              </div>
-            ))
+      <div className="s-lead">
+        <Markdown text={lead} />
+      </div>
+      <SectionView.Provider
+        value={({ title, of, children }) =>
+          of === name ? (
+            <section className="s-preview">
+              {title === of ? null : <h2>{title}</h2>}
+              {children}
+            </section>
+          ) : null
         }
       >
         <group.Examples />
-      </SectionNote.Provider>
+      </SectionView.Provider>
+      <div className="s-rules">
+        <Markdown text={rules} />
+      </div>
     </>
   )
 }
 
 function Body({ page }: { page: Page }) {
+  if (page.kind === 'home') return <Home />
   if (page.kind === 'tokens') return <TokensPage />
-  if (page.kind === 'components') return <Components slug={page.slug} />
+  if (page.kind === 'component') return <Component key={page.name} name={page.name} slug={page.slug} />
   return <Markdown text={page.body} />
 }
 
@@ -85,7 +108,7 @@ function Site() {
 
   /* A new page starts at its top, or at the component the address names. */
   useEffect(() => {
-    document.title = page.path === '/' ? 'Gauth design system' : `${page.title} · Gauth design system`
+    document.title = `${page.title} · Gauth design system`
     const target = window.location.hash ? document.getElementById(decodeURIComponent(window.location.hash.slice(1))) : null
     if (target) target.scrollIntoView()
     else window.scrollTo(0, 0)
@@ -106,7 +129,7 @@ function Site() {
         <nav aria-label="Pages" className="s-nav">
           {NAV.map(({ group, pages }) => (
             <div key={group} className="s-nav__group">
-              {pages.length > 1 ? <span className="s-nav__title">{group}</span> : null}
+              {group ? <span className="s-nav__title">{group}</span> : null}
               {pages.map((p) => (
                 <a key={p.path} href={p.path} aria-current={p === page ? 'page' : undefined} className="s-nav__link">
                   {p.title}
@@ -116,13 +139,14 @@ function Site() {
           ))}
         </nav>
         <div className="s-jump">
-          <Select label="Page" size="xl" value={page.path} onChange={go} options={PAGES.map((p) => ({ value: p.path, label: p.group === p.title ? p.title : `${p.group} · ${p.title}` }))} />
+          <Select label="Page" size="xl" value={page.path} onChange={go} options={PAGES.map((p) => ({ value: p.path, label: p.group ? `${p.group} · ${p.title}` : p.title }))} />
         </div>
-        <main className="s-main" lang={page.kind === 'components' ? locale : 'en'}>
-          <h1 className="s-title">{page.path === '/' ? 'Gauth design system' : page.title}</h1>
+        <main className={page.kind === 'home' ? 's-main s-main--wide' : 's-main'} lang={page.kind === 'home' || page.kind === 'component' ? locale : 'en'}>
+          <h1 className="s-title">{page.title}</h1>
           <Body page={page} />
         </main>
       </div>
+      <Toaster />
     </LocaleProvider>
   )
 }

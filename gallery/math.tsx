@@ -48,7 +48,7 @@ export default function Formulas() {
           </div>
         </div>
       </Section>
-      <Section title="Tex in answers">
+      <Section title="Tex in answers" of="Tex">
         <div className="g-col">
           <AnswerGroup label="Slope of the line" value={pick} onChange={setPick}>
             {SLOPES.map((o) => (

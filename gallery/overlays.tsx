@@ -3,7 +3,7 @@ import { Callout } from '../src/components/Callout'
 import { Dialog, DialogActions, DialogClose, DialogContent, DialogTrigger } from '../src/components/Dialog'
 import { EmptyState } from '../src/components/EmptyState'
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from '../src/components/Menu'
-import { toast, Toaster } from '../src/components/Toast'
+import { toast } from '../src/components/Toast'
 import { Icon } from '../src/core/Icon'
 import { Section } from './section'
 
@@ -94,7 +94,6 @@ export default function Overlays() {
             Remove student
           </Button>
         </div>
-        <Toaster />
       </Section>
 
       <Section title="EmptyState">

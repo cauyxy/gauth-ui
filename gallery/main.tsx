@@ -5,6 +5,7 @@ import '../src/styles.css'
 import '../src/math/math.css'
 import './gallery.css'
 import { Segmented } from '../src/components/Segmented'
+import { Toaster } from '../src/components/Toast'
 import { LocaleProvider } from '../src/core/locale'
 import type { Locale } from '../src/core/messages'
 import Chat from './chat'
@@ -44,6 +45,7 @@ function Gallery() {
         <h2 className="g-group">Math</h2>
         <Formulas />
       </main>
+      <Toaster />
     </LocaleProvider>
   )
 }

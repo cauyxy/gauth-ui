@@ -68,9 +68,16 @@ it('core does not import learning', () => {
     for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/from '\.\.\/learning\//)
 })
 
-it('the docs site shows every component', () => {
+it('the docs site has a page for every component, with one block of examples', () => {
   const site = read('site/content.ts')
-  for (const name of readdirSync(`${ROOT}design/components`)) expect(site, `${name} is on no page of the site`).toContain(`'${name}'`)
+  const gallery = readdirSync(`${ROOT}gallery`)
+    .filter((file) => file.endsWith('.tsx'))
+    .map((file) => read(`gallery/${file}`))
+    .join('\n')
+  for (const name of readdirSync(`${ROOT}design/components`)) {
+    expect(site, `${name} has no page on the site`).toContain(`'${name}'`)
+    expect(gallery.split(`<Section title="${name}">`).length - 1, `${name} needs one block of examples in gallery/`).toBe(1)
+  }
 })
 
 describe('math', () => {

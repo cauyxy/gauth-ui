@@ -183,7 +183,7 @@ export default function Chat() {
           ) : null}
         </div>
       </Section>
-      <Section title="Conversation">
+      <Section title="Conversation" of="Message">
         <Conversation />
       </Section>
     </>
