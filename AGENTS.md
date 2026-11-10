@@ -113,10 +113,10 @@ node gallery/shot.ts <folder>    # screenshots of every component, both language
 
 ## Release
 
-Two things ship, each by hand, each from `main`.
+Two things ship from `main`: the package on a version tag, the docs site after each push.
 
 **The package, to npm.** Change `version` in `package.json`, merge, then push a tag `v<version>`. `release.yml` runs the checks through `prepublishOnly` and publishes. npm trusts that workflow by name (the package's Trusted publisher setting on npmjs.com names `cauyxy/gauth-ui` and `release.yml`), so do not rename the file. When the trusted publisher does not allow `npm publish`, the version is staged: it is live only after the owner approves it on npmjs.com. Check with `npm view gauth-ui@<version>`.
 
-**The docs site, to ui.gauthx.app.** Run the `site` workflow (Actions → site → Run workflow, or `gh workflow run site`). It builds `site/` and deploys it to Cloudflare as the Worker `gauth-ui-site` (`site/wrangler.jsonc`). It needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets, the same account that holds the `gauthx.app` zone.
+**The docs site, to ui.gauthx.app.** `ci.yml` checks and builds every pull request and push to `main`. On `main`, the deploy job publishes that run's site artifact to Cloudflare as `gauth-ui-site`; a failed check blocks deployment. To redeploy manually, run `gh workflow run ci.yml --ref main`. It needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets for the account holding `gauthx.app`. The token must allow Workers Scripts Write on the account and zone/DNS access for the custom domain in `site/wrangler.jsonc`.
 
 The site has no content of its own. It reads `README.md`, `design/README.md`, `design/components/*/README.md`, `GLOSSARY.md`, `design/tokens.json` and the gallery, so a change to a rule or a component is on the site at the next deploy. A new component goes into `GROUPS` in `site/content.ts`; `rules.test.ts` fails when one is missing. `pnpm site` serves it locally.

@@ -1,5 +1,5 @@
 {
-  // ui.gauthx.app: the docs site, static files only. `pnpm site:build` writes ./dist; the site workflow deploys it.
+  // ui.gauthx.app: the docs site, static files only. `pnpm site:build` writes ./dist; CI deploys it after checks pass on main.
   "name": "gauth-ui-site",
   "compatibility_date": "2026-10-15",
   "assets": { "directory": "./dist", "not_found_handling": "single-page-application" },
