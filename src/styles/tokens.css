@@ -8,6 +8,11 @@
   --gx-font-sans: 'Google Sans', 'Google Sans Fallback', -apple-system, system-ui, Roboto, Arial, sans-serif;
   --gx-font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; /* Worked steps and standard codes */
 
+  /* Weights: body text is 400 and needs no token. Controls are medium, not bold: a page full of semibold reads heavy. */
+  --gx-font-weight-control: 500; /* Buttons, chips, labels, table rows, the options of a Segmented control */
+  --gx-font-weight-title: 600; /* Panel and card titles */
+  --gx-font-weight-strong: 700; /* Page titles and metrics */
+
   /* Page column: every app shell centers its content in one column this wide. */
   --gx-container-page: 1600px;
 
@@ -24,13 +29,12 @@
   /* Surfaces */
   --gx-color-canvas: #fafafb;
   --gx-color-surface: #f5f5f7;
-  --gx-color-surface-2: #f1f1f3;
   --gx-color-line: #edeef1;
-  --gx-color-track: #e9eaee; /* The empty part of a bar, the ground of a Segmented control, a round icon ground */
+  --gx-color-track: #f0f1f4; /* The empty part of a bar, the ground of a Segmented control, a round icon ground */
   --gx-color-ring: #c5c8cf;
   --gx-color-rule: #dadce1; /* A firmer hairline than line: print-sheet rules and boxes, off toggles, step connectors, chart grids */
-  --gx-color-edge: rgb(80 88 101 / 0.12); /* The card hairline */
-  --gx-color-edge-strong: rgb(80 88 101 / 0.2); /* The hairline where it must show on a tinted ground */
+  --gx-color-edge: rgb(80 88 101 / 0.1); /* The card hairline */
+  --gx-color-edge-strong: rgb(80 88 101 / 0.14); /* The outline of a field, an option or an outline button */
 
   /* Brand and accents */
   --gx-color-brand: #ff013e;
@@ -94,7 +98,7 @@
   /* Shadows: only these. Cards are drawn with an inset hairline, not a drop shadow. */
   --gx-shadow-card: 0 1px 2px rgb(33 37 46 / 0.04), inset 0 0 0 1px var(--gx-color-edge);
   --gx-shadow-edge: inset 0 0 0 1px var(--gx-color-edge); /* The card hairline */
-  --gx-shadow-edge-strong: inset 0 0 0 1px var(--gx-color-edge-strong); /* The hairline where it must show on a tinted ground */
+  --gx-shadow-edge-strong: inset 0 0 0 1px var(--gx-color-edge-strong); /* The outline of a control */
   --gx-shadow-pop: 0 8px 28px rgb(33 37 46 / 0.1), inset 0 0 0 1px var(--gx-color-edge); /* Popovers, menus and floating docks only */
   --gx-shadow-raise: 0 1px 2px rgb(33 37 46 / 0.1); /* The picked option of a Segmented control */
   --gx-shadow-outline: inset 0 0 0 1.5px var(--gx-color-ink); /* The ring of a picked item */

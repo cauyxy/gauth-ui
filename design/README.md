@@ -25,7 +25,7 @@ Ink on white carries the page. Color appears only where it means something. A to
 | Meaning      | Tokens                                                              | Where                                                                                             |
 | ------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | Text         | `ink`, `ink-soft`, `muted`, `faint`                                 | `ink` for text and primary buttons; `muted` for meta lines; `faint` never for running text.       |
-| Surfaces     | `canvas`, `surface`, `surface-2`, `line`                            | White cards on `canvas` or `surface`; `surface` for soft cards and row hover; `surface-2` for secondary buttons and icon squares; `line` for dividers. |
+| Surfaces     | `canvas`, `surface`, `line`                                         | White cards on `canvas`; `surface` for soft cards, row hover, secondary buttons and icon squares; `line` for dividers. |
 | Edges        | `edge`, `edge-strong`, `ring`, `rule`, `track`                      | Card outlines are an inset 1px shadow (`shadow-edge`); `rule` for firmer lines and off toggles; `track` is the empty part of any bar and the ground of a Segmented control. |
 | Brand        | `brand`                                                             | The Gauth mark only. Never text, buttons or states.                                               |
 | Skill levels | `attempted`, `familiar`, `proficient`, `mastered`, `not-started`    | Level marks and level bars. See Skill levels.                                                     |
@@ -48,7 +48,7 @@ One ladder in every product: **Attempted, Familiar, Proficient, Mastered**, plus
 | Proficient  | `proficient`  | `proficient-ink` | `proficient-soft` |
 | Familiar    | `familiar`    | `familiar-ink`   | `familiar-soft`   |
 | Attempted   | `attempted`   | `attempted-ink`  | `attempted-soft`  |
-| Not started | `not-started` | `muted`          | `surface-2`       |
+| Not started | `not-started` | `muted`          | `surface`         |
 
 - The ramp runs from warm to cool: orange, gold, mint, teal.
 - `attempted` is also the color of a wrong answer and of a field error. There is no separate error color, and nothing is red.
@@ -74,9 +74,12 @@ Google Sans (`--gx-font-sans`), loaded from Google Fonts by each product, with a
 | `2xs`  | 11 px | Captions, column heads, chart labels  |
 | `3xs`  | 10 px | Print sheets and tiny badges only     |
 
-Weights: 700 for titles and metrics, 600 for labels, rows and buttons, 400 for body. Headings use tight tracking (−0.015 to −0.035em). Figures that line up use tabular numbers. A size that is not on the scale goes to the nearest step.
+Weights: 400 for body, 500 for controls (buttons, chips, labels, table rows), 600 for panel and card titles, 700 for page titles and metrics. Controls are medium, not bold: a page full of semibold reads heavy. Headings use tight tracking (−0.015 to −0.035em). Figures that line up use tabular numbers. A size that is not on the scale goes to the nearest step.
 
 ## Surfaces and layout
+
+- **Keep it light.** A grey fill, an outline and a bold weight each add weight, so an element gets one of them at most. A plain chip has an outline and no fill. A table's column heads have no fill. A picked option stays white and only its mark turns ink.
+- The hairline has two strengths: `edge` (10%) around cards, `edge-strong` (14%) around a control.
 
 - Staff cards are `Panel`: 16px radius, white, a 1px inset hairline, no drop shadow. Student cards run larger (24px).
 - Nested radii are concentric: a card holds tiles a step smaller. Radii: `xs` 2 · `sm` 4 · `md` 6 · `lg` 8 · `xl` 12 · `2xl` 16 · `3xl` 24 · `4xl` 32 px.

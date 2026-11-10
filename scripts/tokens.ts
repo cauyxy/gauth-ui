@@ -68,7 +68,12 @@ export function tokensJson(tokens: Token[]) {
     },
     type: {
       fonts: [],
-      families: Object.fromEntries(of('font').map((t) => [t.name.slice('font-'.length), t.value])),
+      families: Object.fromEntries(
+        of('font')
+          .filter((t) => !t.name.startsWith('font-weight-'))
+          .map((t) => [t.name.slice('font-'.length), t.value]),
+      ),
+      weights: of('font').filter((t) => t.name.startsWith('font-weight-')),
       groups: [],
       scale: of('text'),
     },

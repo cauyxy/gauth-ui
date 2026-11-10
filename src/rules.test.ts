@@ -58,6 +58,7 @@ describe.each(components)('%s', (name) => {
     const css = read(cssPath).replace(/\/\*[\s\S]*?\*\//g, '')
     expect(css.match(/#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab)\(/gi) ?? [], 'color literals').toEqual([])
     expect(css.match(/font-size:(?!\s*var\(--gx-text-)[^;]+/g) ?? [], 'font sizes off the scale').toEqual([])
+    expect(css.match(/font-weight:(?!\s*var\(--gx-font-weight-)[^;]+/g) ?? [], 'font weights that are not tokens').toEqual([])
     expect(css.match(/(?<![\w.-])\d*\.?\d+m?s\b/g) ?? [], 'durations that are not tokens').toEqual([])
     expect(css, 'reduced motion is handled once, by --gx-ms').not.toContain('prefers-reduced-motion')
     const local = new Set(css.match(/--gx-[\w-]+(?=\s*:)/g) ?? [])

@@ -10,7 +10,9 @@ The Tailwind theme clears every color that is not a token, so a class with an ol
 | -------------------------------------- | ------------------- | ------------------------------------------------------------------- | ---------------------------------- |
 | `text-subtle`, `--color-subtle`        | `muted`             | `subtle` is 4.2:1 on white, below the 4.5:1 that text needs         | `#757c88` → `#646a77`              |
 | `bg-surface-3`, `--color-surface-3`    | `surface`           | Two greys two steps apart for one role: a soft ground under content | `#f7f7f8` → `#f5f5f7`              |
-| `bg-line-2`, `--color-line-2`          | `track`             | It was never a line: every use is a bar's empty part or a ground    | `#eeeff3` → `#e9eaee`              |
+| `bg-line-2`, `--color-line-2`          | `track`             | It was never a line: every use is a bar's empty part or a ground    | `#eeeff3` → `#f0f1f4`              |
+| `bg-track`, `--color-track`            | `track`             | Lighter, with the lighter treatment                                 | `#e9eaee` → `#f0f1f4`              |
+| `bg-surface-2`, `--color-surface-2`    | `surface`           | Secondary buttons and icon squares take the same grey as soft cards | `#f1f1f3` → `#f5f5f7`              |
 | `--color-edge-2`, `--color-edge-3`     | `edge-strong`       | No uses                                                             | none                               |
 | `--color-brand-soft`, `--color-blue-tint` | none             | No uses                                                             | none                               |
 
@@ -24,7 +26,18 @@ The Tailwind theme clears every color that is not a token, so a class with an ol
 
 Rose is replaced by orange for the Attempted level, a wrong answer and a field error (picked Nov 10, 2026). gauthx keeps a second copy of these values in `MASTERY_COLOR`, `MASTERY_INK` and `MASTERY_SOFT` in `packages/task/src/index.ts`: change them in the same PR. Its docs and the `gauthx-ui` skill say "rose" in several places. Sign-in and sign-up show errors in `text-brand` (red): they take `attempted-ink` too.
 
-The hairline had four strengths (8, 10, 12 and 20%). It now has two: `edge` (12%) and `edge-strong` (20%). `shadow-card` and `shadow-pop` take `edge`, so their 1px outline is a little firmer.
+The hairline had four strengths (8, 10, 12 and 20%). It now has two: `edge` (10%) around cards and `edge-strong` (14%) around a control. `shadow-card`, `shadow-edge` and `shadow-pop` take `edge`; `shadow-edge-strong` takes `edge-strong`.
+
+## The lighter treatment
+
+Picked Nov 10, 2026, because the UI read heavy. In this package:
+
+- Buttons, chips and Segmented options are 500, not 600 (`--gx-font-weight-control`). Their widths change with it.
+- `Button size="xl"` has a 12px radius, not 16px, and equal 20px side padding.
+- `Chip tone="neutral"` has an outline and no grey fill.
+- A soft button on a `surface` ground no longer shows at rest, because both are the same grey. Put it on white, or use `outline`.
+
+The same treatment applies to what gauthx still builds by hand: labels and table rows at 500, column heads with no fill, an answer option's letter square with an outline and no fill, a picked option on white.
 
 ## Motion
 

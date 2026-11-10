@@ -12,7 +12,7 @@
   box-shadow: var(--gx-btn-focus), var(--gx-btn-edge);
   color: var(--gx-color-ink);
   font: inherit;
-  font-weight: 600;
+  font-weight: var(--gx-font-weight-control);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
@@ -38,7 +38,7 @@
   color: var(--gx-color-white);
 }
 .gx-btn--soft {
-  background-color: var(--gx-color-surface-2);
+  background-color: var(--gx-color-surface);
 }
 .gx-btn--outline {
   --gx-btn-edge: var(--gx-shadow-edge-strong);
@@ -81,10 +81,9 @@
   border-radius: var(--gx-radius-xl);
   font-size: var(--gx-text-sm);
 }
-/* A little more on the text side, so a label with a trailing arrow looks centered. */
 .gx-btn--xl {
   height: var(--gx-h-xl);
-  padding-inline: 22px 18px;
-  border-radius: var(--gx-radius-2xl);
+  padding-inline: 1.25rem;
+  border-radius: var(--gx-radius-xl);
   font-size: var(--gx-text-base);
 }

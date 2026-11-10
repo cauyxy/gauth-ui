@@ -5,7 +5,7 @@
   border-radius: calc(infinity * 1px);
   box-shadow: var(--gx-avatar-edge);
   color: var(--gx-color-white);
-  font-weight: 600;
+  font-weight: var(--gx-font-weight-title);
   letter-spacing: 0.02em;
   user-select: none;
 }
@@ -28,9 +28,9 @@
   background: var(--gx-avatar-6);
 }
 .gx-avatar--plain {
-  background-color: var(--gx-color-surface-2);
+  background-color: var(--gx-color-surface);
   box-shadow: none;
   color: var(--gx-color-ink-soft);
-  font-weight: 700;
+  font-weight: var(--gx-font-weight-strong);
   letter-spacing: normal;
 }

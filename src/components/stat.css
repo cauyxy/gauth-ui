@@ -9,7 +9,7 @@
 }
 .gx-stat__value {
   font-size: var(--gx-text-3xl);
-  font-weight: 700;
+  font-weight: var(--gx-font-weight-strong);
   line-height: 1;
   letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;

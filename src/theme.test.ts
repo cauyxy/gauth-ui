@@ -32,8 +32,8 @@ it('gives the tokens as utilities, and nothing from Tailwind\'s own palette', as
 it('emits the colors that the shadows are made of', async () => {
   const css = await build(['shadow-edge', 'shadow-pop', 'shadow-edge-strong'])
   expect(css).toContain('.shadow-edge')
-  expect(css).toMatch(/--color-edge:\s*rgb\(80 88 101 \/ 0\.12\)/)
-  expect(css).toMatch(/--color-edge-strong:\s*rgb\(80 88 101 \/ 0\.2\)/)
+  expect(css).toMatch(/--color-edge:\s*rgb\(80 88 101 \/ 0\.1\)/)
+  expect(css).toMatch(/--color-edge-strong:\s*rgb\(80 88 101 \/ 0\.14\)/)
 })
 
 it('tints a shadow with a color utility', async () => {

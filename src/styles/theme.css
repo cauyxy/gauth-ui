@@ -8,6 +8,9 @@
   --drop-shadow-*: initial;
   --font-sans: 'Google Sans', 'Google Sans Fallback', -apple-system, system-ui, Roboto, Arial, sans-serif;
   --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-weight-control: 500;
+  --font-weight-title: 600;
+  --font-weight-strong: 700;
   --container-page: 1600px;
   --color-white: #fff;
   --color-black: #000;
@@ -17,13 +20,12 @@
   --color-faint: #9ca2ac;
   --color-canvas: #fafafb;
   --color-surface: #f5f5f7;
-  --color-surface-2: #f1f1f3;
   --color-line: #edeef1;
-  --color-track: #e9eaee;
+  --color-track: #f0f1f4;
   --color-ring: #c5c8cf;
   --color-rule: #dadce1;
-  --color-edge: rgb(80 88 101 / 0.12);
-  --color-edge-strong: rgb(80 88 101 / 0.2);
+  --color-edge: rgb(80 88 101 / 0.1);
+  --color-edge-strong: rgb(80 88 101 / 0.14);
   --color-brand: #ff013e;
   --color-blue: #2e5ce5;
   --color-blue-soft: #eef1ff;

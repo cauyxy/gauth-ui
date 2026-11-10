@@ -7,11 +7,12 @@
   padding-inline: 9px;
   border-radius: var(--gx-radius-md);
   font-size: var(--gx-text-xs);
-  font-weight: 600;
+  font-weight: var(--gx-font-weight-control);
   white-space: nowrap;
 }
+/* A plain fact has an outline, not a grey fill: fills are for facts with a meaning. */
 .gx-chip--neutral {
-  background-color: var(--gx-color-surface);
+  box-shadow: var(--gx-shadow-edge-strong);
   color: var(--gx-color-ink-soft);
 }
 .gx-chip--blue {
