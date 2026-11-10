@@ -115,7 +115,7 @@ node gallery/shot.ts <folder>    # screenshots of every component, both language
 
 Two things ship, each by hand, each from `main`.
 
-**The package, to npm.** Change `version` in `package.json`, merge, then push a tag `v<version>`. `release.yml` runs the checks through `prepublishOnly` and publishes. It needs the `NPM_TOKEN` repository secret.
+**The package, to npm.** Change `version` in `package.json`, merge, then push a tag `v<version>`. `release.yml` runs the checks through `prepublishOnly` and publishes. npm trusts that workflow by name (the package's Trusted publisher setting on npmjs.com names `cauyxy/gauth-ui` and `release.yml`), so do not rename the file. When the trusted publisher does not allow `npm publish`, the version is staged: it is live only after the owner approves it on npmjs.com. Check with `npm view gauth-ui@<version>`.
 
 **The docs site, to ui.gauthx.app.** Run the `site` workflow (Actions → site → Run workflow, or `gh workflow run site`). It builds `site/` and deploys it to Cloudflare as the Worker `gauth-ui-site` (`site/wrangler.jsonc`). It needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets, the same account that holds the `gauthx.app` zone.
 

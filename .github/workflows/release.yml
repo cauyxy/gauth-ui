@@ -1,4 +1,6 @@
-# Publishes the package to npm when a version tag (v0.1.0) is pushed. Needs the NPM_TOKEN repository secret.
+# Publishes the package to npm when a version tag (v0.1.0) is pushed.
+# npm trusts this workflow by name (npmjs.com → gauth-ui → Settings → Trusted publisher: cauyxy/gauth-ui, release.yml),
+# so it signs in with a short-lived identity from GitHub. The NPM_TOKEN secret is only the fallback.
 name: Release
 on:
   push:
@@ -7,6 +9,9 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # the identity npm checks against the trusted publisher
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
