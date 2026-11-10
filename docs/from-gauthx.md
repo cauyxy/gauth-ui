@@ -37,7 +37,7 @@ Picked Nov 10, 2026, because the UI read heavy. In this package:
 - `Chip tone="neutral"` has an outline and no grey fill.
 - A soft button on a `surface` ground no longer shows at rest, because both are the same grey. Put it on white, or use `outline`.
 
-The same treatment applies to what gauthx still builds by hand: labels and table rows at 500, column heads with no fill, an answer option's letter square with an outline and no fill, a picked option on white.
+The same treatment applies to what gauthx still builds by hand: labels and table rows at 500, column heads with no fill, an answer option's letter mark with an outline and no fill, a picked option on white.
 
 ## Motion
 

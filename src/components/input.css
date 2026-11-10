@@ -73,5 +73,5 @@
 /* An error: an attempted outline on the attempted-soft ground, the look of "Not yet". The Field's error text says what is wrong. */
 .gx-input > .gx-input__control[aria-invalid='true'] {
   background-color: var(--gx-color-attempted-soft);
-  box-shadow: inset 0 0 0 1.5px var(--gx-color-attempted);
+  box-shadow: var(--gx-shadow-invalid);
 }

@@ -63,7 +63,13 @@ for (const [name, width] of [['desktop', 1120], ['phone', 375]] as const) {
       await page.waitForSelector('.gx-toast')
       await page.waitForTimeout(300)
       await page.screenshot({ path: `${OUT}/${name}-toast.png` })
-      await gone('.gx-toast', 8000)
+      /* F8 moves to the toasts; the first Tab is the toast, the second its dismiss button. */
+      await page.keyboard.press('F8')
+      await page.keyboard.press('Tab')
+      await page.keyboard.press('Tab')
+      await page.locator('.gx-toast').screenshot({ path: `${OUT}/${name}-focus-toast.png` })
+      await page.keyboard.press('Enter')
+      await gone('.gx-toast')
       /* Keyboard focus: the ring on a field and on an answer option. */
       for (const [what, target] of [['input', page.locator('.gx-input__control').first()], ['answer', page.locator('.gx-answer-option:not(:disabled)').first()]] as const) {
         await target.scrollIntoViewIfNeeded()

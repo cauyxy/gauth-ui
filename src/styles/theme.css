@@ -90,6 +90,8 @@
   --shadow-pop: 0 8px 28px rgb(33 37 46 / 0.1), inset 0 0 0 1px var(--color-edge);
   --shadow-raise: 0 1px 2px rgb(33 37 46 / 0.1);
   --shadow-outline: inset 0 0 0 1.5px var(--color-ink);
+  --shadow-box: inset 0 0 0 1.5px var(--color-ring);
+  --shadow-invalid: inset 0 0 0 1.5px var(--color-attempted);
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
   --animate-fade-in: gx-fade-in var(--gx-dur-base) var(--ease-enter) both;

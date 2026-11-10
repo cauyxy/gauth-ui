@@ -135,6 +135,8 @@
   --gx-shadow-pop: 0 8px 28px rgb(33 37 46 / 0.1), inset 0 0 0 1px var(--gx-color-edge); /* Popovers, menus and floating docks only */
   --gx-shadow-raise: 0 1px 2px rgb(33 37 46 / 0.1); /* The picked option of a Segmented control */
   --gx-shadow-outline: inset 0 0 0 1.5px var(--gx-color-ink); /* The ring of a picked item */
+  --gx-shadow-box: inset 0 0 0 1.5px var(--gx-color-ring); /* The edge of an empty checkbox */
+  --gx-shadow-invalid: inset 0 0 0 1.5px var(--gx-color-attempted); /* The edge of a field with an error */
 
   /* Control heights: every button and field uses one of these. */
   --gx-h-sm: 30px;

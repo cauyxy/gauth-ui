@@ -85,7 +85,7 @@ Line height has four steps: `leading-figure` 1 for a metric, `leading-title` 1.1
 
 - Staff cards are `Panel`: 16px radius, white, a 1px inset hairline, no drop shadow. Student cards run larger (24px).
 - Nested radii are concentric: a card holds tiles a step smaller. Radii: `xs` 2 · `sm` 4 · `md` 6 · `lg` 8 · `xl` 12 · `2xl` 16 · `3xl` 24 · `4xl` 32 px.
-- Shadows are only `card`, `edge`, `edge-strong`, `pop`, `raise` and `outline`. `shadow-pop` is for popovers, menus and floating docks.
+- Shadows are only `card`, `edge`, `edge-strong`, `pop`, `raise`, `outline`, `box` (an empty checkbox) and `invalid` (a field with an error). `shadow-pop` is for popovers, menus and floating docks.
 - Lines between rows are borders in `line`, not shadows. A picked item is `shadow-outline` (1.5px ink).
 - Controls have four heights: `--gx-h-sm` 30, `--gx-h-md` 34, `--gx-h-lg` 40, `--gx-h-xl` 44px. Staff pages use `md`; student pages and touch targets use `xl`.
 - **Spacing is a 12-step scale** (`--gx-space-*`): 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32, 40px. Inside a control use 4 to 12; between rows 12 to 16; inside a card 20 to 24; between sections 32 to 40.

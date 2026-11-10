@@ -88,6 +88,7 @@ describe.each(components)('%s', (name, dir) => {
     expect(offToken(css, 'line-height', /^(?:normal|inherit|var\(--gx-leading-[\w-]+\))$/), 'line heights that are not tokens').toEqual([])
     expect(offToken(css, 'letter-spacing', /^(?:normal|inherit|var\(--gx-tracking-[\w-]+\))$/), 'letter spacing that is not a token').toEqual([])
     expect(offToken(css, 'z-index', /^(?:0|1|auto|var\(--gx-z-[\w-]+\))$/), 'layers that are not tokens').toEqual([])
+    expect(css.match(/box-shadow:(?!\s*(?:none|var\(--gx-[\w-]+\));)[^;]+/g) ?? [], 'shadows that are not tokens').toEqual([])
     const local = new Set(css.match(/--gx-[\w-]+(?=\s*:)/g) ?? [])
     const unknown = (css.match(/var\(--gx-[\w-]+/g) ?? []).map((v) => v.slice(4)).filter((v) => !tokens.has(v) && !local.has(v))
     expect(unknown, 'tokens that do not exist').toEqual([])
