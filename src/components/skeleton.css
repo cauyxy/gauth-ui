@@ -1,0 +1,49 @@
+.gx-skeleton {
+  display: block;
+  border-radius: var(--gx-radius-lg);
+  background-color: color-mix(in oklab, var(--gx-color-ink) 7%, transparent);
+  animation: gx-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gx-skeleton {
+    animation: none;
+  }
+}
+
+.gx-page-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: gx-fade-in 0.2s ease-out 0.15s both;
+}
+.gx-page-skeleton__title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+.gx-page-skeleton__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: var(--gx-radius-2xl);
+  background-color: var(--gx-color-white);
+  box-shadow: var(--gx-shadow-edge);
+}
+.gx-page-skeleton__row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.gx-page-skeleton__dot {
+  flex: none;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: calc(infinity * 1px);
+}
+.gx-page-skeleton__lines {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.5rem;
+}

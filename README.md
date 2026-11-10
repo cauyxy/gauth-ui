@@ -1,0 +1,69 @@
+# gauth-ui
+
+The Gauth design system: tokens, React components and the design rules they follow. White ground, ink text, hairline-edged cards instead of drop shadows, and the red Gauth mark as the only red on the page.
+
+The design rules ship with the package: [`design/README.md`](design/README.md) says what each color, type size and component means.
+
+## Install
+
+```bash
+pnpm add gauth-ui
+```
+
+React 19 is a peer dependency. Load Google Sans in the page's `<head>`:
+
+```html
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" />
+```
+
+## Use
+
+Import the styles once, then the components:
+
+```tsx
+import 'gauth-ui/styles.css'
+import { Button, Chip, Panel, PanelHeader } from 'gauth-ui'
+
+export function NeedsSupport() {
+  return (
+    <Panel>
+      <PanelHeader title="Needs support">
+        <Button variant="outline">Reteach</Button>
+      </PanelHeader>
+      <Chip tone="blue">A-REI.B.3</Chip>
+    </Panel>
+  )
+}
+```
+
+No Tailwind is needed. Every token is a CSS variable (`var(--gx-color-ink)`, `var(--gx-radius-2xl)`, `var(--gx-h-md)`) for your own styles.
+
+The stylesheet also sets page defaults: the font, text color and line height on `html`, no margin and a white ground on `body`, and links and buttons that inherit their color. Component classes win over your own element rules such as `button { … }`.
+
+## With Tailwind v4
+
+Add the theme to get the tokens as utilities (`bg-ink`, `text-muted`, `rounded-2xl`, `shadow-edge`). Tailwind's own palette, type sizes and shadows are cleared, so only Gauth's exist.
+
+```css
+@import 'tailwindcss';
+@import 'gauth-ui/theme.css';
+@import 'gauth-ui/styles.css' layer(components);
+```
+
+Import the styles in CSS with `layer(components)`, not from JavaScript. A utility on a component then wins: `<Button className="w-full">`.
+
+## Components
+
+Avatar · Button · Chip · Dot · IconBox · Meter · Panel · Popover · Segmented · Skeleton · Stat · Switch · Tooltip
+
+Each has a guideline in [`design/components/`](design/components).
+
+## Develop
+
+```bash
+pnpm install
+pnpm test
+pnpm typecheck
+pnpm build
+pnpm tokens     # after a change to src/styles/tokens.css
+```

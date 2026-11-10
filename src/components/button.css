@@ -1,0 +1,90 @@
+.gx-btn {
+  --gx-btn-edge: 0 0 transparent;
+  --gx-btn-focus: 0 0 transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0;
+  border: 0;
+  padding-block: 0;
+  background: none;
+  box-shadow: var(--gx-btn-focus), var(--gx-btn-edge);
+  color: var(--gx-color-ink);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  outline-style: none;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.gx-btn:focus-visible {
+  outline-style: none;
+  --gx-btn-focus: 0 0 0 2px color-mix(in oklab, var(--gx-color-blue) 40%, transparent);
+}
+.gx-btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.gx-btn svg {
+  flex-shrink: 0;
+}
+
+.gx-btn--ink {
+  background-color: var(--gx-color-ink);
+  color: var(--gx-color-white);
+}
+.gx-btn--soft {
+  background-color: var(--gx-color-surface-2);
+}
+.gx-btn--outline {
+  --gx-btn-edge: var(--gx-shadow-edge-strong);
+  background-color: var(--gx-color-white);
+}
+.gx-btn--link {
+  color: var(--gx-color-muted);
+}
+@media (hover: hover) {
+  .gx-btn--ink:hover {
+    background-color: var(--gx-color-black);
+  }
+  .gx-btn--soft:hover {
+    background-color: var(--gx-color-line-2);
+  }
+  .gx-btn--outline:hover,
+  .gx-btn--ghost:hover {
+    background-color: var(--gx-color-surface);
+  }
+  .gx-btn--link:hover {
+    color: var(--gx-color-ink);
+  }
+}
+
+.gx-btn--sm {
+  height: var(--gx-h-sm);
+  padding-inline: 0.75rem;
+  border-radius: var(--gx-radius-lg);
+  font-size: var(--gx-text-sm);
+}
+.gx-btn--md {
+  height: var(--gx-h-md);
+  padding-inline: 0.875rem;
+  border-radius: var(--gx-radius-lg);
+  font-size: var(--gx-text-sm);
+}
+.gx-btn--lg {
+  height: var(--gx-h-lg);
+  padding-inline: 1rem;
+  border-radius: var(--gx-radius-xl);
+  font-size: var(--gx-text-sm);
+}
+/* A little more on the text side, so a label with a trailing arrow looks centered. */
+.gx-btn--xl {
+  height: var(--gx-h-xl);
+  padding-inline: 22px 18px;
+  border-radius: var(--gx-radius-2xl);
+  font-size: var(--gx-text-base);
+}

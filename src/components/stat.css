@@ -1,0 +1,20 @@
+.gx-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.gx-stat__label {
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-sm);
+}
+.gx-stat__value {
+  font-size: var(--gx-text-3xl);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.gx-stat__sub {
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-xs);
+}

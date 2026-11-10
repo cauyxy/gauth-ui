@@ -1,0 +1,11 @@
+.gx-tooltip {
+  z-index: 50;
+  max-width: 18rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--gx-radius-lg);
+  background-color: var(--gx-color-ink);
+  box-shadow: var(--gx-shadow-pop);
+  color: var(--gx-color-white);
+  font-size: var(--gx-text-xs);
+  line-height: 1.45;
+}

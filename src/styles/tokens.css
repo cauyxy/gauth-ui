@@ -1,0 +1,122 @@
+/*
+ * Gauth design tokens. This file is the one source: scripts/tokens.ts writes theme.css (the same tokens as a
+ * Tailwind v4 theme) and design/tokens.json from it. A comment above a group, or at the end of a line, is the
+ * token's usage note.
+ */
+:root {
+  /* Google Sans, as on gauth.com; a metric-matched Arial while it loads, the system font if neither is there. */
+  --gx-font-sans: 'Google Sans', 'Google Sans Fallback', -apple-system, system-ui, Roboto, Arial, sans-serif;
+  --gx-font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; /* Worked steps and standard codes */
+
+  /* Page column: every app shell centers its content in one column this wide. */
+  --gx-container-page: 1600px;
+
+  /* Only these colors exist, plus white and black. */
+  --gx-color-white: #fff;
+  --gx-color-black: #000;
+
+  /* Text */
+  --gx-color-ink: #21252e;
+  --gx-color-ink-soft: rgb(33 37 46 / 0.75);
+  --gx-color-muted: #646a77;
+  --gx-color-subtle: #757c88;
+  --gx-color-faint: #9ca2ac;
+
+  /* Surfaces */
+  --gx-color-canvas: #fafafb;
+  --gx-color-surface: #f5f5f7;
+  --gx-color-surface-2: #f1f1f3;
+  --gx-color-surface-3: #f7f7f8;
+  --gx-color-line: #edeef1;
+  --gx-color-line-2: #eeeff3;
+  --gx-color-track: #e9eaee;
+  --gx-color-ring: #c5c8cf;
+  --gx-color-rule: #dadce1; /* A firmer hairline than line: print-sheet rules and boxes, off toggles, step connectors, chart grids */
+  --gx-color-edge: rgb(80 88 101 / 0.1);
+  --gx-color-edge-2: rgb(80 88 101 / 0.16);
+  --gx-color-edge-3: rgb(80 88 101 / 0.2);
+
+  /* Brand and accents */
+  --gx-color-brand: #ff013e;
+  --gx-color-brand-soft: #ff6e6e;
+  --gx-color-blue: #2e5ce5;
+  --gx-color-blue-soft: #eef1ff;
+  --gx-color-blue-tint: #e3e8ff;
+  --gx-color-good: #1f5d3e;
+  --gx-color-good-soft: #e8f9f2;
+  --gx-color-good-mid: #3ba776;
+  --gx-color-warn: #8a5a12;
+  --gx-color-warn-soft: #fff1dd;
+  --gx-color-pink: #b0124a;
+  --gx-color-pink-soft: #ffe5ec;
+
+  /* Skill levels: rose, gold, mint, teal. The same levels on every side. */
+  --gx-color-mastered: #3f9f8f;
+  --gx-color-proficient: #8acfc0;
+  --gx-color-familiar: #edcd83;
+  --gx-color-attempted: #e8a8b5;
+  --gx-color-not-started: #e6e8eb;
+  --gx-color-mastered-ink: #276e60;
+  --gx-color-mastered-soft: #e7f4ef;
+  --gx-color-proficient-ink: #2d7063;
+  --gx-color-familiar-ink: #7d6229;
+  --gx-color-attempted-ink: #99556d;
+  --gx-color-proficient-soft: #edf8f4;
+  --gx-color-familiar-soft: #fbf4e4;
+  --gx-color-attempted-soft: #f9eef2;
+  --gx-color-correct: #3fb5a5; /* Right answers */
+
+  /* Violet: XP and Gauth AI accents. Never a level, never a button. */
+  --gx-color-violet: #6556c8;
+  --gx-color-violet-deep: #443493;
+  --gx-color-violet-mid: #918ddf;
+  --gx-color-violet-soft: #f3f1ff;
+  --gx-color-violet-tint: #e3e3fa;
+
+  /* Radii: Tailwind's own values. Nested corners step down so they stay concentric. */
+  --gx-radius-xs: 0.125rem; /* 2px */
+  --gx-radius-sm: 0.25rem; /* 4px */
+  --gx-radius-md: 0.375rem; /* 6px */
+  --gx-radius-lg: 0.5rem; /* 8px */
+  --gx-radius-xl: 0.75rem; /* 12px */
+  --gx-radius-2xl: 1rem; /* 16px. Staff panels */
+  --gx-radius-3xl: 1.5rem; /* 24px. Student cards */
+  --gx-radius-4xl: 2rem; /* 32px */
+
+  /* Type scale: Tailwind's sizes plus 2xs and 3xs. Text keeps the inherited line height. */
+  --gx-text-3xs: 0.625rem; /* 10px. Print sheets and tiny badges only */
+  --gx-text-2xs: 0.6875rem; /* 11px. Captions, column heads, chart labels */
+  --gx-text-xs: 0.75rem; /* 12px. Meta text, chips, small labels */
+  --gx-text-sm: 0.875rem; /* 14px. Staff UI body, rows, buttons, nav */
+  --gx-text-base: 1rem; /* 16px. Student body, phone inputs, panel titles */
+  --gx-text-lg: 1.125rem; /* 18px. Student reading size: problems, steps, answers */
+  --gx-text-xl: 1.25rem; /* 20px. Card titles */
+  --gx-text-2xl: 1.5rem; /* 24px. Staff page titles, question stems */
+  --gx-text-3xl: 1.875rem; /* 30px. Page titles on phones, metrics */
+  --gx-text-4xl: 2.25rem; /* 36px. Student page titles */
+  --gx-text-5xl: 3rem; /* 48px. Marketing section titles */
+  --gx-text-6xl: 3.75rem; /* 60px. Marketing hero */
+
+  /* Shadows: only these. Cards are drawn with an inset hairline, not a drop shadow. */
+  --gx-shadow-card: 0 1px 2px rgb(33 37 46 / 0.04), inset 0 0 0 1px rgb(80 88 101 / 0.1);
+  --gx-shadow-edge: inset 0 0 0 1px rgb(80 88 101 / 0.12); /* The card hairline */
+  --gx-shadow-edge-strong: inset 0 0 0 1px rgb(80 88 101 / 0.2); /* The hairline where it must show on a tinted ground */
+  --gx-shadow-pop: 0 8px 28px rgb(33 37 46 / 0.1), inset 0 0 0 1px rgb(80 88 101 / 0.08); /* Popovers, menus and floating docks only */
+  --gx-shadow-raise: 0 1px 2px rgb(33 37 46 / 0.1); /* The picked option of a Segmented control */
+  --gx-shadow-outline: inset 0 0 0 1.5px var(--gx-color-ink); /* The ring of a picked item */
+
+  /* Control heights: every button and field uses one of these. */
+  --gx-h-sm: 30px;
+  --gx-h-md: 34px; /* The default staff control */
+  --gx-h-lg: 2.5rem; /* 40px */
+  --gx-h-xl: 2.75rem; /* 44px. Student controls and touch targets */
+
+  /* Avatar fills: a name always lands on the same one. */
+  --gx-avatar-1: linear-gradient(135deg, #6cc6de, #2685ae);
+  --gx-avatar-2: linear-gradient(135deg, #a49deb, #6556c8);
+  --gx-avatar-3: linear-gradient(135deg, #ff9aa8, #e8476b);
+  --gx-avatar-4: linear-gradient(135deg, #6fd0a4, #2f9466);
+  --gx-avatar-5: linear-gradient(135deg, #7b95f7, #2e5ce5);
+  --gx-avatar-6: linear-gradient(135deg, #f7c26b, #d9822b);
+  --gx-avatar-edge: inset 0 0 0 1px rgb(255 255 255 / 0.18), 0 1px 2px rgb(33 37 46 / 0.12);
+}

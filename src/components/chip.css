@@ -1,0 +1,40 @@
+.gx-chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.5rem;
+  padding-inline: 9px;
+  border-radius: var(--gx-radius-md);
+  font-size: var(--gx-text-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.gx-chip--neutral {
+  background-color: var(--gx-color-surface);
+  color: var(--gx-color-ink-soft);
+}
+.gx-chip--blue {
+  background-color: var(--gx-color-blue-soft);
+  color: var(--gx-color-blue);
+}
+.gx-chip--violet {
+  background-color: var(--gx-color-violet-soft);
+  color: var(--gx-color-violet);
+}
+.gx-chip--good {
+  background-color: var(--gx-color-good-soft);
+  color: var(--gx-color-good);
+}
+.gx-chip--warn {
+  background-color: var(--gx-color-warn-soft);
+  color: var(--gx-color-warn);
+}
+.gx-chip--pink {
+  background-color: var(--gx-color-pink-soft);
+  color: var(--gx-color-pink);
+}
+.gx-chip--ink {
+  background-color: var(--gx-color-ink);
+  color: var(--gx-color-white);
+}
