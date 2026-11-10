@@ -10,7 +10,6 @@
  */
 .gx-tex .katex {
   font-size: 1.1em;
-  line-height: var(--gx-leading-title);
 }
 /* Words and units inside a formula ("5 cm", "and") are the same type as the words around it, at their size. */
 .gx-tex .katex .text {
@@ -27,9 +26,4 @@
 }
 .gx-tex--display > .katex-display {
   margin: var(--gx-space-3) 0;
-}
-
-/* A formula and the punctuation that touches it stay on one line. */
-.gx-rich-text__keep {
-  white-space: nowrap;
 }

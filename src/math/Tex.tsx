@@ -4,7 +4,8 @@ import { cx } from '../core/cx'
 
 const cache = new Map<string, string>()
 
-function toHtml(tex: string, display: boolean) {
+/** The HTML of a formula. Kept, so a formula that is drawn again costs nothing. */
+export function toHtml(tex: string, display: boolean) {
   const key = `${display ? 'D' : 'I'}${tex}`
   let html = cache.get(key)
   if (html === undefined) {

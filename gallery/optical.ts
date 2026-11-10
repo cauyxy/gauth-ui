@@ -92,7 +92,12 @@ for (const width of [1120, 375]) {
     const out: string[] = []
     const say = (kind: string, el: Element, text: string, what: string) => out.push(`${kind.padEnd(6)} ${name(el).padEnd(40).slice(0, 40)} ${text.padEnd(22).slice(0, 22)} ${what}`)
     const px = (n: number) => `${n > 0 ? '+' : ''}${n.toFixed(2)}px`
-    const all = (selector: string) => [...document.querySelectorAll<HTMLElement>(`.g-section :is(${selector})`)]
+    /* A list that finds nothing checks nothing, so that is a failure too: a class name changed, or the gallery lost a case. */
+    const all = (selector: string) => {
+      const found = [...document.querySelectorAll<HTMLElement>(`.g-section :is(${selector})`)]
+      if (!found.length) out.push(`none   nothing in the gallery matches ${selector}`)
+      return found
+    }
 
     for (const el of all(LABELS)) {
       const ink = inkOf(el)
@@ -141,11 +146,18 @@ for (const width of [1120, 375]) {
       probe.remove()
       return bottom
     }
+    let measured = 0
     for (const tex of all('.gx-tex:not(.gx-tex--display)')) {
       const holder = tex.parentElement!
       const katex = tex.querySelector('.katex')
       const base = tex.querySelector('.katex-html > .katex-base')
-      if (!katex || !base || ![...holder.childNodes].some((n) => n.nodeType === 3 && n.textContent!.trim())) continue
+      if (tex.querySelector('.katex-error')) continue
+      if (!katex || !base) {
+        say('none', tex, tex.textContent ?? '', 'no drawn formula found in it: did KaTeX rename its classes?')
+        continue
+      }
+      if (![...holder.childNodes].some((n) => n.nodeType === 3 && n.textContent!.trim())) continue
+      measured++
       /* A probe before the formula can stay at the end of the line above when the line breaks there, so try both sides. */
       const math = probeAt(base, base.firstChild)
       const off = [probeAt(holder, tex), probeAt(holder, tex.nextSibling)].map((words) => math - words).sort((a, b) => Math.abs(a) - Math.abs(b))[0]!
@@ -158,6 +170,7 @@ for (const width of [1120, 375]) {
       const ratio = heightOf(katex, 'KaTeX_Main') / heightOf(holder, getComputedStyle(holder).fontFamily)
       if (Math.abs(ratio - 1) > 0.05) say('size', holder, label, `its numbers are ${(ratio * 100).toFixed(0)}% of the height of the numbers in the words`)
     }
+    if (!measured) out.push('none   no formula in a line of words was measured')
     for (const el of all(ENDS)) {
       const svg = el.querySelector(':scope > svg:last-child, :scope > .gx-select__icon')
       const ink = inkOf(el)
