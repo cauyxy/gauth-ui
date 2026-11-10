@@ -78,6 +78,21 @@ Weights: 400 for body, 500 for controls (buttons, chips, labels, table rows), 60
 
 Line height has four steps: `leading-figure` 1 for a metric, `leading-title` 1.15 for a page title, `leading-heading` 1.35 for a card title or an answer option, `leading-body` 1.5 for running text. Tracking has three: `tracking-display` −0.03em for page titles and metrics, `tracking-title` −0.02em for card titles, `tracking-label` +0.025em for column heads.
 
+- A title balances its lines (`text-wrap: balance`), so a phone never leaves "3?" alone on the last line. Running text in a callout, a hint or a description uses `text-wrap: pretty`.
+- A middle dot stays with the word before it: write a non-breaking space before "·", so a line never starts with the dot.
+- A column of numbers is right-aligned with tabular numbers.
+- No `-webkit-font-smoothing: antialiased`: on macOS it makes the stems thin and washed out.
+
+## Optical alignment
+
+Align what the eye sees, the ink, not the box. `node gallery/optical.ts` measures it in Chrome and fails when a place is off by half a pixel or more.
+
+- **A label in a control.** The control's middle lies between the middle of the capitals and the middle of the lowercase letters. Google Sans does this by itself at the four control heights, so a label needs no nudge. Do not set a `line-height` on a one-line label to "fix" it.
+- **A letter or number in a round mark** (an answer's letter, a step's number, initials): the capitals' middle is the mark's middle, both ways.
+- **A mark beside text** (a checkbox, a level mark, a spinner): its middle is on the first line of the text. When the text wraps, the mark stays on the first line; it does not move to the middle of the block.
+- **An icon at the end of a control.** An icon's strokes do not fill its 20px box, so the icon sits 2px closer to the edge than text does. `Button` and `Select` do this by themselves.
+- **Icons are drawn on one grid:** 20px box, 1.8px stroke, round ends, strokes inside the middle 10 to 14px. An icon from another set sits wrong next to them.
+
 ## Surfaces and layout
 
 - **Keep it light.** A grey fill, an outline and a bold weight each add weight, so an element gets one of them at most. A plain chip has an outline and no fill. A table's column heads have no fill. A picked option stays white and only its mark turns ink.

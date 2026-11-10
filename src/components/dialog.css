@@ -44,12 +44,14 @@
   font-weight: var(--gx-font-weight-strong);
   line-height: var(--gx-leading-heading);
   letter-spacing: var(--gx-tracking-title);
+  text-wrap: balance;
 }
 .gx-dialog__description {
   margin: 0;
   color: var(--gx-color-muted);
   font-size: var(--gx-text-sm);
   line-height: var(--gx-leading-body);
+  text-wrap: pretty;
 }
 
 /* The row of answers at the end of the body. */

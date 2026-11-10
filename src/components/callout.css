@@ -4,6 +4,7 @@
   border-radius: var(--gx-radius-xl);
   font-size: var(--gx-text-sm);
   line-height: var(--gx-leading-body);
+  text-wrap: pretty;
 }
 .gx-callout__title {
   margin: 0 0 var(--gx-space-0-5);

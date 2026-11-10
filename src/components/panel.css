@@ -21,6 +21,7 @@
   font-weight: var(--gx-font-weight-title);
   line-height: var(--gx-leading-heading);
   letter-spacing: var(--gx-tracking-title);
+  text-wrap: balance;
 }
 .gx-panel__actions {
   display: flex;

@@ -18,6 +18,13 @@
   transition-duration: var(--gx-dur-fast);
   transition-timing-function: var(--gx-ease-standard);
 }
+/* An icon's strokes do not fill its box, so an icon at an end sits closer to the edge: the space the eye sees is then equal on both sides. */
+.gx-btn > svg:first-child {
+  margin-inline-start: calc(var(--gx-space-0-5) * -1);
+}
+.gx-btn > svg:last-child {
+  margin-inline-end: calc(var(--gx-space-0-5) * -1);
+}
 .gx-btn:focus-visible {
   outline: var(--gx-focus-ring);
   outline-offset: 2px;

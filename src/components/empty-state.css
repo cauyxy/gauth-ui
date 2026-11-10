@@ -19,6 +19,7 @@
   font-size: var(--gx-text-base);
   font-weight: var(--gx-font-weight-title);
   line-height: var(--gx-leading-heading);
+  text-wrap: balance;
 }
 .gx-empty-state__description {
   max-width: 20rem;
@@ -26,6 +27,7 @@
   color: var(--gx-color-muted);
   font-size: var(--gx-text-sm);
   line-height: var(--gx-leading-body);
+  text-wrap: pretty;
 }
 .gx-empty-state__action {
   margin-top: var(--gx-space-2-5);

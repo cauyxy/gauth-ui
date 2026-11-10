@@ -17,6 +17,7 @@
   font-weight: var(--gx-font-weight-strong);
   line-height: var(--gx-leading-title);
   letter-spacing: var(--gx-tracking-display);
+  text-wrap: balance;
 }
 .gx-page-title__actions {
   display: flex;

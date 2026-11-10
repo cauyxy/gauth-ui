@@ -14,6 +14,7 @@
 }
 .gx-reveal__body {
   line-height: var(--gx-leading-body);
+  text-wrap: pretty;
 }
 .gx-reveal--hint {
   background-color: var(--gx-color-surface);

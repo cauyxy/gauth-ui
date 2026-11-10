@@ -31,7 +31,7 @@ export default function Overlays() {
             <DialogTrigger asChild>
               <Button variant="outline">Publish practice</Button>
             </DialogTrigger>
-            <DialogContent title="Publish to Geometry · Period 3?">
+            <DialogContent title={'Publish to Geometry\u00a0· Period 3?'}>
               <Callout tone="warn">2 students have no graded answers yet.</Callout>
               <DialogActions>
                 <DialogClose asChild>

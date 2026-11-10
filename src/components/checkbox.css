@@ -1,7 +1,8 @@
 .gx-checkbox {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  /* The box sits on the first line of the text, also when the text wraps. */
+  align-items: flex-start;
   gap: var(--gx-space-2-5);
   min-width: 0;
   font-size: var(--gx-text-sm);
@@ -16,7 +17,7 @@
   position: absolute;
   width: 18px;
   height: 18px;
-  margin: 0;
+  margin: calc((1lh - 18px) / 2) 0;
   opacity: 0;
   cursor: inherit;
 }
@@ -26,6 +27,7 @@
   place-items: center;
   width: 18px;
   height: 18px;
+  margin: calc((1lh - 18px) / 2) 0;
   border-radius: var(--gx-radius-md);
   box-shadow: var(--gx-shadow-box);
   color: var(--gx-color-white);

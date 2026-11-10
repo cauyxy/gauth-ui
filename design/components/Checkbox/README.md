@@ -7,3 +7,4 @@ A yes or no for one item of a list: a standard to cover, a student to include. `
 - With no visible text (a table row), give it `label` for screen readers.
 - For a setting that takes effect at once, use `Switch`. For one choice out of a few, use `Segmented`.
 - Disabled is half opacity.
+- The box sits on the first line of its text, also when the text wraps.

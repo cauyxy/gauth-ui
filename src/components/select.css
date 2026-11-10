@@ -48,7 +48,7 @@
   font-size: var(--gx-text-sm);
 }
 .gx-select--md > .gx-select__icon {
-  inset-inline-end: var(--gx-space-2-5);
+  inset-inline-end: calc(var(--gx-space-2-5) - 1px); /* The strokes end 12px from the edge, as the text starts */
 }
 /* 16px text, so a phone does not zoom in on focus. */
 .gx-select--xl > .gx-select__control {
@@ -58,7 +58,7 @@
   font-size: var(--gx-text-base);
 }
 .gx-select--xl > .gx-select__icon {
-  inset-inline-end: var(--gx-space-3-5);
+  inset-inline-end: calc(var(--gx-space-3-5) - 1px); /* 16px, as the text starts */
 }
 
 /* An error: an attempted outline on the attempted-soft ground, the look of "Not yet". The Field's error text says what is wrong. */

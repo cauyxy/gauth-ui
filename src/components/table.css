@@ -40,4 +40,5 @@
 }
 .gx-table__cell--end {
   text-align: end;
+  font-variant-numeric: tabular-nums;
 }

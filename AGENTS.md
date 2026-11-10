@@ -16,7 +16,7 @@ src/learning/            learning components, same shape
 src/styles.css           imports all of the above; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
-gallery/                 every component on one page, in both languages (pnpm gallery)
+gallery/                 every component on one page, in both languages (pnpm gallery); shot.ts and optical.ts check it in Chrome
 GLOSSARY.md              what each shared word means, in en and es
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
 compare/                 compares each component with the gauthx one it replaces (pnpm compare)
@@ -100,6 +100,8 @@ pnpm typecheck
 pnpm test        # component tests and rules.test.ts
 pnpm build       # dist/: index.js, types, styles.css, tokens.css, theme.css
 pnpm tokens      # after a change to tokens.css
+node gallery/optical.ts          # after a change to a control's size, padding, font or icon: ink alignment, measured in Chrome
+node gallery/shot.ts <folder>    # screenshots of every component, both languages, desktop and phone
 ```
 
 ## Release

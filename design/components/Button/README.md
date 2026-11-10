@@ -10,3 +10,4 @@ The one way to act on a row, card or page. `Button` and `buttonClass` in `src/co
 - Never red. Never two ink buttons side by side. Violet is never a button.
 - A link that must look like a button uses `asChild` or `buttonClass()`. Do not copy the styles.
 - It is `type="button"` by default. A form's submit button sets `type="submit"`.
+- An icon goes first or last in the button, from `Icon`. It sits 2px closer to the edge than text does, so the space looks equal on both sides.
