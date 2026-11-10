@@ -11,7 +11,7 @@
   gap: 1.25rem;
   /* It waits 150 ms, so a page whose data is already on the way never flashes it. */
   animation: var(--gx-animate-fade-in);
-  animation-delay: var(--gx-dur-fast);
+  animation-delay: var(--gx-delay-loading);
 }
 .gx-page-skeleton__title {
   display: flex;

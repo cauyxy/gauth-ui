@@ -111,6 +111,7 @@
   --gx-dur-base: calc(200ms * var(--gx-ms)); /* A change in place: a picked answer, a fade */
   --gx-dur-enter: calc(260ms * var(--gx-ms)); /* Content that arrives: a drawer, a revealed hint, a card */
   --gx-dur-mark: calc(360ms * var(--gx-ms)); /* Feedback on an answer */
+  --gx-delay-loading: 150ms; /* A loading state waits this long, so data that is already on the way never flashes it. A wait is not motion, so it is not multiplied */
   --gx-ease-standard: cubic-bezier(0.4, 0, 0.2, 1); /* A change in place */
   --gx-ease-enter: cubic-bezier(0.22, 1, 0.36, 1); /* Content that arrives: fast at first, then it settles */
 
