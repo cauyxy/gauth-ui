@@ -50,7 +50,8 @@ One ladder in every product: **Attempted, Familiar, Proficient, Mastered**, plus
 | Attempted   | `attempted`   | `attempted-ink`  | `attempted-soft`  |
 | Not started | `not-started` | `muted`          | `surface-2`       |
 
-- The ramp runs muted rose, warm gold, mint, teal.
+- The ramp runs from warm to cool: orange, gold, mint, teal.
+- `attempted` is also the color of a wrong answer and of a field error. There is no separate error color, and nothing is red.
 - Each level also has its own shape, so no level relies on color alone.
 - Text in a level's color uses its `-ink` value on its `-soft` ground.
 
@@ -98,7 +99,7 @@ Motion says what changed and then stops. It is short, it never loops for decorat
 - Two easings: `ease-standard` for a change in place, `ease-enter` for content that arrives (fast at first, then it settles).
 - Named movements (`--gx-animate-*`, `animate-*` in Tailwind): `fade-in`, `fade-out`, `pop-in`, `rise-in`, `slide-in`, `pulse`, `spin`, `sweep`, `mark-right`, `mark-retry`.
 - Things leave faster than they arrive: an exit is `dur-fast`.
-- **A right answer** gets one small swell (`mark-right`). **A wrong answer** gets a short side-to-side nudge (`mark-retry`) in rose, never red, and the words "Not yet".
+- **A right answer** gets one small swell (`mark-right`). **A wrong answer** gets a short side-to-side nudge (`mark-retry`) in the `attempted` orange, never red, and the words "Not yet".
 - **Only three things loop:** a skeleton's pulse, a spinner, and the segment of a bar with no known end. Each one means "wait".
 - Hover changes color only. Text never moves or changes size on hover.
 - When a person asks for reduced motion, every duration is 0: changes are instant and loops stop.

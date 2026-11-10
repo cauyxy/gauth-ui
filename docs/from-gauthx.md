@@ -14,6 +14,16 @@ The Tailwind theme clears every color that is not a token, so a class with an ol
 | `--color-edge-2`, `--color-edge-3`     | `edge-strong`       | No uses                                                             | none                               |
 | `--color-brand-soft`, `--color-blue-tint` | none             | No uses                                                             | none                               |
 
+## Colors that changed
+
+| Token            | gauthx    | gauth-ui  |
+| ---------------- | --------- | --------- |
+| `attempted`      | `#e8a8b5` | `#f59e62` |
+| `attempted-ink`  | `#99556d` | `#974a12` |
+| `attempted-soft` | `#f9eef2` | `#fef1e6` |
+
+Rose is replaced by orange for the Attempted level, a wrong answer and a field error (picked Nov 10, 2026). gauthx keeps a second copy of these values in `MASTERY_COLOR`, `MASTERY_INK` and `MASTERY_SOFT` in `packages/task/src/index.ts`: change them in the same PR. Its docs and the `gauthx-ui` skill say "rose" in several places. Sign-in and sign-up show errors in `text-brand` (red): they take `attempted-ink` too.
+
 The hairline had four strengths (8, 10, 12 and 20%). It now has two: `edge` (12%) and `edge-strong` (20%). `shadow-card` and `shadow-pop` take `edge`, so their 1px outline is a little firmer.
 
 ## Motion

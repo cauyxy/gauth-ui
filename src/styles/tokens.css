@@ -44,20 +44,20 @@
   --gx-color-pink: #b0124a;
   --gx-color-pink-soft: #ffe5ec;
 
-  /* Skill levels: rose, gold, mint, teal. The same levels on every side. */
+  /* Skill levels: orange, gold, mint, teal, from warm to cool. The same levels in every product. */
   --gx-color-mastered: #3f9f8f;
   --gx-color-proficient: #8acfc0;
   --gx-color-familiar: #edcd83;
-  --gx-color-attempted: #e8a8b5;
+  --gx-color-attempted: #f59e62; /* Also a wrong answer and a field error: "Not yet", never red */
   --gx-color-not-started: #e6e8eb;
   --gx-color-mastered-ink: #276e60;
   --gx-color-mastered-soft: #e7f4ef;
   --gx-color-proficient-ink: #2d7063;
   --gx-color-familiar-ink: #7d6229;
-  --gx-color-attempted-ink: #99556d;
+  --gx-color-attempted-ink: #974a12;
   --gx-color-proficient-soft: #edf8f4;
   --gx-color-familiar-soft: #fbf4e4;
-  --gx-color-attempted-soft: #f9eef2;
+  --gx-color-attempted-soft: #fef1e6;
   --gx-color-correct: #3fb5a5; /* Right answers */
 
   /* Violet: XP and Gauth AI accents. Never a level, never a button. */
