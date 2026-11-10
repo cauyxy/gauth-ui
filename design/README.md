@@ -26,11 +26,11 @@ Ink on white carries the page. Color appears only where it means something. A to
 | ------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | Text         | `ink`, `ink-soft`, `muted`, `subtle`, `faint`                       | `ink` for text and primary buttons; `muted` for meta lines; `faint` never for running text.       |
 | Surfaces     | `canvas`, `surface`, `surface-2`, `surface-3`, `line`, `line-2`     | White cards on `canvas`; `surface-2` for secondary buttons and icon squares; `line` for dividers. |
-| Edges        | `edge`, `edge-2`, `edge-3`, `ring`, `rule`, `track`                 | Card outlines are an inset 1px shadow (`shadow-edge`); `rule` for firmer lines and off toggles; `track` is the empty part of any bar. |
-| Brand        | `brand`, `brand-soft`                                               | The Gauth mark only. Never text, buttons or states.                                               |
+| Edges        | `edge`, `ring`, `rule`, `track`                                     | Card outlines are an inset 1px shadow (`shadow-edge`); `rule` for firmer lines and off toggles; `track` is the empty part of any bar. |
+| Brand        | `brand`                                                             | The Gauth mark only. Never text, buttons or states.                                               |
 | Skill levels | `attempted`, `familiar`, `proficient`, `mastered`, `not-started`    | Level marks and level bars. See Skill levels.                                                     |
 | XP and AI    | `violet`, `violet-deep`, `violet-mid`, `violet-soft`, `violet-tint` | XP and Gauth AI accents. Never a level, never a button.                                           |
-| Standards    | `blue`, `blue-soft`, `blue-tint`                                    | Standard-code chips and links. The focus ring.                                                    |
+| Standards    | `blue`, `blue-soft`                                                 | Standard-code chips and links. The focus ring.                                                    |
 | Done, right  | `good`, `good-soft`, `good-mid`, `correct`                          | Checked, the right answer, a positive delta.                                                      |
 | Look here    | `warn`, `warn-soft`                                                 | Something that needs a person's eyes.                                                             |
 | Celebration  | `pink`, `pink-soft`                                                 | Celebration moments only.                                                                         |

@@ -33,15 +33,11 @@
   --gx-color-ring: #c5c8cf;
   --gx-color-rule: #dadce1; /* A firmer hairline than line: print-sheet rules and boxes, off toggles, step connectors, chart grids */
   --gx-color-edge: rgb(80 88 101 / 0.1);
-  --gx-color-edge-2: rgb(80 88 101 / 0.16);
-  --gx-color-edge-3: rgb(80 88 101 / 0.2);
 
   /* Brand and accents */
   --gx-color-brand: #ff013e;
-  --gx-color-brand-soft: #ff6e6e;
   --gx-color-blue: #2e5ce5;
   --gx-color-blue-soft: #eef1ff;
-  --gx-color-blue-tint: #e3e8ff;
   --gx-color-good: #1f5d3e;
   --gx-color-good-soft: #e8f9f2;
   --gx-color-good-mid: #3ba776;
