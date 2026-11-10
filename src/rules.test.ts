@@ -8,9 +8,12 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
 const kebab = (name: string) => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
-const components = readdirSync(`${ROOT}src/components`)
-  .filter((f) => /^[A-Z]\w*\.tsx$/.test(f) && !f.endsWith('.test.tsx'))
-  .map((f) => f.slice(0, -'.tsx'.length))
+/** Every component of both groups: [name, folder under src]. */
+const components = (['components', 'learning'] as const).flatMap((dir) =>
+  readdirSync(`${ROOT}src/${dir}`)
+    .filter((f) => /^[A-Z]\w*\.tsx$/.test(f) && !f.endsWith('.test.tsx'))
+    .map((f) => [f.slice(0, -'.tsx'.length), dir] as const),
+)
 const tokens = new Set(parse(read('src/styles/tokens.css')).map((t) => `--gx-${t.name}`))
 
 /** Every `selector { … }` rule of a CSS file, with the at-rules it sits in. */
@@ -39,19 +42,36 @@ function rulesOf(css: string) {
   return rules
 }
 
+/** The values of a property family in a CSS file that are not on the allowed list. */
+const offToken = (css: string, property: string, allowed: RegExp) =>
+  [...css.matchAll(new RegExp(`(?<![\\w-])(${property}):\\s*([^;}]+)`, 'g'))]
+    .flatMap((m) =>
+      m[2]!
+        .trim()
+        .split(/\s+(?![^(]*\))/)
+        .map((part) => [m[1]!, part] as const),
+    )
+    .filter(([, part]) => !allowed.test(part))
+    .map(([prop, part]) => `${prop}: ${part}`)
+
 it('theme.css and tokens.json match tokens.css', () => {
   expect(stale()).toEqual([])
 })
 
-describe.each(components)('%s', (name) => {
-  const cssPath = `src/components/${kebab(name)}.css`
+it('core does not import learning', () => {
+  for (const dir of ['components', 'core'])
+    for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/from '\.\.\/learning\//)
+})
+
+describe.each(components)('%s', (name, dir) => {
+  const cssPath = `src/${dir}/${kebab(name)}.css`
 
   it('has its style file, test, guideline and exports', () => {
     expect(existsSync(`${ROOT}${cssPath}`), cssPath).toBe(true)
-    expect(existsSync(`${ROOT}src/components/${name}.test.tsx`), `${name}.test.tsx`).toBe(true)
+    expect(existsSync(`${ROOT}src/${dir}/${name}.test.tsx`), `${name}.test.tsx`).toBe(true)
     expect(existsSync(`${ROOT}design/components/${name}/README.md`), `design/components/${name}/README.md`).toBe(true)
-    expect(read('src/styles.css')).toContain(`@import './components/${kebab(name)}.css';`)
-    expect(read('src/index.ts')).toContain(`'./components/${name}'`)
+    expect(read('src/styles.css')).toContain(`@import './${dir}/${kebab(name)}.css';`)
+    expect(read('src/index.ts')).toContain(`'./${dir}/${name}'`)
   })
 
   it('styles use tokens only', () => {
@@ -61,6 +81,13 @@ describe.each(components)('%s', (name) => {
     expect(css.match(/font-weight:(?!\s*var\(--gx-font-weight-)[^;]+/g) ?? [], 'font weights that are not tokens').toEqual([])
     expect(css.match(/(?<![\w.-])\d*\.?\d+m?s\b/g) ?? [], 'durations that are not tokens').toEqual([])
     expect(css, 'reduced motion is handled once, by --gx-ms').not.toContain('prefers-reduced-motion')
+    expect(
+      offToken(css, '(?:padding|margin|gap|row-gap|column-gap)(?:-[a-z-]+)?', /^(?:0|auto|inherit|-?1px|var\(--gx-space-[\w-]+\)|calc\(.+\))$/),
+      'spacing that is not on the space scale',
+    ).toEqual([])
+    expect(offToken(css, 'line-height', /^(?:normal|inherit|var\(--gx-leading-[\w-]+\))$/), 'line heights that are not tokens').toEqual([])
+    expect(offToken(css, 'letter-spacing', /^(?:normal|inherit|var\(--gx-tracking-[\w-]+\))$/), 'letter spacing that is not a token').toEqual([])
+    expect(offToken(css, 'z-index', /^(?:0|1|auto|var\(--gx-z-[\w-]+\))$/), 'layers that are not tokens').toEqual([])
     const local = new Set(css.match(/--gx-[\w-]+(?=\s*:)/g) ?? [])
     const unknown = (css.match(/var\(--gx-[\w-]+/g) ?? []).map((v) => v.slice(4)).filter((v) => !tokens.has(v) && !local.has(v))
     expect(unknown, 'tokens that do not exist').toEqual([])
@@ -72,5 +99,17 @@ describe.each(components)('%s', (name) => {
       expect(rule.selector.match(/\.(?!gx-)[A-Za-z_][\w-]*/g) ?? [], rule.selector).toEqual([])
       if (rule.selector.includes(':hover')) expect(rule.within, rule.selector).toContain('@media (hover: hover)')
     }
+  })
+
+  it('shows keyboard focus with the shared ring', () => {
+    const css = read(cssPath).replace(/\/\*[\s\S]*?\*\//g, '')
+    expect(css.match(/(?<![\w-])outline:(?!\s*(?:0\b|none\b|var\(--gx-focus-ring\)))[^;]+/g) ?? [], 'outlines use --gx-focus-ring').toEqual([])
+    if (/cursor:\s*pointer/.test(css)) expect(css, 'a control that takes clicks shows keyboard focus').toMatch(/:focus-visible|:focus-within/)
+  })
+
+  it('says nothing by itself: its words come from messages or from props', () => {
+    const jsx = read(`src/${dir}/${name}.tsx`).replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '')
+    expect(jsx.match(/>\s*[A-Za-z][A-Za-z ,.'’!?-]*[a-z]\s*<\//g) ?? [], 'text written in the markup').toEqual([])
+    expect(jsx.match(/(?:aria-label|title|placeholder|alt)="[^"]*[A-Za-z][^"]*"/g) ?? [], 'a label written in the markup').toEqual([])
   })
 })

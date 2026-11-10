@@ -1,0 +1,38 @@
+.gx-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--gx-space-3-5);
+  min-width: 0;
+}
+.gx-progress__bar {
+  position: relative;
+  display: block;
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  border-radius: calc(infinity * 1px);
+  background-color: var(--gx-color-track);
+}
+.gx-progress__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--gx-color-ink);
+  transition: width var(--gx-dur-base) var(--gx-ease-standard);
+}
+/* The end is not known. With reduced motion the segment rests in the middle of the bar. */
+.gx-progress__fill--sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 33%;
+  width: 33%;
+  animation: var(--gx-animate-sweep);
+}
+.gx-progress__text {
+  flex: none;
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-control);
+  white-space: nowrap;
+}

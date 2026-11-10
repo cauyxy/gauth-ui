@@ -1,0 +1,20 @@
+.gx-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gx-space-1-5);
+  min-width: 0;
+}
+.gx-field__label {
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-control);
+}
+.gx-field__hint {
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-xs);
+}
+/* attempted is the color of a field error. Nothing is red. */
+.gx-field__error {
+  color: var(--gx-color-attempted-ink);
+  font-size: var(--gx-text-xs);
+  font-weight: var(--gx-font-weight-control);
+}

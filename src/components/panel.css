@@ -10,20 +10,20 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: var(--gx-space-3);
   min-height: 64px;
-  padding: 1rem 1.25rem;
+  padding: var(--gx-space-4) var(--gx-space-5);
 }
 .gx-panel__title {
   margin: 0;
   color: var(--gx-color-ink);
   font-size: var(--gx-text-lg);
   font-weight: var(--gx-font-weight-title);
-  line-height: 1.35;
-  letter-spacing: -0.015em;
+  line-height: var(--gx-leading-heading);
+  letter-spacing: var(--gx-tracking-title);
 }
 .gx-panel__actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--gx-space-2);
 }

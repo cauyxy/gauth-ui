@@ -6,7 +6,7 @@
   box-shadow: var(--gx-avatar-edge);
   color: var(--gx-color-white);
   font-weight: var(--gx-font-weight-title);
-  letter-spacing: 0.02em;
+  letter-spacing: var(--gx-tracking-label);
   user-select: none;
 }
 .gx-avatar[data-fill='1'] {

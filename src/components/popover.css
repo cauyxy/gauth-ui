@@ -1,8 +1,8 @@
 .gx-popover {
-  z-index: 50;
+  z-index: var(--gx-z-pop);
   width: min(420px, calc(100vw - 32px));
   max-height: var(--radix-popover-content-available-height);
-  padding: 1.25rem;
+  padding: var(--gx-space-5);
   overflow-y: auto;
   border-radius: var(--gx-radius-3xl);
   background-color: var(--gx-color-white);

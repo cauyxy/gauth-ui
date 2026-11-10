@@ -1,0 +1,23 @@
+/* One shape for each level, so a level never relies on its color: a full disc, three quarters, a half, a ring, a dash. */
+.gx-level-mark {
+  display: inline-block;
+  flex: none;
+  border-radius: calc(infinity * 1px);
+  vertical-align: middle;
+}
+.gx-level-mark--mastered {
+  background-color: var(--gx-color-mastered);
+}
+.gx-level-mark--proficient {
+  background-image: conic-gradient(var(--gx-color-proficient) 0 75%, var(--gx-color-not-started) 0);
+}
+.gx-level-mark--familiar {
+  background-image: conic-gradient(var(--gx-color-familiar) 0 50%, var(--gx-color-not-started) 0);
+}
+.gx-level-mark--attempted {
+  border: 2px solid var(--gx-color-attempted);
+}
+.gx-level-mark--not-started {
+  border-radius: 0;
+  background: linear-gradient(var(--gx-color-ring), var(--gx-color-ring)) center / 84% 2px no-repeat;
+}

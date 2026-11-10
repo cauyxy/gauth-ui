@@ -1,0 +1,93 @@
+.gx-dialog__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--gx-z-overlay);
+  background-color: color-mix(in srgb, var(--gx-color-ink) 40%, transparent);
+  animation: var(--gx-animate-fade-in);
+}
+.gx-dialog__scrim[data-state='closed'] {
+  animation: var(--gx-animate-fade-out);
+}
+
+/* Centered by its margins, not by a transform: the pop animation owns the transform. */
+.gx-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--gx-z-overlay);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gx-space-3-5);
+  width: min(480px, calc(100vw - 2 * var(--gx-space-4)));
+  height: fit-content;
+  max-height: calc(100dvh - 2 * var(--gx-space-4));
+  margin: auto;
+  padding: var(--gx-space-6);
+  overflow-y: auto;
+  border-radius: var(--gx-radius-3xl);
+  background-color: var(--gx-color-white);
+  box-shadow: var(--gx-shadow-pop);
+  color: var(--gx-color-ink);
+  outline: none;
+}
+.gx-dialog[data-state='open'] {
+  animation: var(--gx-animate-pop-in);
+}
+.gx-dialog[data-state='closed'] {
+  animation: gx-pop-out var(--gx-dur-fast) var(--gx-ease-standard) both;
+}
+
+/* The title leaves room for the close button. */
+.gx-dialog__title {
+  margin: 0;
+  padding-inline-end: var(--gx-space-8);
+  font-size: var(--gx-text-xl);
+  font-weight: var(--gx-font-weight-strong);
+  line-height: var(--gx-leading-heading);
+  letter-spacing: var(--gx-tracking-title);
+}
+.gx-dialog__description {
+  margin: 0;
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-sm);
+  line-height: var(--gx-leading-body);
+}
+
+/* The row of answers at the end of the body. */
+.gx-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--gx-space-2);
+}
+
+.gx-dialog__close {
+  position: absolute;
+  top: var(--gx-space-5);
+  right: var(--gx-space-5);
+  display: grid;
+  place-items: center;
+  width: var(--gx-h-sm);
+  height: var(--gx-h-sm);
+  margin: 0;
+  border: 0;
+  padding: 0;
+  border-radius: var(--gx-radius-lg);
+  background: none;
+  color: var(--gx-color-muted);
+  font: inherit;
+  cursor: pointer;
+  outline: 0;
+  transition-property: color, background-color;
+  transition-duration: var(--gx-dur-fast);
+  transition-timing-function: var(--gx-ease-standard);
+}
+.gx-dialog__close:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 2px;
+}
+@media (hover: hover) {
+  .gx-dialog__close:hover {
+    background-color: var(--gx-color-surface);
+    color: var(--gx-color-ink);
+  }
+}

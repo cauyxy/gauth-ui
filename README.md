@@ -52,11 +52,25 @@ Add the theme to get the tokens as utilities (`bg-ink`, `text-muted`, `rounded-2
 
 Import the styles in CSS with `layer(components)`, not from JavaScript. A utility on a component then wins: `<Button className="w-full">`.
 
+## Language
+
+Components speak English by default. Set the language once, at the root:
+
+```tsx
+import { LocaleProvider } from 'gauth-ui'
+
+<LocaleProvider locale="es">…</LocaleProvider>
+```
+
+`en` and `es` ship with the package. [`GLOSSARY.md`](GLOSSARY.md) lists the shared words and what each means.
+
 ## Components
 
-Avatar · Button · Chip · Dot · IconBox · Meter · Panel · Popover · Segmented · Skeleton · Stat · Switch · Tooltip
+**Core.** Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · Dialog · Dot · EmptyState · Field · IconBox · Input · Menu · Meter · PageTitle · Panel · Popover · Progress · Segmented · Select · Skeleton · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
 
-Each has a guideline in [`design/components/`](design/components).
+**Learning.** AnswerOption · Composer · Generating · LevelBar · LevelChip · LevelLadder · LevelMark · Reveal · StepProgress · WorkedSteps
+
+Each has a guideline in [`design/components/`](design/components). `pnpm gallery` shows them all on one page, in both languages.
 
 ## Develop
 
@@ -66,4 +80,5 @@ pnpm test
 pnpm typecheck
 pnpm build
 pnpm tokens     # after a change to src/styles/tokens.css
+pnpm gallery    # every component on one page
 ```

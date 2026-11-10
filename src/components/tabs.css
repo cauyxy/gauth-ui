@@ -1,0 +1,46 @@
+.gx-tabs__list {
+  display: flex;
+  gap: var(--gx-space-5);
+  border-bottom: 1px solid var(--gx-color-line);
+}
+/* The tab's own underline sits on the list's rule. */
+.gx-tabs__tab {
+  flex: none;
+  margin: 0 0 -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: var(--gx-space-2-5) 0;
+  background: none;
+  color: var(--gx-color-muted);
+  font: inherit;
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-control);
+  white-space: nowrap;
+  cursor: pointer;
+  outline: 0;
+  transition: color var(--gx-dur-fast) var(--gx-ease-standard);
+}
+.gx-tabs__tab:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 2px;
+}
+.gx-tabs__tab:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .gx-tabs__tab:hover {
+    color: var(--gx-color-ink);
+  }
+}
+.gx-tabs__tab[aria-selected='true'] {
+  border-bottom-color: var(--gx-color-ink);
+  color: var(--gx-color-ink);
+}
+.gx-tabs__panel {
+  outline: 0;
+}
+.gx-tabs__panel:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 2px;
+}

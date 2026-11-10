@@ -11,6 +11,15 @@
   --font-weight-control: 500;
   --font-weight-title: 600;
   --font-weight-strong: 700;
+  --leading-figure: 1;
+  --leading-title: 1.15;
+  --leading-heading: 1.35;
+  --leading-body: 1.5;
+  --tracking-display: -0.03em;
+  --tracking-title: -0.02em;
+  --tracking-label: 0.025em;
+  --container-read: 720px;
+  --container-doc: 960px;
   --container-page: 1600px;
   --color-white: #fff;
   --color-black: #000;

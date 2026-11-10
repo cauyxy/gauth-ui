@@ -1,0 +1,4 @@
+/* The look is Progress. The count keeps its width as it grows. */
+.gx-step-progress {
+  font-variant-numeric: tabular-nums;
+}

@@ -74,7 +74,9 @@ Google Sans (`--gx-font-sans`), loaded from Google Fonts by each product, with a
 | `2xs`  | 11 px | Captions, column heads, chart labels  |
 | `3xs`  | 10 px | Print sheets and tiny badges only     |
 
-Weights: 400 for body, 500 for controls (buttons, chips, labels, table rows), 600 for panel and card titles, 700 for page titles and metrics. Controls are medium, not bold: a page full of semibold reads heavy. Headings use tight tracking (−0.015 to −0.035em). Figures that line up use tabular numbers. A size that is not on the scale goes to the nearest step.
+Weights: 400 for body, 500 for controls (buttons, chips, labels, table rows), 600 for panel and card titles, 700 for page titles and metrics. Controls are medium, not bold: a page full of semibold reads heavy. Figures that line up use tabular numbers. A size that is not on the scale goes to the nearest step.
+
+Line height has four steps: `leading-figure` 1 for a metric, `leading-title` 1.15 for a page title, `leading-heading` 1.35 for a card title or an answer option, `leading-body` 1.5 for running text. Tracking has three: `tracking-display` −0.03em for page titles and metrics, `tracking-title` −0.02em for card titles, `tracking-label` +0.025em for column heads.
 
 ## Surfaces and layout
 
@@ -86,6 +88,9 @@ Weights: 400 for body, 500 for controls (buttons, chips, labels, table rows), 60
 - Shadows are only `card`, `edge`, `edge-strong`, `pop`, `raise` and `outline`. `shadow-pop` is for popovers, menus and floating docks.
 - Lines between rows are borders in `line`, not shadows. A picked item is `shadow-outline` (1.5px ink).
 - Controls have four heights: `--gx-h-sm` 30, `--gx-h-md` 34, `--gx-h-lg` 40, `--gx-h-xl` 44px. Staff pages use `md`; student pages and touch targets use `xl`.
+- **Spacing is a 12-step scale** (`--gx-space-*`): 2, 4, 6, 8, 10, 12, 14, 16, 20, 24, 32, 40px. Inside a control use 4 to 12; between rows 12 to 16; inside a card 20 to 24; between sections 32 to 40.
+- **Three content widths:** `container-read` 720px for a question, a lesson or a form; `container-doc` 960px for a plan or a review; `container-page` 1600px for an app shell.
+- **Three layers:** `z-overlay` for a dialog and its scrim, `z-pop` for a popover, menu or tooltip (also when it opens from a dialog), `z-toast` above everything.
 - Rows of cards share top and bottom edges. When one card is taller, the shorter one stretches and its action sits at the bottom.
 
 ## Motion
@@ -107,12 +112,40 @@ Motion says what changed and then stops. It is short, it never loops for decorat
 - Hover changes color only. Text never moves or changes size on hover.
 - When a person asks for reduced motion, every duration is 0: changes are instant and loops stop.
 
+## Focus and contrast
+
+- **One focus ring:** 2px `blue`, 1 or 2px away from the control, on keyboard focus only. A field shows it too.
+- **A group is one Tab stop.** Arrow keys move inside a Segmented control, tabs, a menu and a set of answer options.
+- **Text reaches 4.5:1 on its ground.** `ink`, `ink-soft` and `muted` pass on white, `canvas` and `surface`. A tone's text passes on its own `-soft` ground. `faint` and `good-mid` are for marks and lines, never text.
+- **A level's fill carries ink, never white.** White on `attempted` is 2.1:1. A letter or a check on a level's fill or on `correct` is ink.
+- A state is never color alone: a level has a shape, a right answer has a check and the word "Correct", a wrong answer has the words "Not yet", a field error has its text.
+
+## Language
+
+- Components speak English and Spanish. A product sets `<LocaleProvider locale="es">` once.
+- A word a component says by itself comes from one list (`src/core/messages.ts`), so "Not yet" and "Proficient" read the same in every product. `GLOSSARY.md` says what each word means and what not to say instead.
+- Dates and deltas come from `useLocale()`: "Fri, Oct 23" and "+8 pts" in English, "vie, 23 oct" in Spanish.
+- A translated label can be a third longer. Do not fix a width around a word.
+
 ## Components
 
-| Group    | Components                                                                                                              |
-| -------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Actions  | [Button](components/Button/README.md), [Segmented](components/Segmented/README.md), [Switch](components/Switch/README.md) |
-| Labels   | [Chip](components/Chip/README.md), [Avatar](components/Avatar/README.md), [Dot](components/Dot/README.md), [IconBox](components/IconBox/README.md) |
-| Surfaces | [Panel](components/Panel/README.md), [Stat](components/Stat/README.md), [Skeleton](components/Skeleton/README.md)       |
-| Overlays | [Tooltip](components/Tooltip/README.md), [Popover](components/Popover/README.md)                                        |
-| Progress | [Meter](components/Meter/README.md)                                                                                     |
+Core: what any product needs.
+
+| Group     | Components |
+| --------- | ---------- |
+| Actions   | [Button](components/Button/README.md), [Segmented](components/Segmented/README.md), [Switch](components/Switch/README.md), [Menu](components/Menu/README.md) |
+| Forms     | [Field](components/Field/README.md), [Input](components/Input/README.md), [Textarea](components/Textarea/README.md), [Select](components/Select/README.md), [Checkbox](components/Checkbox/README.md) |
+| Labels    | [Chip](components/Chip/README.md), [Avatar](components/Avatar/README.md), [Dot](components/Dot/README.md), [IconBox](components/IconBox/README.md) |
+| Surfaces  | [Panel](components/Panel/README.md), [Stat](components/Stat/README.md), [Table](components/Table/README.md), [EmptyState](components/EmptyState/README.md) |
+| Structure | [PageTitle](components/PageTitle/README.md), [Breadcrumbs](components/Breadcrumbs/README.md), [Tabs](components/Tabs/README.md), [Stepper](components/Stepper/README.md) |
+| Overlays  | [Dialog](components/Dialog/README.md), [Popover](components/Popover/README.md), [Tooltip](components/Tooltip/README.md) |
+| Feedback  | [Toast](components/Toast/README.md), [Callout](components/Callout/README.md) |
+| Waiting   | [Skeleton](components/Skeleton/README.md), [Spinner](components/Spinner/README.md), [Progress](components/Progress/README.md), [Meter](components/Meter/README.md) |
+
+Learning: what an education product shows.
+
+| Group        | Components |
+| ------------ | ---------- |
+| Skill levels | [LevelMark](components/LevelMark/README.md), [LevelChip](components/LevelChip/README.md), [LevelLadder](components/LevelLadder/README.md), [LevelBar](components/LevelBar/README.md) |
+| Questions    | [AnswerOption](components/AnswerOption/README.md), [Reveal](components/Reveal/README.md), [WorkedSteps](components/WorkedSteps/README.md), [StepProgress](components/StepProgress/README.md) |
+| Gauth AI     | [Composer](components/Composer/README.md), [Generating](components/Generating/README.md) |

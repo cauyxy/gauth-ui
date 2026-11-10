@@ -1,0 +1,30 @@
+.gx-level-bar {
+  display: flex;
+  gap: var(--gx-space-0-5);
+  height: 8px;
+  overflow: hidden;
+  border-radius: var(--gx-radius-sm);
+}
+/* Nothing counted yet: the empty track. With parts there is no ground, so the gaps between them stay clear. */
+.gx-level-bar:empty {
+  background-color: var(--gx-color-track);
+}
+.gx-level-bar__part {
+  flex-basis: 0;
+  min-width: 0;
+}
+.gx-level-bar__part--mastered {
+  background-color: var(--gx-color-mastered);
+}
+.gx-level-bar__part--proficient {
+  background-color: var(--gx-color-proficient);
+}
+.gx-level-bar__part--familiar {
+  background-color: var(--gx-color-familiar);
+}
+.gx-level-bar__part--attempted {
+  background-color: var(--gx-color-attempted);
+}
+.gx-level-bar__part--not-started {
+  background-color: var(--gx-color-not-started);
+}

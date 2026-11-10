@@ -1,0 +1,28 @@
+/* A soft ground and no outline. Each text color is a pair that contrast.test.ts allows on its ground. */
+.gx-callout {
+  padding: var(--gx-space-3) var(--gx-space-4);
+  border-radius: var(--gx-radius-xl);
+  font-size: var(--gx-text-sm);
+  line-height: var(--gx-leading-body);
+}
+.gx-callout__title {
+  margin: 0 0 var(--gx-space-0-5);
+  font-weight: var(--gx-font-weight-control);
+}
+
+.gx-callout--neutral {
+  background-color: var(--gx-color-surface);
+  color: var(--gx-color-ink);
+}
+.gx-callout--ai {
+  background-color: var(--gx-color-violet-soft);
+  color: var(--gx-color-violet-deep);
+}
+.gx-callout--good {
+  background-color: var(--gx-color-good-soft);
+  color: var(--gx-color-good);
+}
+.gx-callout--warn {
+  background-color: var(--gx-color-warn-soft);
+  color: var(--gx-color-warn);
+}

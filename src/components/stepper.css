@@ -1,0 +1,61 @@
+/* Equal columns: a mark with its name under it, so four steps fit on a phone. */
+.gx-stepper {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.gx-stepper__step {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gx-space-1-5);
+  min-width: 0;
+  padding: 0 var(--gx-space-1);
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-xs);
+  font-weight: var(--gx-font-weight-control);
+  text-align: center;
+}
+/* The line from this mark to the next one: ink once this step is done. */
+.gx-stepper__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: calc(50% + 16px + var(--gx-space-2-5));
+  width: calc(100% - 32px - var(--gx-space-2-5) * 2);
+  height: 2px;
+  border-radius: calc(infinity * 1px);
+  background-color: var(--gx-color-rule);
+}
+.gx-stepper__step[data-state='done']::after {
+  background-color: var(--gx-color-ink);
+}
+.gx-stepper__step[data-state='current'] {
+  color: var(--gx-color-ink);
+}
+.gx-stepper__mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: calc(infinity * 1px);
+  background-color: var(--gx-color-white);
+  box-shadow: var(--gx-shadow-edge-strong);
+  font-size: var(--gx-text-sm);
+}
+.gx-stepper__step[data-state='done'] > .gx-stepper__mark {
+  background-color: var(--gx-color-track);
+  box-shadow: none;
+  color: var(--gx-color-ink);
+}
+.gx-stepper__step[data-state='current'] > .gx-stepper__mark {
+  box-shadow: var(--gx-shadow-outline);
+}
+.gx-stepper__name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}

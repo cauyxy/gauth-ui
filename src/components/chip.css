@@ -2,9 +2,9 @@
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: 0.375rem;
+  gap: var(--gx-space-1-5);
   height: 1.5rem;
-  padding-inline: 9px;
+  padding-inline: var(--gx-space-2);
   border-radius: var(--gx-radius-md);
   font-size: var(--gx-text-xs);
   font-weight: var(--gx-font-weight-control);

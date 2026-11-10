@@ -1,13 +1,13 @@
 .gx-tooltip {
-  z-index: 50;
+  z-index: var(--gx-z-pop);
   max-width: 18rem;
-  padding: 0.5rem 0.75rem;
+  padding: var(--gx-space-2) var(--gx-space-3);
   border-radius: var(--gx-radius-lg);
   background-color: var(--gx-color-ink);
   box-shadow: var(--gx-shadow-pop);
   color: var(--gx-color-white);
   font-size: var(--gx-text-xs);
-  line-height: 1.45;
+  line-height: var(--gx-leading-body);
 }
 .gx-tooltip {
   animation: gx-fade-in var(--gx-dur-fast) var(--gx-ease-enter) both;

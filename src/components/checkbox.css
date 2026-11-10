@@ -1,0 +1,52 @@
+.gx-checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gx-space-2-5);
+  min-width: 0;
+  font-size: var(--gx-text-sm);
+  cursor: pointer;
+}
+.gx-checkbox:has(:disabled) {
+  opacity: 0.5;
+  cursor: default;
+}
+/* The native checkbox lies over the box and takes the click, the focus and the keyboard. */
+.gx-checkbox__input {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.gx-checkbox__box {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--gx-radius-md);
+  box-shadow: inset 0 0 0 1.5px var(--gx-color-ring);
+  color: var(--gx-color-white);
+  transition-property: background-color, box-shadow;
+  transition-duration: var(--gx-dur-fast);
+  transition-timing-function: var(--gx-ease-standard);
+}
+.gx-checkbox__box > svg {
+  opacity: 0;
+}
+.gx-checkbox__input:checked + .gx-checkbox__box {
+  background-color: var(--gx-color-ink);
+  box-shadow: none;
+}
+.gx-checkbox__input:checked + .gx-checkbox__box > svg {
+  opacity: 1;
+}
+.gx-checkbox__input:focus-visible + .gx-checkbox__box {
+  outline: var(--gx-focus-ring);
+  outline-offset: 2px;
+}
+.gx-checkbox__text {
+  min-width: 0;
+}

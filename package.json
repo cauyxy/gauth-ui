@@ -24,7 +24,8 @@
   },
   "files": [
     "dist",
-    "design"
+    "design",
+    "GLOSSARY.md"
   ],
   "scripts": {
     "tokens": "node scripts/tokens.ts",
@@ -32,7 +33,8 @@
     "test": "vitest run",
     "build": "vite build && tsc -p tsconfig.build.json && node scripts/build-css.ts",
     "prepublishOnly": "pnpm typecheck && pnpm test && pnpm build",
-    "compare": "pnpm build && node compare/run.ts"
+    "compare": "pnpm build && node compare/run.ts",
+    "gallery": "vite gallery"
   },
   "publishConfig": {
     "access": "public"

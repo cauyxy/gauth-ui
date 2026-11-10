@@ -13,8 +13,41 @@
   --gx-font-weight-title: 600; /* Panel and card titles */
   --gx-font-weight-strong: 700; /* Page titles and metrics */
 
-  /* Page column: every app shell centers its content in one column this wide. */
-  --gx-container-page: 1600px;
+  /* Line heights and letter spacing: one value for each role. Body text keeps the page's line height. */
+  --gx-leading-figure: 1; /* A metric */
+  --gx-leading-title: 1.15; /* Page titles */
+  --gx-leading-heading: 1.35; /* Card and panel titles, an answer option */
+  --gx-leading-body: 1.5; /* Running text, tooltips, hints */
+  --gx-tracking-display: -0.03em; /* Page titles and metrics */
+  --gx-tracking-title: -0.02em; /* Card and panel titles */
+  --gx-tracking-label: 0.025em; /* Column heads and initials */
+
+  /* Content widths: a page takes one of these. */
+  --gx-container-read: 720px; /* A reading column: a question, a lesson, a form */
+  --gx-container-doc: 960px; /* A document: a plan, a review */
+  --gx-container-page: 1600px; /* The widest: every app shell centers its content in one column this wide */
+
+  /* Space: the 4px grid. Padding, gaps and margins take these steps and nothing between. */
+  --gx-space-0-5: 0.125rem; /* 2px */
+  --gx-space-1: 0.25rem; /* 4px */
+  --gx-space-1-5: 0.375rem; /* 6px */
+  --gx-space-2: 0.5rem; /* 8px */
+  --gx-space-2-5: 0.625rem; /* 10px */
+  --gx-space-3: 0.75rem; /* 12px */
+  --gx-space-3-5: 0.875rem; /* 14px */
+  --gx-space-4: 1rem; /* 16px */
+  --gx-space-5: 1.25rem; /* 20px */
+  --gx-space-6: 1.5rem; /* 24px */
+  --gx-space-8: 2rem; /* 32px */
+  --gx-space-10: 2.5rem; /* 40px */
+
+  /* Layers: what sits above the page, in this order. */
+  --gx-z-overlay: 40; /* A dialog or drawer and its scrim */
+  --gx-z-pop: 50; /* A popover, menu or tooltip, also when it opens from a dialog */
+  --gx-z-toast: 60; /* A toast, above everything */
+
+  /* Focus: the same ring on every control, shown for keyboard focus only. */
+  --gx-focus-ring: 2px solid var(--gx-color-blue);
 
   /* Only these colors exist, plus white and black. */
   --gx-color-white: #fff;

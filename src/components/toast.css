@@ -1,0 +1,88 @@
+/* The list of toasts: bottom center. It takes no clicks itself, so the page under it still works. */
+.gx-toaster {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: var(--gx-z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gx-space-2);
+  margin: 0;
+  padding: var(--gx-space-4);
+  list-style: none;
+  outline: none;
+  pointer-events: none;
+}
+
+.gx-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--gx-space-2-5);
+  max-width: min(26rem, 100%);
+  min-height: var(--gx-h-lg);
+  padding: var(--gx-space-1) var(--gx-space-1-5) var(--gx-space-1) var(--gx-space-4);
+  border-radius: var(--gx-radius-xl);
+  background-color: var(--gx-color-ink);
+  box-shadow: var(--gx-shadow-pop);
+  color: var(--gx-color-white);
+  font-size: var(--gx-text-sm);
+  font-weight: var(--gx-font-weight-control);
+  line-height: var(--gx-leading-heading);
+  outline: 0;
+  pointer-events: auto;
+  animation: var(--gx-animate-pop-in);
+}
+.gx-toast[data-state='closed'] {
+  animation: var(--gx-animate-fade-out);
+}
+.gx-toast:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 2px;
+}
+.gx-toast__text {
+  min-width: 0;
+  padding: var(--gx-space-1-5) 0;
+}
+
+/* The tone has a shape as well as a color: a check for good, a dot for warn, nothing for neutral. */
+.gx-toast__mark {
+  flex: none;
+}
+.gx-toast--good .gx-toast__mark {
+  color: var(--gx-color-correct);
+}
+.gx-toast--warn .gx-toast__mark {
+  width: 8px;
+  height: 8px;
+  border-radius: calc(infinity * 1px);
+  background-color: var(--gx-color-attempted);
+}
+
+.gx-toast__dismiss {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--gx-h-sm);
+  height: var(--gx-h-sm);
+  margin: 0;
+  border: 0;
+  padding: 0;
+  border-radius: var(--gx-radius-lg);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: 0;
+  transition: background-color var(--gx-dur-fast) var(--gx-ease-standard);
+}
+/* On the ink ground the ring is white and inside the button: blue on ink is under 3:1. */
+.gx-toast__dismiss:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-color: var(--gx-color-white);
+  outline-offset: -2px;
+}
+@media (hover: hover) {
+  .gx-toast__dismiss:hover {
+    background-color: color-mix(in srgb, var(--gx-color-white) 16%, transparent);
+  }
+}

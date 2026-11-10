@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import { cx } from '../core/cx'
+import { useLocale } from '../core/locale'
 
 /** A grey block standing in for content that is still loading. Give it a size with `className` or `style`. */
 export function Skeleton({ className, style }: { className?: string; style?: CSSProperties }) {
@@ -13,7 +14,7 @@ export function Skeleton({ className, style }: { className?: string; style?: CSS
 export function PageSkeleton({
   panels = 2,
   rows = 3,
-  label = 'Loading',
+  label,
   className,
 }: {
   panels?: number
@@ -21,8 +22,9 @@ export function PageSkeleton({
   label?: string
   className?: string
 }) {
+  const { messages } = useLocale()
   return (
-    <div role="status" aria-label={label} className={cx('gx-page-skeleton', className)}>
+    <div role="status" aria-label={label ?? messages.loading} className={cx('gx-page-skeleton', className)}>
       <span className="gx-page-skeleton__title">
         <Skeleton style={{ height: '2rem', width: 'min(340px, 70%)' }} />
         <Skeleton style={{ height: '1rem', width: 'min(220px, 50%)' }} />

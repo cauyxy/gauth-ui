@@ -1,0 +1,32 @@
+.gx-level-chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--gx-space-1-5);
+  height: 1.5rem;
+  padding-inline: var(--gx-space-2);
+  border-radius: var(--gx-radius-md);
+  font-size: var(--gx-text-xs);
+  font-weight: var(--gx-font-weight-control);
+  white-space: nowrap;
+}
+.gx-level-chip--mastered {
+  background-color: var(--gx-color-mastered-soft);
+  color: var(--gx-color-mastered-ink);
+}
+.gx-level-chip--proficient {
+  background-color: var(--gx-color-proficient-soft);
+  color: var(--gx-color-proficient-ink);
+}
+.gx-level-chip--familiar {
+  background-color: var(--gx-color-familiar-soft);
+  color: var(--gx-color-familiar-ink);
+}
+.gx-level-chip--attempted {
+  background-color: var(--gx-color-attempted-soft);
+  color: var(--gx-color-attempted-ink);
+}
+.gx-level-chip--not-started {
+  background-color: var(--gx-color-surface);
+  color: var(--gx-color-muted);
+}

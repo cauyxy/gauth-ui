@@ -1,29 +1,26 @@
 .gx-btn {
-  --gx-btn-edge: 0 0 transparent;
-  --gx-btn-focus: 0 0 transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--gx-space-2);
   margin: 0;
   border: 0;
   padding-block: 0;
   background: none;
-  box-shadow: var(--gx-btn-focus), var(--gx-btn-edge);
   color: var(--gx-color-ink);
   font: inherit;
   font-weight: var(--gx-font-weight-control);
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  outline-style: none;
+  outline: 0;
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
   transition-duration: var(--gx-dur-fast);
   transition-timing-function: var(--gx-ease-standard);
 }
 .gx-btn:focus-visible {
-  outline-style: none;
-  --gx-btn-focus: 0 0 0 2px color-mix(in oklab, var(--gx-color-blue) 40%, transparent);
+  outline: var(--gx-focus-ring);
+  outline-offset: 2px;
 }
 .gx-btn:disabled {
   opacity: 0.5;
@@ -41,8 +38,8 @@
   background-color: var(--gx-color-surface);
 }
 .gx-btn--outline {
-  --gx-btn-edge: var(--gx-shadow-edge-strong);
   background-color: var(--gx-color-white);
+  box-shadow: var(--gx-shadow-edge-strong);
 }
 .gx-btn--link {
   color: var(--gx-color-muted);
@@ -65,25 +62,25 @@
 
 .gx-btn--sm {
   height: var(--gx-h-sm);
-  padding-inline: 0.75rem;
+  padding-inline: var(--gx-space-3);
   border-radius: var(--gx-radius-lg);
   font-size: var(--gx-text-sm);
 }
 .gx-btn--md {
   height: var(--gx-h-md);
-  padding-inline: 0.875rem;
+  padding-inline: var(--gx-space-3-5);
   border-radius: var(--gx-radius-lg);
   font-size: var(--gx-text-sm);
 }
 .gx-btn--lg {
   height: var(--gx-h-lg);
-  padding-inline: 1rem;
+  padding-inline: var(--gx-space-4);
   border-radius: var(--gx-radius-xl);
   font-size: var(--gx-text-sm);
 }
 .gx-btn--xl {
   height: var(--gx-h-xl);
-  padding-inline: 1.25rem;
+  padding-inline: var(--gx-space-5);
   border-radius: var(--gx-radius-xl);
   font-size: var(--gx-text-base);
 }

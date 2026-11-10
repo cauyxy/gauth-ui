@@ -1,0 +1,50 @@
+.gx-textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  background-color: var(--gx-color-white);
+  box-shadow: var(--gx-shadow-edge-strong);
+  color: var(--gx-color-ink);
+  font: inherit;
+  line-height: var(--gx-leading-body);
+  outline: 0;
+  appearance: none;
+  resize: vertical;
+  transition-property: background-color, box-shadow;
+  transition-duration: var(--gx-dur-fast);
+  transition-timing-function: var(--gx-ease-standard);
+}
+.gx-textarea::placeholder {
+  color: var(--gx-color-muted);
+  opacity: 1;
+}
+.gx-textarea:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 1px;
+}
+.gx-textarea:disabled {
+  opacity: 0.5;
+  resize: none;
+}
+
+.gx-textarea--md {
+  min-height: var(--gx-h-md);
+  padding: var(--gx-space-2) var(--gx-space-3);
+  border-radius: var(--gx-radius-lg);
+  font-size: var(--gx-text-sm);
+}
+/* 16px text, so a phone does not zoom in on focus. */
+.gx-textarea--xl {
+  min-height: var(--gx-h-xl);
+  padding: var(--gx-space-2-5) var(--gx-space-4);
+  border-radius: var(--gx-radius-2xl);
+  font-size: var(--gx-text-base);
+}
+
+/* An error: an attempted outline on the attempted-soft ground, the look of "Not yet". The Field's error text says what is wrong. */
+.gx-textarea[aria-invalid='true'] {
+  background-color: var(--gx-color-attempted-soft);
+  box-shadow: inset 0 0 0 1.5px var(--gx-color-attempted);
+}

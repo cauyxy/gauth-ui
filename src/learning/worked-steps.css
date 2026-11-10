@@ -1,0 +1,42 @@
+.gx-worked-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gx-space-1-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--gx-font-mono);
+  font-size: var(--gx-text-sm);
+}
+/* Every step keeps room for the bar, so the numbers line up when one step is flagged. */
+.gx-worked-steps__step {
+  display: flex;
+  gap: var(--gx-space-3);
+  padding: var(--gx-space-0-5) var(--gx-space-2);
+  border-inline-start: 3px solid transparent;
+  border-radius: var(--gx-radius-sm);
+}
+.gx-worked-steps__number {
+  flex: none;
+  min-width: 1rem;
+  color: var(--gx-color-muted);
+  font-variant-numeric: tabular-nums;
+}
+.gx-worked-steps__text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The step that went wrong: the bar is the shape signal, the flag says what happened. */
+.gx-worked-steps__step[data-flagged] {
+  padding-block: var(--gx-space-1-5);
+  border-inline-start-color: var(--gx-color-attempted);
+  background-color: var(--gx-color-attempted-soft);
+}
+.gx-worked-steps__flag {
+  display: block;
+  margin-top: var(--gx-space-0-5);
+  color: var(--gx-color-attempted-ink);
+  font-family: var(--gx-font-sans);
+  font-weight: var(--gx-font-weight-control);
+}

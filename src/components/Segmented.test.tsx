@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { useState } from 'react'
 import { Segmented, segmentedOptionClass } from './Segmented'
 
 const options = [
@@ -22,6 +23,37 @@ it('reports the new value on a click and on the keyboard', async () => {
   screen.getByRole('radio', { name: 'Form A' }).focus()
   await userEvent.keyboard(' ')
   expect(onChange).toHaveBeenLastCalledWith('a')
+})
+
+it('moves the pick with the arrow keys, and Tab reaches only the picked option', async () => {
+  const onChange = vi.fn()
+  render(<Segmented label="Form" value="a" options={options} onChange={onChange} />)
+  expect(screen.getByRole('radio', { name: 'Form A' })).toHaveAttribute('tabindex', '0')
+  expect(screen.getByRole('radio', { name: 'Form B' })).toHaveAttribute('tabindex', '-1')
+  await userEvent.tab()
+  expect(screen.getByRole('radio', { name: 'Form A' })).toHaveFocus()
+  await userEvent.keyboard('{ArrowRight}')
+  expect(onChange).toHaveBeenLastCalledWith('b')
+  await userEvent.keyboard('{End}')
+  expect(onChange).toHaveBeenLastCalledWith('b')
+  await userEvent.keyboard('{ArrowLeft}')
+  expect(onChange).toHaveBeenLastCalledWith('b')
+})
+
+it('moves focus with the pick', async () => {
+  function Form() {
+    const [value, setValue] = useState<'a' | 'b'>('a')
+    return <Segmented label="Form" value={value} options={options} onChange={setValue} />
+  }
+  render(<Form />)
+  await userEvent.tab()
+  await userEvent.keyboard('{ArrowRight}')
+  expect(screen.getByRole('radio', { name: 'Form B' })).toBeChecked()
+  expect(screen.getByRole('radio', { name: 'Form B' })).toHaveFocus()
+  await userEvent.keyboard('{ArrowRight}')
+  expect(screen.getByRole('radio', { name: 'Form A' })).toHaveFocus()
+  await userEvent.keyboard('{End}')
+  expect(screen.getByRole('radio', { name: 'Form B' })).toHaveFocus()
 })
 
 it('stretches with fill', () => {

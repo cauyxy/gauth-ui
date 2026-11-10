@@ -10,12 +10,17 @@
   border-radius: var(--gx-radius-xl);
   background-color: var(--gx-color-rule);
   cursor: pointer;
+  outline: 0;
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
   transition-duration: var(--gx-dur-fast);
   transition-timing-function: var(--gx-ease-standard);
 }
 .gx-switch[aria-checked='true'] {
   background-color: var(--gx-color-ink);
+}
+.gx-switch:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 2px;
 }
 .gx-switch__thumb {
   position: absolute;

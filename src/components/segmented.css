@@ -1,7 +1,7 @@
 .gx-segmented {
   display: flex;
-  gap: 0.125rem;
-  padding: 0.25rem;
+  gap: var(--gx-space-0-5);
+  padding: var(--gx-space-1);
   border-radius: var(--gx-radius-xl);
   background-color: var(--gx-color-track);
 }
@@ -20,7 +20,7 @@
   height: 1.75rem;
   margin: 0;
   border: 0;
-  padding: 0 0.75rem;
+  padding: 0 var(--gx-space-3);
   border-radius: var(--gx-radius-lg);
   background: none;
   color: var(--gx-color-muted);
@@ -32,10 +32,15 @@
   text-overflow: ellipsis;
   overflow: hidden;
   cursor: pointer;
+  outline: 0;
 }
 .gx-segmented--fill > .gx-segmented__option {
   flex: 1;
-  padding-inline: 0.5rem;
+  padding-inline: var(--gx-space-2);
+}
+.gx-segmented__option:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: 1px;
 }
 @media (hover: hover) {
   .gx-segmented__option:hover {
