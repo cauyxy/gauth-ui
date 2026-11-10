@@ -138,7 +138,7 @@ Motion says what changed and then stops. It is short, it never loops for decorat
 | `dur-mark`  | 360 ms | Feedback on an answer                                            |
 
 - Two easings: `ease-standard` for a change in place, `ease-enter` for content that arrives (fast at first, then it settles).
-- Named movements (`--gx-animate-*`, `animate-*` in Tailwind): `fade-in`, `fade-out`, `pop-in`, `rise-in`, `slide-in`, `pulse`, `spin`, `sweep`, `mark-right`, `mark-retry`.
+- Named movements (`--gx-animate-*`, `animate-*` in Tailwind): `fade-in`, `fade-out`, `pop-in`, `pop-out`, `tip-in`, `rise-in`, `slide-in`, `pulse`, `spin`, `sweep`, `mark-right`, `mark-retry`.
 - Things leave faster than they arrive: an exit is `dur-fast`.
 - **A right answer** gets one small swell (`mark-right`). **A wrong answer** gets a short side-to-side nudge (`mark-retry`) in the `attempted` orange, never red, and the words "Not yet".
 - **Only three things loop:** a skeleton's pulse, a spinner, and the segment of a bar with no known end. Each one means "wait".

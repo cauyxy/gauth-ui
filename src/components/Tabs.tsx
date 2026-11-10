@@ -1,6 +1,6 @@
 import { Tabs as TabsPrimitive } from 'radix-ui'
 import type { ComponentProps } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 
 /**
  * Views of one thing, one shown at a time. `value` is the picked tab; `defaultValue` when the page does not keep it.
@@ -11,17 +11,26 @@ export function Tabs({
   className,
   ...props
 }: Omit<ComponentProps<typeof TabsPrimitive.Root>, 'onChange' | 'onValueChange'> & { onChange?: (value: string) => void }) {
-  return <TabsPrimitive.Root onValueChange={onChange} className={cx('gx-tabs', className)} {...props} />
+  return <TabsPrimitive.Root onValueChange={onChange} className={cn('gx-tabs', className)} {...props} />
 }
 
 export function TabList({ className, ...props }: ComponentProps<typeof TabsPrimitive.List>) {
-  return <TabsPrimitive.List className={cx('gx-tabs__list', className)} {...props} />
+  return <TabsPrimitive.List className={cn('gx-tabs__list flex gap-5 border-b border-line', className)} {...props} />
 }
 
 export function Tab({ className, ...props }: ComponentProps<typeof TabsPrimitive.Trigger>) {
-  return <TabsPrimitive.Trigger className={cx('gx-tabs__tab', className)} {...props} />
+  return (
+    <TabsPrimitive.Trigger
+      className={cn(
+        /* The tab's own underline sits on the list's rule. */
+        'gx-tabs__tab -mb-px flex-none cursor-pointer border-b-2 border-transparent py-2.5 text-sm font-control whitespace-nowrap text-muted outline-0 transition-[color] duration-(--gx-dur-fast) ease-standard hover:text-ink focus-visible:focus-ring focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50 aria-selected:border-ink aria-selected:text-ink',
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 export function TabPanel({ className, ...props }: ComponentProps<typeof TabsPrimitive.Content>) {
-  return <TabsPrimitive.Content className={cx('gx-tabs__panel', className)} {...props} />
+  return <TabsPrimitive.Content className={cn('gx-tabs__panel outline-0 focus-visible:focus-ring focus-visible:outline-offset-2', className)} {...props} />
 }

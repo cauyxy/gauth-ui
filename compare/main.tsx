@@ -2,9 +2,10 @@
  * The comparison page: each gauthx component (@gauthx/ui, Tailwind classes) beside the gauth-ui one that replaces it.
  * compare/run.ts serves this page and compares the computed styles of every pair.
  *
- * (no query)  Tailwind page: gauthx's theme, gauth-ui's styles imported into the components layer.
- * ?plain      no Tailwind: only gauth-ui's stylesheet.
- * ?reset      no Tailwind, plus a product's own element rules, loaded after it.
+ * ?old   the page gauthx builds: Tailwind with gauthx's theme. Read the old components here.
+ * ?new   the page a product on gauth-ui builds: Tailwind with gauth-ui's styles. Read the new components here.
+ *
+ * The two themes give the same names different values, so each side is read on its own page.
  */
 import * as Old from '@gauthx/ui'
 import { Switch as OldSwitch } from '@gauthx-teach/authoring-ui'
@@ -13,17 +14,7 @@ import type { ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import * as New from '../dist/index.js'
 
-const mode = location.search.slice(1)
-if (!mode) await import('./.tmp/tailwind.css')
-else await import('../dist/styles.css')
-if (mode === 'reset') {
-  const style = document.createElement('style')
-  style.textContent = `* { box-sizing: border-box; } body { margin: 0; } button, textarea, select { font: inherit; }
-    button { color: inherit; cursor: pointer; transition: color .15s, background .15s, border-color .15s; }
-    button:disabled { opacity: .38; cursor: default; }
-    a { color: inherit; text-decoration: none; }`
-  document.head.append(style)
-}
+await (location.search === '?old' ? import('./.tmp/old.css') : import('./.tmp/new.css'))
 
 const cases: [string, ReactNode, ReactNode][] = []
 const add = (name: string, old: ReactNode, next: ReactNode) => cases.push([name, old, next])
@@ -36,7 +27,7 @@ for (const variant of ['ink', 'soft', 'outline', 'ghost', 'link'] as const)
       <New.Button variant={variant} size={size}>Send practice</New.Button>,
     )
 add('button-disabled', <Old.Button disabled>Publish</Old.Button>, <New.Button disabled>Publish</New.Button>)
-/* Names that start with tw- use Tailwind utilities, so they are compared on the Tailwind page only. */
+/* Names that start with tw- pass Tailwind utilities to the component: the caller's class must win on both sides. */
 add(
   'tw-button-utility-override',
   <Old.Button variant="outline" className="h-12 w-full rounded-2xl text-base">Continue with Google</Old.Button>,
@@ -127,7 +118,7 @@ createRoot(document.getElementById('root')!).render(
     {cases.map(([name, old, next]) => (
       <div key={name} style={{ display: 'grid', gridTemplateColumns: '220px 420px 420px', alignItems: 'start', gap: 16 }}>
         <code style={{ fontSize: 12 }}>{name}</code>
-        <div data-old={name}>{mode ? null : old}</div>
+        <div data-old={name}>{old}</div>
         <div data-new={name}>{next}</div>
       </div>
     ))}

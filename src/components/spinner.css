@@ -1,9 +1,0 @@
-/* With reduced motion the ring stands still: three quarters of a ring still reads as "working". */
-.gx-spinner {
-  display: block;
-  flex: none;
-  border: 2px solid var(--gx-color-track);
-  border-top-color: var(--gx-color-ink);
-  border-radius: calc(infinity * 1px);
-  animation: var(--gx-animate-spin);
-}

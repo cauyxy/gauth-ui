@@ -1,6 +1,24 @@
+import { cva } from 'class-variance-authority'
 import { useId, type ReactNode } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
+
+const reveal = cva('gx-reveal flex animate-rise-in flex-col gap-1.5 rounded-2xl px-4 py-3.5 text-base text-ink', {
+  variants: {
+    kind: {
+      hint: 'gx-reveal--hint bg-surface',
+      why: 'gx-reveal--why bg-good-soft',
+    },
+  },
+})
+const title = cva('gx-reveal__title text-sm font-title', {
+  variants: {
+    kind: {
+      hint: 'text-muted',
+      why: 'text-good',
+    },
+  },
+})
 
 /**
  * Help that arrives under a question. A `hint` is one step of help before the answer; `why` is the reason, shown after
@@ -8,13 +26,13 @@ import { useLocale } from '../core/locale'
  */
 export function Reveal({ kind, children, className }: { kind: 'hint' | 'why'; children: ReactNode; className?: string }) {
   const { messages } = useLocale()
-  const title = useId()
+  const id = useId()
   return (
-    <div role="note" aria-labelledby={title} className={cx('gx-reveal', `gx-reveal--${kind}`, className)}>
-      <span id={title} className="gx-reveal__title">
+    <div role="note" aria-labelledby={id} className={cn(reveal({ kind }), className)}>
+      <span id={id} className={title({ kind })}>
         {messages[kind]}
       </span>
-      <div className="gx-reveal__body">{children}</div>
+      <div className="gx-reveal__body leading-body text-pretty">{children}</div>
     </div>
   )
 }

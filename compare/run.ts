@@ -1,7 +1,7 @@
 /*
  * Compares the computed styles of each gauthx component with the gauth-ui component that replaces it, for the switch of
- * gauthx to this package. It serves compare/main.tsx and reads both sides in Chrome: at rest, hovered, with keyboard
- * focus, on a page with no Tailwind, and on a page with a product's own element rules.
+ * gauthx to this package. It serves compare/main.tsx twice, once with each theme, and reads each side on its own page in
+ * Chrome: at rest, hovered, and with keyboard focus.
  *
  *   pnpm build && node compare/run.ts [path to the gauthx checkout, default ../gauthx] [folder for screenshots]
  *
@@ -21,17 +21,9 @@ const GAUTHX = resolve(process.argv[2] ?? `${HERE}../../gauthx`)
 const SHOTS = process.argv[3]
 
 mkdirSync(`${HERE}.tmp`, { recursive: true })
-writeFileSync(
-  `${HERE}.tmp/tailwind.css`,
-  [
-    "@import 'tailwindcss';",
-    `@import '${GAUTHX}/packages/ui/src/theme.css';`,
-    "@import '../../dist/styles.css' layer(components);",
-    "@source '../';",
-    `@source '${GAUTHX}/apps/teach/src/components';`,
-    '',
-  ].join('\n'),
-)
+const sources = ["@source '../';", `@source '${GAUTHX}/apps/teach/src/components';`, '']
+writeFileSync(`${HERE}.tmp/old.css`, ["@import 'tailwindcss';", `@import '${GAUTHX}/packages/ui/src/theme.css';`, `@source '${GAUTHX}/packages/ui/src';`, ...sources].join('\n'))
+writeFileSync(`${HERE}.tmp/new.css`, ["@import 'tailwindcss';", "@import '../../dist/styles.css';", ...sources].join('\n'))
 
 const server = await createServer({
   configFile: false,
@@ -80,6 +72,8 @@ function readTree(sel: string): Node[] | null {
     const rect = el.getBoundingClientRect()
     const style = Object.fromEntries(PROPS.map((p) => [p, norm(cs.getPropertyValue(p))]))
     if (!cs.animationName || cs.animationName === 'none') style.opacity = cs.opacity
+    /* An outline with no width or no style paints nothing, however it is written. */
+    if (style['outline-style'] === 'none' || style['outline-width'] === '0px') Object.assign(style, { 'outline-style': 'none', 'outline-width': '0px' })
     out.push({ path, cls: typeof el.className === 'string' ? el.className : '', style, w: rect.width, h: rect.height })
     ;[...el.children].forEach((child, i) => walk(child, `${path}>${child.tagName.toLowerCase()}[${i}]`, out))
     return out
@@ -88,15 +82,15 @@ function readTree(sel: string): Node[] | null {
   return el ? walk(el, 'root', []) : null
 }
 
-async function collect(query: string, state?: 'hover' | 'focus'): Promise<Trees> {
-  const page: Page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 })
-  page.on('pageerror', (e) => console.error('page error:', e.message))
-  await page.goto(`http://localhost:5179/${query}`, { waitUntil: 'networkidle' })
-  await page.waitForTimeout(800)
-  if (!state && SHOTS) await page.screenshot({ path: `${SHOTS}/compare${query.replace('?', '-') || '-tailwind'}.png`, fullPage: true })
-  const names: string[] = await page.evaluate(() => [...document.querySelectorAll('[data-new]')].map((e) => e.getAttribute('data-new')!))
+async function collect(state?: 'hover' | 'focus'): Promise<Trees> {
   const trees: Trees = {}
   for (const side of ['old', 'new']) {
+    const page: Page = await browser.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 1 })
+    page.on('pageerror', (e) => console.error('page error:', e.message))
+    await page.goto(`http://localhost:5179/?${side}`, { waitUntil: 'networkidle' })
+    await page.waitForTimeout(800)
+    if (!state && SHOTS) await page.screenshot({ path: `${SHOTS}/compare-${side}.png`, fullPage: true })
+    const names: string[] = await page.evaluate(() => [...document.querySelectorAll('[data-new]')].map((e) => e.getAttribute('data-new')!))
     for (const name of names) {
       const sel = `[data-${side}="${name}"] > *`
       const target = page.locator(sel).first()
@@ -117,20 +111,19 @@ async function collect(query: string, state?: 'hover' | 'focus'): Promise<Trees>
         const tree = await page.evaluate(readTree, `[data-portal="${side}-${kind}"]`)
         if (tree) trees[`${side}:${kind}-content`] = tree
       }
+    await page.close()
   }
-  await page.close()
   return trees
 }
 
 let total = 0
-function report(title: string, olds: Trees, news: Trees, skip: (name: string, node: Node) => boolean) {
+function report(title: string, trees: Trees) {
   const diffs: string[] = []
   let pairs = 0
-  for (const key of Object.keys(olds).filter((k) => k.startsWith('old:'))) {
+  for (const key of Object.keys(trees).filter((k) => k.startsWith('old:'))) {
     const name = key.slice(4)
-    const a = olds[key]!
-    const b = news[`new:${name}`]
-    if (skip(name, b?.[0] ?? a[0]!)) continue
+    const a = trees[key]!
+    const b = trees[`new:${name}`]
     pairs++
     if (!b || a.length !== b.length) {
       diffs.push(`${name}: old has ${a.length} elements, new has ${b?.length ?? 0}`)
@@ -138,7 +131,6 @@ function report(title: string, olds: Trees, news: Trees, skip: (name: string, no
     }
     a.forEach((na, i) => {
       const nb = b[i]!
-      if (skip(name, nb)) return
       for (const [p, va] of Object.entries(na.style)) if (va !== nb.style[p]) diffs.push(`${name} ${na.path} ${p}: old "${va}" new "${nb.style[p]}"`)
       if (Math.abs(na.w - nb.w) > 0.01 || Math.abs(na.h - nb.h) > 0.01) diffs.push(`${name} ${na.path} size: old ${na.w}x${na.h} new ${nb.w}x${nb.h}`)
     })
@@ -149,18 +141,9 @@ function report(title: string, olds: Trees, news: Trees, skip: (name: string, no
 }
 
 try {
-  const tailwind = await collect('')
-  const hover = await collect('', 'hover')
-  const focus = await collect('', 'focus')
-  const plain = await collect('?plain')
-  const reset = await collect('?reset')
-  /* Without Tailwind, only gauth-ui's own elements can match: Radix's unstyled trigger and arrow wrapper are the product's to style. */
-  const ownOnly = (name: string, node: Node) => name.startsWith('tw-') || !node.cls.includes('gx-')
-  report('Tailwind page, at rest', tailwind, tailwind, () => false)
-  report('Tailwind page, hovered', hover, hover, () => false)
-  report('Tailwind page, keyboard focus', focus, focus, () => false)
-  report('No Tailwind', tailwind, plain, ownOnly)
-  report("No Tailwind, with a product's own element rules", tailwind, reset, ownOnly)
+  report('At rest', await collect())
+  report('Hovered', await collect('hover'))
+  report('Keyboard focus', await collect('focus'))
 } finally {
   await browser.close()
   await server.close()

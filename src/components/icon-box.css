@@ -1,8 +1,0 @@
-.gx-icon-box {
-  display: grid;
-  flex: none;
-  place-items: center;
-  border-radius: var(--gx-radius-lg);
-  background-color: var(--gx-color-surface);
-  color: var(--gx-color-ink);
-}

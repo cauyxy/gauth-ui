@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { IconButton } from '../components/IconButton'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
 
@@ -41,7 +41,11 @@ export function ReplyActions({
   const toggle = (next: ReplyVote) => onVote?.(vote === next ? null : next)
 
   return (
-    <div className={cx('gx-reply-actions', className)}>
+    /*
+     * The row starts flush with the text above it. A small icon button holds its icon 7px in and the icon's strokes start
+     * about half a pixel further, so the row moves 8px toward the start: the first icon's strokes are then on the text edge.
+     */
+    <div className={cn('gx-reply-actions -ms-2 flex flex-wrap items-center gap-0.5', className)}>
       {onVote ? (
         <>
           <IconButton size="sm" label={messages.goodReply} pressed={vote === 'good'} onClick={() => toggle('good')}>

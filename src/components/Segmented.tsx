@@ -1,10 +1,14 @@
 import type { KeyboardEvent, ReactNode } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 
 /** The track and option classes, for a segmented control whose options are links. */
-export const segmentedTrackClass = (className?: string) => cx('gx-segmented', className)
+export const segmentedTrackClass = (className?: string) => cn('gx-segmented flex gap-0.5 rounded-xl bg-track p-1', className)
 export const segmentedOptionClass = (on: boolean, className?: string) =>
-  cx('gx-segmented__option', on && 'gx-segmented__option--on', className)
+  cn(
+    'gx-segmented__option grid h-[1.75rem] min-w-0 place-items-center truncate rounded-lg px-3 text-sm font-control text-muted no-underline cursor-pointer outline-0 hover:text-ink focus-visible:focus-ring focus-visible:outline-offset-1 aria-checked:bg-white aria-checked:text-ink aria-checked:shadow-raise',
+    on && 'gx-segmented__option--on bg-white text-ink shadow-raise',
+    className,
+  )
 
 export type SegmentedOption<T extends string> = { value: T; label: ReactNode; title?: string; ariaLabel?: string }
 
@@ -55,7 +59,7 @@ export function Segmented<T extends string>({
       aria-label={label}
       title={title}
       onKeyDown={onKeyDown}
-      className={segmentedTrackClass(cx(fill ? 'gx-segmented--fill' : 'gx-segmented--fit', className))}
+      className={segmentedTrackClass(cn(fill ? 'gx-segmented--fill w-full' : 'gx-segmented--fit inline-flex w-fit flex-wrap', className))}
     >
       {options.map((o, i) => (
         <button
@@ -67,7 +71,7 @@ export function Segmented<T extends string>({
           title={o.title}
           tabIndex={i === (current < 0 ? 0 : current) ? 0 : -1}
           onClick={() => onChange(o.value)}
-          className="gx-segmented__option"
+          className={segmentedOptionClass(false, fill ? 'flex-1 px-2' : undefined)}
         >
           {o.label}
         </button>

@@ -7,8 +7,8 @@ import { compile } from 'tailwindcss'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 
-async function build(candidates: string[]) {
-  const compiler = await compile("@import 'tailwindcss';\n@import './src/styles/theme.css';", {
+async function build(candidates: string[], entry = './src/styles/theme.css') {
+  const compiler = await compile(`@import 'tailwindcss';\n@import '${entry}';`, {
     base: ROOT,
     loadStylesheet: async (id, base) => {
       const path = id === 'tailwindcss' ? `${ROOT}node_modules/tailwindcss/index.css` : resolve(base, id)
@@ -49,4 +49,14 @@ it('names the movements and their easings', async () => {
   expect(css).toMatch(/--animate-fade-in:\s*gx-fade-in var\(--gx-dur-base\) var\(--ease-enter\) both/)
   expect(css).toMatch(/--ease-enter:\s*cubic-bezier\(0\.22, 1, 0\.36, 1\)/)
   expect(css).toMatch(/--animate-spin:\s*gx-spin/)
+})
+
+it('styles.css is all a product imports: the theme, the tokens, the base styles in the base layer, and the focus ring', async () => {
+  const css = await build(['bg-ink', 'h-(--gx-h-md)', 'focus-visible:focus-ring', 'duration-(--gx-dur-fast)'], './src/styles.css')
+  expect(css).toContain('.bg-ink')
+  expect(css).toMatch(/--gx-h-md:\s*34px/)
+  expect(css).toMatch(/\.h-\\\(--gx-h-md\\\)\s*\{[^}]*height:\s*var\(--gx-h-md\)/)
+  expect(css).toMatch(/\.focus-visible\\:focus-ring:focus-visible\s*\{[^}]*outline:\s*var\(--gx-focus-ring\)/)
+  expect(css).toMatch(/@layer base\s*\{[\s\S]*@keyframes gx-fade-in/)
+  expect(css).toContain("font-family: 'Google Sans Fallback'")
 })

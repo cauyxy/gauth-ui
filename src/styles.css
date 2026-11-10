@@ -1,52 +1,17 @@
-/* The whole package: tokens, base styles and every component. Nothing here is in a cascade layer, so a component's class
-   wins over a product's element rules (`button { … }`). A Tailwind product imports this file into the components layer. */
+/*
+ * The styles of the package, for a product on Tailwind 4:
+ *
+ *   @import 'tailwindcss';
+ *   @import 'gauth-ui/styles.css';
+ *
+ * It gives Tailwind the Gauth tokens as its theme, the base styles, and the components' files to read class names from.
+ */
 @import './styles/tokens.css';
-@import './styles/base.css';
-@import './components/avatar.css';
-@import './components/breadcrumbs.css';
-@import './components/button.css';
-@import './components/callout.css';
-@import './components/checkbox.css';
-@import './components/chip.css';
-@import './components/chip-toggle.css';
-@import './components/cover-card.css';
-@import './components/dialog.css';
-@import './components/dot.css';
-@import './components/empty-state.css';
-@import './components/field.css';
-@import './components/icon-box.css';
-@import './components/icon-button.css';
-@import './components/input.css';
-@import './components/menu.css';
-@import './components/meter.css';
-@import './components/page-title.css';
-@import './components/panel.css';
-@import './components/popover.css';
-@import './components/progress.css';
-@import './components/segmented.css';
-@import './components/select.css';
-@import './components/skeleton.css';
-@import './components/spinner.css';
-@import './components/stat.css';
-@import './components/stepper.css';
-@import './components/switch.css';
-@import './components/table.css';
-@import './components/tabs.css';
-@import './components/textarea.css';
-@import './components/toast.css';
-@import './components/tooltip.css';
-@import './learning/ai-status.css';
-@import './learning/answer-option.css';
-@import './learning/composer.css';
-@import './learning/follow-ups.css';
-@import './learning/generating.css';
-@import './learning/level-bar.css';
-@import './learning/level-chip.css';
-@import './learning/level-ladder.css';
-@import './learning/level-mark.css';
-@import './learning/message.css';
-@import './learning/quote.css';
-@import './learning/reply-actions.css';
-@import './learning/reveal.css';
-@import './learning/step-progress.css';
-@import './learning/worked-steps.css';
+@import './styles/theme.css';
+@import './styles/base.css' layer(base);
+@source './';
+
+/* The one keyboard-focus ring. A control takes `outline-0 focus-visible:focus-ring` and an offset. */
+@utility focus-ring {
+  outline: var(--gx-focus-ring);
+}

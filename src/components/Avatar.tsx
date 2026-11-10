@@ -1,4 +1,4 @@
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 
 /** Titles don't count toward initials: "Ms. Carter" is C, "Rachel Carter" is RC. */
 const TITLES = new Set(['mr', 'mrs', 'ms', 'mx', 'dr'])
@@ -12,8 +12,16 @@ export const initialsOf = (name: string) => {
     .toUpperCase()
 }
 
-/** The number of `--gx-avatar-N` fills in tokens.css. */
-const FILLS = 6
+/** The avatar fills in tokens.css, one class for each. */
+const FILL_CLASSES = [
+  'bg-(image:--gx-avatar-1)',
+  'bg-(image:--gx-avatar-2)',
+  'bg-(image:--gx-avatar-3)',
+  'bg-(image:--gx-avatar-4)',
+  'bg-(image:--gx-avatar-5)',
+  'bg-(image:--gx-avatar-6)',
+]
+const FILLS = FILL_CLASSES.length
 
 /** Which fill a name takes (1 to 6): the same one for a person everywhere. */
 export const fillOf = (name: string) => {
@@ -29,7 +37,13 @@ export function Avatar({ name, size = 30, plain, className }: { name: string; si
       role="img"
       aria-label={name}
       data-fill={plain ? undefined : fillOf(name)}
-      className={cx('gx-avatar', plain && 'gx-avatar--plain', className)}
+      className={cn(
+        'gx-avatar grid flex-none place-items-center rounded-full select-none',
+        plain
+          ? 'gx-avatar--plain bg-surface font-strong tracking-normal text-ink-soft'
+          : ['font-title tracking-label text-white shadow-(--gx-avatar-edge)', FILL_CLASSES[fillOf(name) - 1]],
+        className,
+      )}
       style={{ width: size, height: size, fontSize: Math.round(size * 0.38) }}
     >
       {initialsOf(name)}

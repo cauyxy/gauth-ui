@@ -53,11 +53,6 @@ button {
   white-space: nowrap;
 }
 
-[class^='gx-'],
-[class*=' gx-'] {
-  box-sizing: border-box;
-}
-
 /* Keyframes for the --gx-animate-* tokens. A keyframe says where a movement starts; the element's own style is where it ends. */
 @keyframes gx-fade-in {
   from {

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
 
 /**
@@ -21,18 +21,25 @@ export function Progress({
   const known = value !== undefined
   const width = known ? Math.min(100, Math.max(0, value)) : undefined
   return (
-    <span className={cx('gx-progress', className)}>
+    <span className={cn('gx-progress flex min-w-0 items-center gap-3.5', className)}>
       <span
         role="progressbar"
         aria-label={label ?? messages.loading}
         aria-valuemin={known ? 0 : undefined}
         aria-valuemax={known ? 100 : undefined}
         aria-valuenow={width}
-        className="gx-progress__bar"
+        className="gx-progress__bar relative block h-[6px] flex-1 overflow-hidden rounded-full bg-track"
       >
-        <span className={cx('gx-progress__fill', !known && 'gx-progress__fill--sweep')} style={known ? { width: `${width}%` } : undefined} />
+        {/* The end is not known: a segment sweeps. With reduced motion it rests in the middle of the bar. */}
+        <span
+          className={cn(
+            'gx-progress__fill block h-full rounded-[inherit] bg-ink transition-[width] duration-(--gx-dur-base) ease-standard',
+            !known && 'gx-progress__fill--sweep absolute top-0 bottom-0 left-[33%] w-[33%] animate-sweep',
+          )}
+          style={known ? { width: `${width}%` } : undefined}
+        />
       </span>
-      {children ? <span className="gx-progress__text">{children}</span> : null}
+      {children ? <span className="gx-progress__text flex-none text-sm font-control whitespace-nowrap text-muted">{children}</span> : null}
     </span>
   )
 }

@@ -10,7 +10,7 @@ The design rules ship with the package: [`design/README.md`](design/README.md) s
 pnpm add gauth-ui
 ```
 
-React 19 is a peer dependency. Load Google Sans in the page's `<head>`:
+React 19 and Tailwind 4 are peer dependencies: the components are written in Tailwind classes, the same way as shadcn/ui, and your Tailwind build makes their CSS. Load Google Sans in the page's `<head>`:
 
 ```html
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" />
@@ -18,10 +18,16 @@ React 19 is a peer dependency. Load Google Sans in the page's `<head>`:
 
 ## Use
 
-Import the styles once, then the components:
+In your stylesheet, after Tailwind:
+
+```css
+@import 'tailwindcss';
+@import 'gauth-ui/styles.css';
+```
+
+That one line gives Tailwind the Gauth tokens as its theme, the base styles, and the components to read class names from. Then use the components:
 
 ```tsx
-import 'gauth-ui/styles.css'
 import { Button, Chip, Panel, PanelHeader } from 'gauth-ui'
 
 export function NeedsSupport() {
@@ -36,21 +42,10 @@ export function NeedsSupport() {
 }
 ```
 
-No Tailwind is needed. Every token is a CSS variable (`var(--gx-color-ink)`, `var(--gx-radius-2xl)`, `var(--gx-h-md)`) for your own styles.
-
-The stylesheet also sets page defaults: the font, text color and line height on `html`, no margin and a white ground on `body`, and links and buttons that inherit their color. Component classes win over your own element rules such as `button { … }`.
-
-## With Tailwind v4
-
-Add the theme to get the tokens as utilities (`bg-ink`, `text-muted`, `rounded-2xl`, `shadow-edge`). Tailwind's own palette, type sizes and shadows are cleared, so only Gauth's exist.
-
-```css
-@import 'tailwindcss';
-@import 'gauth-ui/theme.css';
-@import 'gauth-ui/styles.css' layer(components);
-```
-
-Import the styles in CSS with `layer(components)`, not from JavaScript. A utility on a component then wins: `<Button className="w-full">`.
+- **The theme is Gauth's only.** The tokens are utilities (`bg-ink`, `text-muted`, `rounded-2xl`, `shadow-edge`, `font-control`). Tailwind's own palette, type sizes and shadows are cleared, so `bg-red-500` and `shadow-lg` give nothing.
+- **Your class wins.** `<Button className="w-full bg-surface">` replaces the classes it conflicts with.
+- **Every token is also a CSS variable** (`var(--gx-color-ink)`, `var(--gx-h-md)`) for the styles you write by hand.
+- **Page defaults come with it**, in the base layer: the font, text color and line height on `html`, and a white ground on `body`.
 
 ## Formulas
 

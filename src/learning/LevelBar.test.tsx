@@ -9,7 +9,7 @@ it('names what it counts and each level, Mastered first', () => {
   const bar = screen.getByRole('img', { name: 'Geometry · Period 3, Mastered: 9, Proficient: 7, Familiar: 6, Attempted: 4, Not started: 2' })
   expect(bar).toHaveClass('gx-level-bar', 'mine')
   const parts = [...bar.children]
-  expect(parts.map((p) => p.className.split('--')[1])).toEqual(['mastered', 'proficient', 'familiar', 'attempted', 'not-started'])
+  expect(parts.map((p) => [...p.classList].find((c) => c.startsWith('gx-level-bar__part--'))?.split('--')[1])).toEqual(['mastered', 'proficient', 'familiar', 'attempted', 'not-started'])
   expect(parts[0]).toHaveStyle({ flexGrow: '9' })
   expect(parts[4]).toHaveStyle({ flexGrow: '2' })
 })

@@ -1,7 +1,6 @@
 /* The docs site: every component live, then the design rules and the tokens, read from this repository. Built to site/dist. */
 import { StrictMode, useEffect, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { createRoot } from 'react-dom/client'
-import '../src/styles.css'
 import '../src/math/math.css'
 import '../gallery/gallery.css'
 import './site.css'

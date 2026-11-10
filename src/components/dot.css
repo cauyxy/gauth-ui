@@ -1,6 +1,0 @@
-.gx-dot {
-  display: block;
-  flex: none;
-  border-radius: calc(infinity * 1px);
-  background: var(--gx-color-ring);
-}

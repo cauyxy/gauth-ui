@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 
 /**
@@ -22,20 +22,23 @@ export function Checkbox({
   className?: string
 }) {
   const Root = children ? 'label' : 'span'
+  /* `items-start` and the `1lh` margins keep the box on the first line of the text, also when the text wraps. */
   return (
-    <Root className={cx('gx-checkbox', className)}>
+    <Root className={cn('gx-checkbox relative inline-flex min-w-0 cursor-pointer items-start gap-2.5 text-sm has-disabled:cursor-default has-disabled:opacity-50', className)}>
+      {/* The native checkbox lies over the box and takes the click, the focus and the keyboard. */}
       <input
         type="checkbox"
         checked={checked}
         disabled={disabled}
         aria-label={label}
         onChange={(event) => onChange(event.target.checked)}
-        className="gx-checkbox__input"
+        className="gx-checkbox__input peer absolute my-[calc((1lh-18px)/2)] size-[18px] cursor-[inherit] opacity-0"
       />
-      <span className="gx-checkbox__box">
+      {/* The edge is on the empty box only, so a checked box has no shadow at all and the edge fades out as before. */}
+      <span className="gx-checkbox__box grid size-[18px] flex-none place-items-center my-[calc((1lh-18px)/2)] rounded-md text-white transition-[background-color,box-shadow] duration-(--gx-dur-fast) ease-standard peer-not-checked:shadow-box peer-checked:bg-ink peer-focus-visible:focus-ring peer-focus-visible:outline-offset-2 [&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100">
         <Icon name="check" size={14} strokeWidth={2.6} />
       </span>
-      {children ? <span className="gx-checkbox__text">{children}</span> : null}
+      {children ? <span className="gx-checkbox__text min-w-0">{children}</span> : null}
     </Root>
   )
 }

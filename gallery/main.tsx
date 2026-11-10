@@ -1,7 +1,6 @@
 /* Every component on one page, in both languages. `pnpm gallery` serves it. Not part of the package. */
 import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import '../src/styles.css'
 import '../src/math/math.css'
 import './gallery.css'
 import { Segmented } from '../src/components/Segmented'

@@ -13,6 +13,7 @@
  *   base   a formula in a line of words, a number beside its step: both stand on one baseline
  *   size   a formula in a line of words: its numbers are as tall as the numbers in the words
  */
+import tailwind from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright-core'
@@ -22,7 +23,7 @@ const server = await createServer({
   configFile: false,
   root: fileURLToPath(new URL('.', import.meta.url)),
   logLevel: 'error',
-  plugins: [react()],
+  plugins: [react(), tailwind()],
   server: { port: 5182, strictPort: true },
 })
 await server.listen()

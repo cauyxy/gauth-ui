@@ -62,6 +62,7 @@ it('stretches with fill', () => {
 })
 
 it('gives the option look as a class string, for links', () => {
-  expect(segmentedOptionClass(true)).toBe('gx-segmented__option gx-segmented__option--on')
-  expect(segmentedOptionClass(false)).toBe('gx-segmented__option')
+  expect(segmentedOptionClass(true).split(' ')).toEqual(expect.arrayContaining(['gx-segmented__option', 'gx-segmented__option--on']))
+  expect(segmentedOptionClass(false).split(' ')).toContain('gx-segmented__option')
+  expect(segmentedOptionClass(false).split(' ')).not.toContain('gx-segmented__option--on')
 })

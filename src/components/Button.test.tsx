@@ -45,5 +45,9 @@ it('puts the look on a link with asChild', () => {
 })
 
 it('gives the same look as a class string', () => {
-  expect(buttonClass({ variant: 'outline' }, 'flex-none')).toBe('gx-btn gx-btn--outline gx-btn--md flex-none')
+  const classes = buttonClass({ variant: 'outline' }, 'flex-none bg-surface').split(' ')
+  expect(classes).toEqual(expect.arrayContaining(['gx-btn', 'gx-btn--outline', 'gx-btn--md', 'flex-none', 'shadow-edge-strong']))
+  /* A class from the product replaces the one it conflicts with. */
+  expect(classes).toContain('bg-surface')
+  expect(classes).not.toContain('bg-white')
 })

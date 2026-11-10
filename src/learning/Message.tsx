@@ -1,6 +1,18 @@
+import { cva } from 'class-variance-authority'
 import type { ReactNode } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
+
+/* Each direct child is one row: a run of text, a file card, a status line, the reply's actions. The font size is the page's. */
+const message = cva('gx-message flex min-w-0 flex-col gap-2 leading-body wrap-anywhere text-ink', {
+  variants: {
+    from: {
+      /* The bubble is as wide as its text and sits at the end side, in a block, a flex column or a grid. The lines a person made with Shift+Enter stay. */
+      user: 'gx-message--user ms-auto w-fit max-w-[min(85%,36rem)] rounded-2xl bg-surface px-4 py-2.5 whitespace-pre-wrap',
+      ai: 'gx-message--ai',
+    },
+  },
+})
 
 /**
  * One turn of a conversation with Gauth AI. `user` is what the person wrote, in a soft bubble at the end side; `ai` is
@@ -9,7 +21,7 @@ import { useLocale } from '../core/locale'
 export function Message({ from, children, className }: { from: 'user' | 'ai'; children: ReactNode; className?: string }) {
   const { messages } = useLocale()
   return (
-    <div className={cx('gx-message', `gx-message--${from}`, className)}>
+    <div className={cn(message({ from }), className)}>
       <span className="gx-visually-hidden">{from === 'user' ? messages.you : messages.gauthAi}</span>
       {children}
     </div>

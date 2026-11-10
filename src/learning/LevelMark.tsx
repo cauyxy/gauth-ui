@@ -1,6 +1,21 @@
-import { cx } from '../core/cx'
+import { cva } from 'class-variance-authority'
+import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
 import type { Level } from '../core/messages'
+
+/* One shape for each level, so a level never relies on its color: a full disc, three quarters, a half, a ring, a dash. */
+const mark = cva('gx-level-mark inline-block flex-none rounded-full align-middle', {
+  variants: {
+    level: {
+      mastered: 'gx-level-mark--mastered bg-mastered',
+      proficient: 'gx-level-mark--proficient bg-[conic-gradient(var(--gx-color-proficient)_0_75%,var(--gx-color-not-started)_0)]',
+      familiar: 'gx-level-mark--familiar bg-[conic-gradient(var(--gx-color-familiar)_0_50%,var(--gx-color-not-started)_0)]',
+      attempted: 'gx-level-mark--attempted border-2 border-attempted',
+      not_started:
+        'gx-level-mark--not-started rounded-none bg-[linear-gradient(var(--gx-color-ring),var(--gx-color-ring))] bg-size-[84%_2px] bg-center bg-no-repeat',
+    },
+  },
+})
 
 /**
  * The small mark of a skill level: its own shape in its own color. `size` is in pixels.
@@ -13,7 +28,7 @@ export function LevelMark({ level, size = 14, label = false, className }: { leve
       role={label ? 'img' : undefined}
       aria-label={label ? messages.levels[level] : undefined}
       aria-hidden={label ? undefined : 'true'}
-      className={cx('gx-level-mark', `gx-level-mark--${level.replace('_', '-')}`, className)}
+      className={cn(mark({ level }), className)}
       style={{ width: size, height: size }}
     />
   )

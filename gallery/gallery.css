@@ -1,8 +1,12 @@
-/* The gallery page only. Not part of the package. */
+/* The gallery page only. Not part of the package. It loads the package as a product on Tailwind does. */
+@import 'tailwindcss';
+@import '../src/styles.css';
+
 body {
   background: var(--gx-color-canvas);
 }
 .g-page {
+  box-sizing: content-box;
   max-width: var(--gx-container-doc);
   margin: 0 auto;
   padding: var(--gx-space-8) var(--gx-space-4) var(--gx-space-10);

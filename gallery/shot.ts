@@ -5,6 +5,7 @@
  *
  * It also prints what a page must never have: an error in the console, or content wider than a phone.
  */
+import tailwind from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -19,7 +20,7 @@ const server = await createServer({
   configFile: false,
   root: fileURLToPath(new URL('.', import.meta.url)),
   logLevel: 'error',
-  plugins: [react()],
+  plugins: [react(), tailwind()],
   server: { port: 5180, strictPort: true },
 })
 await server.listen()

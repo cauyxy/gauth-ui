@@ -159,6 +159,8 @@
   --gx-animate-fade-in: gx-fade-in var(--gx-dur-base) var(--gx-ease-enter) both; /* Content that appears in place */
   --gx-animate-fade-out: gx-fade-out var(--gx-dur-fast) var(--gx-ease-standard) both; /* Content that leaves */
   --gx-animate-pop-in: gx-pop-in var(--gx-dur-fast) var(--gx-ease-enter) both; /* A popover or menu that grows out of what opened it */
+  --gx-animate-pop-out: gx-pop-out var(--gx-dur-fast) var(--gx-ease-standard) both; /* A dialog, popover or menu that closes */
+  --gx-animate-tip-in: gx-fade-in var(--gx-dur-fast) var(--gx-ease-enter) both; /* A tooltip: it appears faster than content does */
   --gx-animate-rise-in: gx-rise-in var(--gx-dur-enter) var(--gx-ease-enter) both; /* A hint, a worked step or a card that is revealed */
   --gx-animate-slide-in: gx-slide-in var(--gx-dur-enter) var(--gx-ease-enter) both; /* A drawer from the left edge */
   --gx-animate-mark-right: gx-mark-right var(--gx-dur-mark) var(--gx-ease-enter); /* A right answer: one small swell */

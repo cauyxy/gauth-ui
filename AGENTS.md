@@ -9,15 +9,15 @@ Read this page before you write or change a component. `design/README.md` says w
 ```
 src/styles/tokens.css    the tokens (--gx-*). The one source.
 src/styles/theme.css     the tokens as a Tailwind v4 theme. Generated.
-src/styles/base.css      page defaults, the fallback font, keyframes
-src/core/                cx, the icons, the language: messages.ts (every word, en and es) and locale.tsx
-src/components/          core components: one per file, with its styles and test
+src/styles/base.css      page defaults, the fallback font, keyframes; in the base layer
+src/core/                cn (joins classes), the icons, the language: messages.ts (every word, en and es) and locale.tsx
+src/components/          core components: one per file, with its test
 src/learning/            learning components, same shape
 src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and math.css
-src/styles.css           imports all of the above; built to dist/styles.css
+src/styles.css           what a product imports after Tailwind: the tokens, the theme, the base styles, and where Tailwind finds the classes; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
-gallery/                 a block of examples for each component, all on one page, in both languages (pnpm gallery); shot.ts and optical.ts check it in Chrome
+gallery/                 a block of examples for each component, all on one page, in both languages (pnpm gallery); shot.ts, optical.ts and pixels.ts check it in Chrome
 site/                    the docs site (ui.gauthx.app): every component live on the first page, a page for each with its examples first, then the design rules and the tokens
 GLOSSARY.md              what each shared word means, in en and es
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
@@ -29,28 +29,29 @@ design/components/       one guideline per component
 design/tokens.json       the tokens for the Design System artifact. Generated.
 ```
 
-## A component is four files
+## A component is three files
 
 ```
-src/components/Button.tsx          the component
-src/components/button.css          its styles
+src/components/Button.tsx          the component, with its styles as Tailwind classes
 src/components/Button.test.tsx     its test
 design/components/Button/README.md when to use it
 ```
 
-A learning component has the same four files, under `src/learning/`. Then export it from `src/index.ts`, import its CSS in `src/styles.css` and show it in `gallery/`. `rules.test.ts` fails when one of these is missing.
+A learning component has the same three files, under `src/learning/`. Then export it from `src/index.ts` and show it in `gallery/`. `rules.test.ts` fails when one of these is missing. `Button.tsx` is the reference for how the classes are written.
 
 ## Styles
 
-- **Plain CSS.** No Tailwind classes, no CSS-in-JS. A product without Tailwind must get the same result.
-- **Class names:** `gx-<component>` for the root, `gx-<component>__<part>` for a part, `gx-<component>--<variant>` for a variant or size.
-- **State is an attribute** in a component: `aria-checked`, `aria-current`, `:disabled`, `data-*`. A class helper for links cannot set an attribute, so it gives a state class (`gx-segmented__option--on`).
-- **No cascade layers.** A component's class must win over a product's own element rules (`button { color: inherit }`), and a layered rule loses to any rule that is not in a layer. A Tailwind product puts the whole file in a layer when it imports it (`@import 'gauth-ui/styles.css' layer(components)`), so its utilities win: `className="w-full"` works.
-- **Tokens only.** Colors, type sizes and weights, shadows and durations are `var(--gx-*)`. A `box-shadow` is a shadow token, never a value written in the component. No hex, no `rgb()`, no literal `font-size`. If a value is missing, add a token to `tokens.css` and run `pnpm tokens`. Do not write the literal.
-- **Spacing is on the scale.** `padding`, `margin` and `gap` are `var(--gx-space-*)` (2 to 40px), `0`, `auto`, or a `calc()` of them. `line-height` is `var(--gx-leading-*)`, `letter-spacing` is `var(--gx-tracking-*)`, and `z-index` is `var(--gx-z-overlay | pop | toast)` (`0` and `1` are for stacking inside one component).
-- **Hover goes inside `@media (hover: hover)`.**
-- **Reset what the browser adds.** A product without Tailwind has no CSS reset: a `<button>` sets its own `border`, `padding`, `background`, `font` and `margin`.
-- **Motion uses the motion tokens.** A duration is `var(--gx-dur-fast | base | enter | mark)`, an easing is `var(--gx-ease-standard | enter)`, and a named movement is `var(--gx-animate-*)`. No literal `150ms` or `2s`. Reduced motion is handled once: `--gx-ms` becomes 0, so do not write a `prefers-reduced-motion` query in a component. A loop then stops, so give its element a still state that reads correctly.
+- **Tailwind 4 classes, in the component.** The same way as shadcn/ui: utility classes in the TSX, `cva` for variants and sizes, `cn()` (`src/core/cn.ts`) to join them. There is no CSS file for a component and no `@apply`. A product must be on Tailwind 4; it loads the package with `@import 'gauth-ui/styles.css'` after `@import 'tailwindcss'`.
+- **A product's `className` wins.** `cn()` puts it last and drops the class it conflicts with: `<Button className="w-full bg-surface">`. So `className` always goes through `cn()`, never through string joining.
+- **Whole class names.** Tailwind reads the files as text. Write `bg-good-soft`, never `bg-${tone}-soft`; a variant is a key in a `cva` map with its whole classes.
+- **A `gx-` name stays on each element**: `gx-<component>` for the root, `gx-<component>__<part>` for a part, `gx-<component>--<variant>` for a variant or size. It carries no styles. Tests, `gallery/optical.ts` and a product's own tools find the element by it.
+- **State is an attribute**, styled with a variant: `aria-checked:`, `aria-[current=page]:`, `disabled:`, `data-[state=open]:`. A parent's state reaches a child with `group` and `group-data-[…]:`. When two states can be true at once, the one that must win is written so it does (a `cva` compound variant, or a more specific variant such as `aria-pressed:hover:`): the order of classes in the source does not decide.
+- **Tokens only.** A color, type size, weight, radius or shadow is a theme name from `theme.css`: `bg-ink`, `text-sm`, `font-control`, `rounded-lg`, `shadow-edge`. A control height is `h-(--gx-h-md)`. No `text-[13px]`, no `bg-[#…]`, no `font-semibold`, no `shadow-[…]`, no `ring-*`. If a value is missing, add a token to `tokens.css` and run `pnpm tokens`.
+- **Spacing is on the scale.** Padding, margin and gap take `0 0.5 1 1.5 2 2.5 3 3.5 4 5 6 8 10` (2 to 40px), `px`, `auto`, or `[calc(…)]` of the space tokens. `leading-` is `figure | title | heading | body | normal`, `tracking-` is `display | title | label | normal`, and `z-` is `z-(--gx-z-overlay | pop | toast)` (`z-0` and `z-1` are for stacking inside one component). A size that is not spacing (a 18px mark, a 1.5px border) is written with its unit: `size-[18px]`.
+- **Hover is the `hover:` variant.** Tailwind gives it to devices that can hover only. Never `[&:hover]:`.
+- **Tailwind's reset is there.** Every product has Preflight: margins are 0, borders are `0 solid`, buttons inherit their font, every box is `border-box`, also `::before` and `::after`. Do not write those resets again.
+- **Motion uses the motion tokens.** A duration is `duration-(--gx-dur-fast | base | enter | mark)`, always written beside a `transition-*` class (Tailwind's own default is a literal 150ms). An easing is `ease-standard` or `ease-enter`, and a named movement is `animate-*` from the theme. Reduced motion is handled once: `--gx-ms` becomes 0, so do not write `motion-reduce:`. A loop then stops, so give its element a still state that reads correctly.
+- **What classes cannot say stays in CSS, in one place.** `src/styles/base.css` (page defaults, the fallback font, keyframes, `gx-visually-hidden`) is imported into the base layer, so every utility wins over it. `src/math/math.css` styles KaTeX's own markup and stays plain CSS.
 
 ## Props
 
@@ -74,7 +75,7 @@ A learning component has the same four files, under `src/learning/`. Then export
 - Use the native element: a button is `<button type="button">`, a link is `<a>`.
 - A control with no visible text needs a `label` prop for its accessible name. A button that shows only an icon is an `IconButton`.
 - Text only a screen reader needs (who wrote a message) has the class `gx-visually-hidden`.
-- **Focus is one ring.** Every control that takes a click shows `outline: var(--gx-focus-ring)` on `:focus-visible` (2px blue), with `outline-offset` 1 or 2px. No other focus style. On an ink ground the ring is white (`outline-color`), because blue on ink is under 3:1. A small button inside a control (a chip's remove, a toast's dismiss) draws the ring inside itself, so it does not cover the text beside it.
+- **Focus is one ring.** Every control that takes a click has `outline-0 focus-visible:focus-ring` (2px blue, `--gx-focus-ring`), with `focus-visible:outline-offset-1` or `-2`. No other focus style, and no `ring-*`. On an ink ground the ring is white (`focus-visible:outline-white`), because blue on ink is under 3:1. A small button inside a control (a chip's remove, a toast's dismiss) draws the ring inside itself, so it does not cover the text beside it.
 - **A group is one Tab stop.** Inside a radio group, a tab list or a menu, the arrow keys move and Tab leaves.
 - **Text reaches 4.5:1.** `src/contrast.test.ts` lists the allowed pairs. Text on a level's fill or on `correct` is ink, never white. `faint` and `good-mid` are not text colors.
 - Color is never the only signal: a state also has a shape, a mark or a word.
@@ -82,7 +83,7 @@ A learning component has the same four files, under `src/learning/`. Then export
 
 ## The look does not change here by accident
 
-A change to how a component looks is a design decision: get the owner's OK, then change the component, its guideline and the token together. The components started as copies of the gauthx ones; `docs/from-gauthx.md` lists every difference since.
+A change to how a component looks is a design decision: get the owner's OK, then change the component, its guideline and the token together. The components started as copies of the gauthx ones; `docs/from-gauthx.md` lists every difference since. A change that only rewrites classes proves it with `gallery/pixels.ts`: the pictures before and after are the same, pixel for pixel.
 
 ## Two groups
 
@@ -104,10 +105,12 @@ A page, a flow, or a component that carries one product's data (a roster, a prin
 ```bash
 pnpm typecheck
 pnpm test        # component tests and rules.test.ts
-pnpm build       # dist/: index.js, types, styles.css, tokens.css, theme.css
+pnpm build       # dist/: index.js, types, styles.css (what a product imports after Tailwind), tokens.css, theme.css
 pnpm tokens      # after a change to tokens.css
 pnpm icons       # after adding an icon's name to scripts/icons.ts
 node gallery/optical.ts          # after a change to a control's size, padding, font or icon: ink alignment, measured in Chrome
+node gallery/pixels.ts take <folder>   # before and after a change that must not change the look (how classes are written, a Tailwind upgrade);
+node gallery/pixels.ts compare <a> <b> # then every picture that differs: each block, each control hovered and focused, each floating part open
 node gallery/shot.ts <folder>    # screenshots of every component, both languages, desktop and phone
 node site/shot.ts <folder>       # after a change to site/ or gallery/: screenshots of the docs site, and a check that every component's page shows an example
 ```

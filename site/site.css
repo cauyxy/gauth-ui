@@ -81,6 +81,7 @@ html {
 
 .s-main {
   grid-area: main;
+  box-sizing: content-box;
   min-width: 0;
   max-width: var(--gx-container-doc);
   padding: var(--gx-space-8) var(--gx-space-6) var(--gx-space-10);
@@ -129,6 +130,13 @@ html {
 .s-prose ul,
 .s-prose ol {
   padding-inline-start: var(--gx-space-5);
+}
+/* Tailwind's reset takes the marks off every list. */
+.s-prose ul {
+  list-style: disc;
+}
+.s-prose ol {
+  list-style: decimal;
 }
 .s-prose li {
   margin-bottom: var(--gx-space-2);

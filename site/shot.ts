@@ -4,7 +4,7 @@
  *   node site/shot.ts <folder for the screenshots> [address of a running site]
  *
  * Without an address it serves the site from this folder. It prints what a page must never have: an error in the console,
- * content wider than the window, or a component's page with no example on it.
+ * content wider than the window, a component's page with no example on it, or components without their styles.
  */
 import { mkdirSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -52,6 +52,14 @@ for (const [size, width] of [['desktop', 1280], ['phone', 375]] as const) {
     const preview = page.locator('.s-preview').first()
     if ((await preview.count()) === 0 || (await preview.evaluate((el) => el.querySelector('[class*="gx-"]') === null))) problems.push(`${size} ${at}: no example`)
   }
+
+  /* The styles are there: the classes are names only until Tailwind has made their CSS from the tokens. */
+  await open('/components/button')
+  const ink = await page.locator('.s-preview .gx-btn--ink').first().evaluate((el) => {
+    const s = getComputedStyle(el)
+    return `${s.backgroundColor} ${s.height} ${s.fontWeight} ${s.borderRadius}`
+  })
+  if (ink !== 'rgb(33, 37, 46) 34px 500 8px') problems.push(`${size} ${at}: the ink button is drawn as "${ink}"`)
 
   if (size === 'desktop') {
     /* The floating components open on their own pages, and a toast shows once. */

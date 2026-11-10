@@ -17,43 +17,27 @@ const components = (['components', 'learning'] as const).flatMap((dir) =>
 )
 const tokens = new Set(parse(read('src/styles/tokens.css')).map((t) => `--gx-${t.name}`))
 
-/** Every `selector { … }` rule of a CSS file, with the at-rules it sits in. */
-function rulesOf(css: string) {
-  const rules: { selector: string; body: string; within: string[] }[] = []
-  const stack: string[] = []
-  let prelude = ''
-  let body: string | null = null
-  for (const ch of css.replace(/\/\*[\s\S]*?\*\//g, '')) {
-    if (body !== null) {
-      if (ch === '}') {
-        rules.push({ selector: stack.pop()!, body, within: [...stack] })
-        body = null
-      } else body += ch
-    } else if (ch === '{') {
-      const head = prelude.trim()
-      stack.push(head)
-      prelude = ''
-      if (!head.startsWith('@') || head.startsWith('@font-face')) body = ''
-    } else if (ch === '}') {
-      stack.pop()
-      prelude = ''
-    } else if (ch === ';') prelude = ''
-    else prelude += ch
-  }
-  return rules
+/** Every class name written in a file: each word of each string, without comments. */
+function classesOf(source: string) {
+  const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '')
+  return [...code.matchAll(/'([^'\n]*)'|"([^"\n]*)"|`([^`]*)`/g)].flatMap((m) => (m[1] ?? m[2] ?? m[3] ?? '').split(/\s+/)).filter(Boolean)
 }
+/** A class without its variants: `hover:bg-black` is `bg-black`, `[&>svg]:-ms-0.5` is `-ms-0.5`. */
+const utilityOf = (word: string) => word.split(/:(?![^[(]*[\])])/).at(-1)!
 
-/** The values of a property family in a CSS file that are not on the allowed list. */
-const offToken = (css: string, property: string, allowed: RegExp) =>
-  [...css.matchAll(new RegExp(`(?<![\\w-])(${property}):\\s*([^;}]+)`, 'g'))]
-    .flatMap((m) =>
-      m[2]!
-        .trim()
-        .split(/\s+(?![^(]*\))/)
-        .map((part) => [m[1]!, part] as const),
-    )
-    .filter(([, part]) => !allowed.test(part))
-    .map(([prop, part]) => `${prop}: ${part}`)
+const SPACE = new Set(['0', 'px', 'auto', '0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '5', '6', '8', '10'])
+/** What each kind of utility may end in. A class of that kind with another ending is off the tokens. */
+const KINDS: [what: string, kind: RegExp, allowed: (value: string) => boolean][] = [
+  ['spacing that is not on the space scale', /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/, (v) => SPACE.has(v) || /^\[calc\(.+\)\]$/.test(v)],
+  ['a font weight that is not a token', /^font-(.+)$/, (v) => /^(?:sans|mono|body|control|title|strong)$/.test(v)],
+  ['a line height that is not a token', /^leading-(.+)$/, (v) => /^(?:figure|title|heading|body|normal)$/.test(v)],
+  ['letter spacing that is not a token', /^tracking-(.+)$/, (v) => /^(?:display|title|label|normal)$/.test(v)],
+  ['a layer that is not a token', /^z-(.+)$/, (v) => /^(?:0|1|auto|\(--gx-z-(?:overlay|pop|toast)\))$/.test(v)],
+  ['a duration that is not a token', /^(?:duration|delay)-(.+)$/, (v) => /^\(--gx-(?:dur|delay)-[\w-]+\)$/.test(v)],
+  ['an outline that is not the shared ring', /^-?outline-(.+)$/, (v) => /^(?:0|none|white|offset-(?:\d+|\[-?\d+px\]))$/.test(v)],
+  ['a shadow written in the component', /^(?:shadow|inset-shadow|drop-shadow|ring|inset-ring)-(.+)$/, (v) => !/^[\[\d]/.test(v) && (!v.startsWith('(') || v.startsWith('(--gx-'))],
+  ['a type size off the scale', /^text-(\[.+)$/, () => false],
+]
 
 it('theme.css and tokens.json match tokens.css', () => {
   expect(stale()).toEqual([])
@@ -103,53 +87,57 @@ describe('math', () => {
   })
 })
 
-describe.each(components)('%s', (name, dir) => {
-  const cssPath = `src/${dir}/${kebab(name)}.css`
+it('the class rules catch what they are for', () => {
+  const broken = (c: string) => KINDS.some(([, kind, allowed]) => { const value = utilityOf(c).match(kind)?.[1]; return value !== undefined && !allowed(value) }) // prettier-ignore
+  for (const bad of ['p-7', 'hover:mt-[3px]', 'gap-x-9', 'font-semibold', 'leading-6', 'tracking-wide', 'z-50', 'duration-150', 'delay-75', 'outline-2', 'focus-visible:outline-blue', 'shadow-[0_1px_2px_black]', 'shadow-(--my-shadow)', 'ring-2', 'text-[13px]'])
+    expect(broken(bad), bad).toBe(true)
+  for (const good of ['p-3.5', '-ms-0.5', 'mx-auto', '[&>svg:first-child]:-ms-0.5', 'pe-[calc(var(--gx-space-0-5)+0.5px)]', 'font-control', 'leading-heading', 'z-(--gx-z-pop)', 'duration-(--gx-dur-fast)', 'outline-0', 'focus-visible:outline-offset-2', '-outline-offset-2', 'shadow-edge', 'shadow-correct', 'shadow-(--gx-avatar-edge)', 'text-sm', 'text-muted', 'max-w-[34rem]', 'min-h-(--gx-h-xl)', 'place-items-center', 'pointer-events-none'])
+    expect(broken(good), good).toBe(false)
+})
 
-  it('has its style file, test, guideline and exports', () => {
-    expect(existsSync(`${ROOT}${cssPath}`), cssPath).toBe(true)
+it('the package has no stylesheet of its own rules: the base styles are in the base layer, and no component has a CSS file', () => {
+  const styles = read('src/styles.css')
+  expect(styles).toContain("@import './styles/base.css' layer(base);")
+  expect(styles.match(/@import '\.\/(?:components|learning)\/[^']+';/g) ?? [], 'component style files').toEqual([])
+  for (const dir of ['components', 'learning']) expect(readdirSync(`${ROOT}src/${dir}`).filter((f) => f.endsWith('.css')), dir).toEqual([])
+})
+
+describe.each(components)('%s', (name, dir) => {
+  const source = read(`src/${dir}/${name}.tsx`)
+  const classes = classesOf(source)
+
+  it('has its test, guideline and export, and a gx- name on its root', () => {
     expect(existsSync(`${ROOT}src/${dir}/${name}.test.tsx`), `${name}.test.tsx`).toBe(true)
     expect(existsSync(`${ROOT}design/components/${name}/README.md`), `design/components/${name}/README.md`).toBe(true)
-    expect(read('src/styles.css')).toContain(`@import './${dir}/${kebab(name)}.css';`)
     expect(read('src/index.ts')).toContain(`'./${dir}/${name}'`)
+    expect(classes.some((c) => c.startsWith('gx-')), 'a gx- class on the root, for tests and tools to find it').toBe(true)
   })
 
-  it('styles use tokens only', () => {
-    const css = read(cssPath).replace(/\/\*[\s\S]*?\*\//g, '')
-    expect(css.match(/#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab)\(/gi) ?? [], 'color literals').toEqual([])
-    expect(css.match(/font-size:(?!\s*var\(--gx-text-)[^;]+/g) ?? [], 'font sizes off the scale').toEqual([])
-    expect(css.match(/font-weight:(?!\s*var\(--gx-font-weight-)[^;]+/g) ?? [], 'font weights that are not tokens').toEqual([])
-    expect(css.match(/(?<![\w.-])\d*\.?\d+m?s\b/g) ?? [], 'durations that are not tokens').toEqual([])
-    expect(css, 'reduced motion is handled once, by --gx-ms').not.toContain('prefers-reduced-motion')
-    expect(
-      offToken(css, '(?:padding|margin|gap|row-gap|column-gap)(?:-[a-z-]+)?', /^(?:0|auto|inherit|-?1px|var\(--gx-space-[\w-]+\)|calc\(.+\))$/),
-      'spacing that is not on the space scale',
-    ).toEqual([])
-    expect(offToken(css, 'line-height', /^(?:normal|inherit|var\(--gx-leading-[\w-]+\))$/), 'line heights that are not tokens').toEqual([])
-    expect(offToken(css, 'letter-spacing', /^(?:normal|inherit|var\(--gx-tracking-[\w-]+\))$/), 'letter spacing that is not a token').toEqual([])
-    expect(offToken(css, 'z-index', /^(?:0|1|auto|var\(--gx-z-[\w-]+\))$/), 'layers that are not tokens').toEqual([])
-    expect(css.match(/box-shadow:(?!\s*(?:none|var\(--gx-[\w-]+\));)[^;]+/g) ?? [], 'shadows that are not tokens').toEqual([])
-    const local = new Set(css.match(/--gx-[\w-]+(?=\s*:)/g) ?? [])
-    const unknown = (css.match(/var\(--gx-[\w-]+/g) ?? []).map((v) => v.slice(4)).filter((v) => !tokens.has(v) && !local.has(v))
-    expect(unknown, 'tokens that do not exist').toEqual([])
+  it('writes its styles as whole Tailwind classes, from the tokens only', () => {
+    expect(source, 'styles are classes, not CSS').not.toMatch(/@apply|\.css['"]/)
+    expect(classes.filter((c) => /\[#|\b(?:rgba?|hsla?|oklch|oklab)\(/.test(c)), 'color literals').toEqual([])
+    expect(classes.filter((c) => /(?<![\w.-])\d*\.?\d+m?s\b/.test(c)), 'durations that are not tokens').toEqual([])
+    expect(classes.filter((c) => /motion-(?:reduce|safe):/.test(c)), 'reduced motion is handled once, by --gx-ms').toEqual([])
+    for (const [what, kind, allowed] of KINDS)
+      expect(classes.filter((c) => { const value = utilityOf(c).match(kind)?.[1]; return value !== undefined && !allowed(value) }), what).toEqual([]) // prettier-ignore
+    /* Tailwind reads the files as text: a class it must write is whole in the source. Only a gx- name is put together. */
+    const built = [...source.matchAll(/`([^`]*\$\{[^`]*)`/g)].map((m) => m[1]!)
+    const utility = /(?:^|[\s:])-?(?:bg|text|border|shadow|fill|stroke|outline|decoration|from|via|to|h|w|size|min-[hw]|max-[hw]|p[xytrblse]?|m[xytrblse]?|gap|inset|top|left|right|bottom|rounded|font|leading|tracking|z|duration|ease|animate|grid-cols|col-span|opacity)-[\w-]*\$\{/
+    expect(built.filter((t) => utility.test(t)), 'class names put together from parts').toEqual([])
+    const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '')
+    const local = new Set(code.match(/--gx-[\w-]+(?=['"]?\s*:)/g) ?? [])
+    const unknown = (code.match(/--gx-[a-z][\w-]*/g) ?? []).filter((v) => !tokens.has(v) && !local.has(v) && !v.endsWith('-'))
+    expect([...new Set(unknown)], 'tokens that do not exist').toEqual([])
   })
 
-  it('styles are in no cascade layer, under gx- class names, with hover behind (hover: hover)', () => {
-    expect(read(cssPath)).not.toContain('@layer')
-    for (const rule of rulesOf(read(cssPath))) {
-      expect(rule.selector.match(/\.(?!gx-)[A-Za-z_][\w-]*/g) ?? [], rule.selector).toEqual([])
-      if (rule.selector.includes(':hover')) expect(rule.within, rule.selector).toContain('@media (hover: hover)')
-    }
-  })
-
-  it('shows keyboard focus with the shared ring', () => {
-    const css = read(cssPath).replace(/\/\*[\s\S]*?\*\//g, '')
-    expect(css.match(/(?<![\w-])outline:(?!\s*(?:0\b|none\b|var\(--gx-focus-ring\)))[^;]+/g) ?? [], 'outlines use --gx-focus-ring').toEqual([])
-    if (/cursor:\s*pointer/.test(css)) expect(css, 'a control that takes clicks shows keyboard focus').toMatch(/:focus-visible|:focus-within/)
+  it('shows hover and keyboard focus the shared way', () => {
+    expect(classes.filter((c) => /\[[^\]]*:hover/.test(c)), 'hover is the `hover:` variant, which touch screens do not get').toEqual([])
+    if (classes.some((c) => utilityOf(c) === 'cursor-pointer'))
+      expect(classes.some((c) => /focus-visible:focus-ring$|focus-within:|has-\[[^\]]*:focus-visible/.test(c)), 'a control that takes clicks shows keyboard focus').toBe(true)
   })
 
   it('says nothing by itself: its words come from messages or from props', () => {
-    const jsx = read(`src/${dir}/${name}.tsx`).replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '')
+    const jsx = source.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '')
     expect(jsx.match(/>\s*[A-Za-z][A-Za-z ,.'’!?-]*[a-z]\s*<\//g) ?? [], 'text written in the markup').toEqual([])
     expect(jsx.match(/(?:aria-label|title|placeholder|alt)="[^"]*[A-Za-z][^"]*"/g) ?? [], 'a label written in the markup').toEqual([])
   })

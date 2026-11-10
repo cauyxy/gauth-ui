@@ -98,6 +98,8 @@
   --animate-fade-in: gx-fade-in var(--gx-dur-base) var(--ease-enter) both;
   --animate-fade-out: gx-fade-out var(--gx-dur-fast) var(--ease-standard) both;
   --animate-pop-in: gx-pop-in var(--gx-dur-fast) var(--ease-enter) both;
+  --animate-pop-out: gx-pop-out var(--gx-dur-fast) var(--ease-standard) both;
+  --animate-tip-in: gx-fade-in var(--gx-dur-fast) var(--ease-enter) both;
   --animate-rise-in: gx-rise-in var(--gx-dur-enter) var(--ease-enter) both;
   --animate-slide-in: gx-slide-in var(--gx-dur-enter) var(--ease-enter) both;
   --animate-mark-right: gx-mark-right var(--gx-dur-mark) var(--ease-enter);

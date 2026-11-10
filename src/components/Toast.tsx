@@ -1,6 +1,6 @@
 import { Toast as ToastPrimitive } from 'radix-ui'
 import { useSyncExternalStore } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
 
@@ -55,25 +55,52 @@ export function Toaster() {
           onOpenChange={(next) => {
             if (!next) close(id)
           }}
-          className={cx('gx-toast', `gx-toast--${tone}`)}
+          className={cn(
+            'gx-toast pointer-events-auto flex min-h-(--gx-h-lg) max-w-[min(26rem,100%)] animate-pop-in items-center gap-2.5 rounded-xl bg-ink py-1 pr-1.5 pl-4 text-sm leading-heading font-control text-white shadow-pop outline-0 focus-visible:focus-ring focus-visible:outline-offset-2 data-[state=closed]:animate-fade-out',
+            `gx-toast--${tone}`,
+          )}
         >
-          {tone === 'good' ? <Icon name="check" size={16} className="gx-toast__mark" /> : null}
-          {tone === 'warn' ? <span aria-hidden="true" className="gx-toast__mark" /> : null}
-          <div className="gx-toast__text">
+          {/* The tone has a shape as well as a color: a check for good, a dot for warn, nothing for neutral. With a second line the mark stays on the first one: the text's top padding, half a line, less half the mark. */}
+          {tone === 'good' ? (
+            <Icon name="check" size={16} className={cn('gx-toast__mark flex-none text-correct', description && 'mt-[calc(var(--gx-space-1-5)+0.5lh-8px)] self-start')} />
+          ) : null}
+          {tone === 'warn' ? (
+            <span
+              aria-hidden="true"
+              className={cn('gx-toast__mark size-[8px] flex-none rounded-full bg-attempted', description && 'mt-[calc(var(--gx-space-1-5)+0.5lh-4px)] self-start')}
+            />
+          ) : null}
+          <div className="gx-toast__text min-w-0 py-1.5">
             <ToastPrimitive.Title>{message}</ToastPrimitive.Title>
-            {description ? <ToastPrimitive.Description className="gx-toast__description">{description}</ToastPrimitive.Description> : null}
+            {/* The second line: smaller and quieter. White at 72% on ink is still over 4.5:1. */}
+            {description ? <ToastPrimitive.Description className="gx-toast__description text-xs font-body [color:color-mix(in_srgb,var(--gx-color-white)_72%,transparent)]">{description}</ToastPrimitive.Description> : null}
           </div>
+          {/* The one action: underlined white text, as high as the dismiss button beside it. On the ink ground the ring is white and inside the button: blue on ink is under 3:1. */}
           {action ? (
-            <ToastPrimitive.Action altText={action.label} onClick={action.onClick} className="gx-toast__action">
+            <ToastPrimitive.Action
+              altText={action.label}
+              onClick={action.onClick}
+              className="gx-toast__action h-(--gx-h-sm) flex-none cursor-pointer rounded-lg px-2 whitespace-nowrap underline underline-offset-[3px] outline-0 transition-[background-color] duration-(--gx-dur-fast) ease-standard hover:bg-[color-mix(in_srgb,var(--gx-color-white)_16%,transparent)] focus-visible:focus-ring focus-visible:-outline-offset-2 focus-visible:outline-white"
+            >
               {action.label}
             </ToastPrimitive.Action>
           ) : null}
-          <ToastPrimitive.Close className="gx-toast__dismiss" aria-label={messages.dismiss}>
+          <ToastPrimitive.Close
+            className={cn(
+              'gx-toast__dismiss grid size-(--gx-h-sm) flex-none cursor-pointer place-items-center rounded-lg outline-0 transition-[background-color] duration-(--gx-dur-fast) ease-standard hover:bg-[color-mix(in_srgb,var(--gx-color-white)_16%,transparent)] focus-visible:focus-ring focus-visible:-outline-offset-2 focus-visible:outline-white',
+              action && '-ms-1.5',
+            )}
+            aria-label={messages.dismiss}
+          >
             <Icon name="close" size={16} />
           </ToastPrimitive.Close>
         </ToastPrimitive.Root>
       ))}
-      <ToastPrimitive.Viewport label={messages.notifications} className="gx-toaster" />
+      {/* The list of toasts: bottom center. It takes no clicks itself, so the page under it still works. */}
+      <ToastPrimitive.Viewport
+        label={messages.notifications}
+        className="gx-toaster pointer-events-none fixed inset-x-0 bottom-0 z-(--gx-z-toast) flex flex-col items-center gap-2 p-4 outline-none"
+      />
     </ToastPrimitive.Provider>
   )
 }

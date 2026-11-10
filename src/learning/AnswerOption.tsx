@@ -1,5 +1,5 @@
 import { Children, createContext, isValidElement, useContext, type KeyboardEvent, type ReactNode } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
 
@@ -8,6 +8,30 @@ export type AnswerState = 'right' | 'retry'
 
 type Group = { value: string | null; tabStop: string | null; onChange: (value: string) => void; disabled: boolean }
 const GroupContext = createContext<Group>({ value: null, tabStop: null, onChange: () => {}, disabled: false })
+
+/*
+ * The states of an option are attributes, and two can be true at once, so each class says the whole case it is for.
+ * A locked option keeps its full color: an answered question must stay easy to read.
+ * Picked: the row stays white. Its outline and its ink mark say it is the pick.
+ * Answered: the ground, the mark and the word each say the state; the letter or check on a fill is ink, never white.
+ */
+const option = cn(
+  'gx-answer-option group/option flex min-h-(--gx-h-xl) w-full cursor-pointer items-center gap-3.5 rounded-2xl bg-white px-4 py-2 text-start text-lg leading-heading text-ink shadow-edge-strong outline-0 transition-[background-color,box-shadow] duration-(--gx-dur-base) ease-standard',
+  'focus-visible:focus-ring focus-visible:outline-offset-2 disabled:cursor-default',
+  'enabled:not-aria-checked:not-data-[state]:hover:bg-surface',
+  /* Answered, the edge is transparent and not `shadow-none`: that one is not inset, so the outline would jump away and not fade. */
+  'aria-checked:not-data-[state]:shadow-outline data-[state]:shadow-transparent',
+  'data-[state=right]:animate-mark-right data-[state=right]:bg-good-soft',
+  'data-[state=retry]:animate-mark-retry data-[state=retry]:bg-attempted-soft',
+)
+const mark = cn(
+  'gx-answer-option__mark grid size-[1.75rem] flex-none place-items-center rounded-full text-sm leading-figure font-control shadow-edge-strong transition-[background-color,color] duration-(--gx-dur-base) ease-standard',
+  'group-aria-checked/option:shadow-none group-aria-checked/option:group-not-data-[state]/option:bg-ink group-aria-checked/option:group-not-data-[state]/option:text-white',
+  'group-data-[state]/option:text-ink group-data-[state]/option:shadow-none',
+  'group-data-[state=right]/option:bg-correct group-data-[state=retry]/option:bg-attempted',
+)
+const word =
+  'gx-answer-option__word flex-none text-sm font-control group-data-[state=right]/option:text-good group-data-[state=retry]/option:text-attempted-ink'
 
 /**
  * The options of one question. `label` is its accessible name (the question, or "Answers").
@@ -52,7 +76,7 @@ export function AnswerGroup({
     options[to]!.focus()
   }
   return (
-    <div role="radiogroup" aria-label={label} aria-disabled={disabled || undefined} onKeyDown={onKeyDown} className={cx('gx-answer-group', className)}>
+    <div role="radiogroup" aria-label={label} aria-disabled={disabled || undefined} onKeyDown={onKeyDown} className={cn('gx-answer-group grid w-full grid-cols-[repeat(auto-fit,minmax(min(14.5rem,100%),1fr))] gap-2.5', className)}>
       <GroupContext.Provider value={{ value, tabStop, onChange, disabled }}>{children}</GroupContext.Provider>
     </div>
   )
@@ -87,11 +111,11 @@ export function AnswerOption({
       tabIndex={group.tabStop === value ? 0 : -1}
       disabled={group.disabled}
       onClick={() => group.onChange(value)}
-      className={cx('gx-answer-option', className)}
+      className={cn(option, className)}
     >
-      <span className="gx-answer-option__mark">{state === 'right' ? <Icon name="check" size={16} /> : letter}</span>
-      <span className="gx-answer-option__content">{children}</span>
-      {state ? <span className="gx-answer-option__word">{state === 'right' ? messages.correct : messages.notYet}</span> : null}
+      <span className={mark}>{state === 'right' ? <Icon name="check" size={16} /> : letter}</span>
+      <span className="gx-answer-option__content min-w-0 flex-1">{children}</span>
+      {state ? <span className={word}>{state === 'right' ? messages.correct : messages.notYet}</span> : null}
     </button>
   )
 }

@@ -1,5 +1,5 @@
 import { createContext, useContext, useId, type ReactNode } from 'react'
-import { cx } from '../core/cx'
+import { cn } from '../core/cn'
 
 /** What a Field gives the control inside it. */
 export type FieldControl = { id: string; describedBy?: string; invalid: boolean }
@@ -31,13 +31,14 @@ export function Field({
   const invalid = Boolean(error)
   const note = error || hint
   return (
-    <div className={cx('gx-field', className)}>
-      <label htmlFor={id} className="gx-field__label">
+    <div className={cn('gx-field flex min-w-0 flex-col gap-1.5', className)}>
+      <label htmlFor={id} className="gx-field__label text-sm font-control">
         {label}
       </label>
       <FieldContext.Provider value={{ id, describedBy: note ? noteId : undefined, invalid }}>{children}</FieldContext.Provider>
+      {/* attempted is the color of a field error. Nothing is red. */}
       {note ? (
-        <span id={noteId} className={invalid ? 'gx-field__error' : 'gx-field__hint'}>
+        <span id={noteId} className={invalid ? 'gx-field__error text-xs font-control text-pretty text-attempted-ink' : 'gx-field__hint text-xs text-pretty text-muted'}>
           {note}
         </span>
       ) : null}
