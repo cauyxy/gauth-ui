@@ -4,7 +4,7 @@
   height: 0.25rem;
   overflow: hidden;
   border-radius: calc(infinity * 1px);
-  background-color: var(--gx-color-line-2);
+  background-color: var(--gx-color-track);
 }
 .gx-meter__fill {
   display: block;

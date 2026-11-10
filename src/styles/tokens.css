@@ -19,20 +19,18 @@
   --gx-color-ink: #21252e;
   --gx-color-ink-soft: rgb(33 37 46 / 0.75);
   --gx-color-muted: #646a77;
-  --gx-color-subtle: #757c88;
   --gx-color-faint: #9ca2ac;
 
   /* Surfaces */
   --gx-color-canvas: #fafafb;
   --gx-color-surface: #f5f5f7;
   --gx-color-surface-2: #f1f1f3;
-  --gx-color-surface-3: #f7f7f8;
   --gx-color-line: #edeef1;
-  --gx-color-line-2: #eeeff3;
-  --gx-color-track: #e9eaee;
+  --gx-color-track: #e9eaee; /* The empty part of a bar, the ground of a Segmented control, a round icon ground */
   --gx-color-ring: #c5c8cf;
   --gx-color-rule: #dadce1; /* A firmer hairline than line: print-sheet rules and boxes, off toggles, step connectors, chart grids */
-  --gx-color-edge: rgb(80 88 101 / 0.1);
+  --gx-color-edge: rgb(80 88 101 / 0.12); /* The card hairline */
+  --gx-color-edge-strong: rgb(80 88 101 / 0.2); /* The hairline where it must show on a tinted ground */
 
   /* Brand and accents */
   --gx-color-brand: #ff013e;
@@ -94,10 +92,10 @@
   --gx-text-6xl: 3.75rem; /* 60px. Marketing hero */
 
   /* Shadows: only these. Cards are drawn with an inset hairline, not a drop shadow. */
-  --gx-shadow-card: 0 1px 2px rgb(33 37 46 / 0.04), inset 0 0 0 1px rgb(80 88 101 / 0.1);
-  --gx-shadow-edge: inset 0 0 0 1px rgb(80 88 101 / 0.12); /* The card hairline */
-  --gx-shadow-edge-strong: inset 0 0 0 1px rgb(80 88 101 / 0.2); /* The hairline where it must show on a tinted ground */
-  --gx-shadow-pop: 0 8px 28px rgb(33 37 46 / 0.1), inset 0 0 0 1px rgb(80 88 101 / 0.08); /* Popovers, menus and floating docks only */
+  --gx-shadow-card: 0 1px 2px rgb(33 37 46 / 0.04), inset 0 0 0 1px var(--gx-color-edge);
+  --gx-shadow-edge: inset 0 0 0 1px var(--gx-color-edge); /* The card hairline */
+  --gx-shadow-edge-strong: inset 0 0 0 1px var(--gx-color-edge-strong); /* The hairline where it must show on a tinted ground */
+  --gx-shadow-pop: 0 8px 28px rgb(33 37 46 / 0.1), inset 0 0 0 1px var(--gx-color-edge); /* Popovers, menus and floating docks only */
   --gx-shadow-raise: 0 1px 2px rgb(33 37 46 / 0.1); /* The picked option of a Segmented control */
   --gx-shadow-outline: inset 0 0 0 1.5px var(--gx-color-ink); /* The ring of a picked item */
 

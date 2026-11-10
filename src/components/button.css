@@ -52,7 +52,7 @@
     background-color: var(--gx-color-black);
   }
   .gx-btn--soft:hover {
-    background-color: var(--gx-color-line-2);
+    background-color: var(--gx-color-track);
   }
   .gx-btn--outline:hover,
   .gx-btn--ghost:hover {
