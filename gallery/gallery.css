@@ -55,3 +55,21 @@ body {
 .g-math-line {
   line-height: var(--gx-leading-body);
 }
+/* The icon set, each with its name. */
+.g-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  gap: var(--gx-space-3);
+  margin-top: var(--gx-space-5);
+}
+.g-icon {
+  display: flex;
+  align-items: center;
+  gap: var(--gx-space-2);
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-xs);
+}
+.g-icon > svg {
+  flex: none;
+  color: var(--gx-color-ink);
+}

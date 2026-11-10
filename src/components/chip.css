@@ -10,6 +10,15 @@
   font-weight: var(--gx-font-weight-control);
   white-space: nowrap;
 }
+/* An icon in a chip is 14px. Its strokes do not fill its box, so at the start it sits 2px closer to the edge and to the text. */
+.gx-chip > svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+.gx-chip > svg:first-child {
+  margin-inline: calc(var(--gx-space-0-5) * -1);
+}
 /* A plain fact has an outline, not a grey fill: fills are for facts with a meaning. */
 .gx-chip--neutral {
   box-shadow: var(--gx-shadow-edge-strong);
@@ -38,4 +47,42 @@
 .gx-chip--ink {
   background-color: var(--gx-color-ink);
   color: var(--gx-color-white);
+}
+
+/* The remove button: 20px, so the chip stays 24px high. The chip's end padding and the button's start margin shrink,
+   so the cross has the same 8px on both sides that the text has at the start. */
+.gx-chip--removable {
+  padding-inline-end: var(--gx-space-0-5);
+}
+.gx-chip__remove {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  margin-inline-start: calc(var(--gx-space-1) * -1);
+  border: 0;
+  padding: 0;
+  border-radius: var(--gx-radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: 0;
+  transition: background-color var(--gx-dur-fast) var(--gx-ease-standard);
+}
+/* The ring is inside the button: outside, it would lie on the last letter of the text. */
+.gx-chip__remove:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: -2px;
+}
+/* On the ink chip the ring is white: blue on ink is under 3:1. */
+.gx-chip--ink > .gx-chip__remove:focus-visible {
+  outline-color: var(--gx-color-white);
+}
+@media (hover: hover) {
+  .gx-chip__remove:hover {
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+  }
 }

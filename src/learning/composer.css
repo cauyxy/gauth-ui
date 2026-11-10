@@ -4,27 +4,52 @@
   gap: var(--gx-space-2);
   width: 100%;
 }
+/* Two columns: the text, then Send at the bottom end. With tools the text takes both and the tools stand beside Send. */
 .gx-composer__box {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--gx-space-2-5);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--gx-space-2) var(--gx-space-2-5);
   padding: var(--gx-space-3) var(--gx-space-3) var(--gx-space-3) var(--gx-space-4);
   border-radius: var(--gx-radius-2xl);
   background-color: var(--gx-color-white);
   box-shadow: var(--gx-shadow-edge-strong);
 }
-/* The ring goes around the box while the person writes. The send button shows its own. */
-.gx-composer__box:focus-within {
+/* The ring goes around the box while the person writes. A button in the box shows its own. */
+.gx-composer__box:has(.gx-composer__input:focus-visible) {
   outline: var(--gx-focus-ring);
   outline-offset: 1px;
 }
-.gx-composer__box:has(.gx-composer__send:focus-visible) {
-  outline: 0;
+/* Rows above the text: a quote, attached files. They keep to the box's own padding. */
+.gx-composer__before {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / -1;
+  gap: var(--gx-space-2);
+  min-width: 0;
+}
+.gx-composer__before:empty {
+  display: none;
+}
+.gx-composer__box--tools > .gx-composer__input {
+  grid-column: 1 / -1;
+}
+.gx-composer__tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-self: center;
+  gap: var(--gx-space-1);
+  min-width: 0;
+}
+/* A ghost icon button holds its icon 8px in, so the row moves 8px toward the start: the first icon is then under the text's edge. */
+.gx-composer__tools:has(> .gx-icon-btn--ghost:first-child) {
+  margin-inline-start: calc(var(--gx-space-2) * -1);
 }
 /* One line high at first; the component sets the height as the text grows, up to six lines. */
 .gx-composer__input {
   display: block;
-  flex: 1;
+  width: 100%;
   min-width: 0;
   max-height: calc(6em * var(--gx-leading-body) + var(--gx-space-3));
   margin: 0;

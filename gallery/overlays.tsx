@@ -77,6 +77,22 @@ export default function Overlays() {
           <Button variant="outline" onClick={() => toast('Not saved. Try again.', { tone: 'warn' })}>
             Save offline
           </Button>
+          <Button
+            variant="outline"
+            onClick={() => toast('Assigned', { tone: 'good', description: 'Exit ticket · Geometry · Period 3' })}
+          >
+            Assign
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() =>
+              toast('Devon removed from Period 3', {
+                action: { label: 'Undo', onClick: () => toast('Devon is back in Period 3', { tone: 'good' }) },
+              })
+            }
+          >
+            Remove student
+          </Button>
         </div>
         <Toaster />
       </Section>

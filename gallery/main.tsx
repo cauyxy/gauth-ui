@@ -7,6 +7,7 @@ import './gallery.css'
 import { Segmented } from '../src/components/Segmented'
 import { LocaleProvider } from '../src/core/locale'
 import type { Locale } from '../src/core/messages'
+import Chat from './chat'
 import Core from './core'
 import Forms from './forms'
 import Learning from './learning'
@@ -36,6 +37,8 @@ function Gallery() {
         <Overlays />
         <h2 className="g-group">Structure and Gauth AI</h2>
         <Structure />
+        <h2 className="g-group">Conversation</h2>
+        <Chat />
         <h2 className="g-group">Learning</h2>
         <Learning />
         <h2 className="g-group">Math</h2>

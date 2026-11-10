@@ -1,0 +1,19 @@
+.gx-ai-status {
+  display: flex;
+  /* The spinner sits on the first line of the text, also when the text wraps. */
+  align-items: flex-start;
+  gap: var(--gx-space-2);
+  min-width: 0;
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-sm);
+}
+.gx-ai-status[data-state='working'] {
+  color: var(--gx-color-ink-soft);
+}
+.gx-ai-status__mark {
+  flex: none;
+  margin: calc((1lh - 14px) / 2) 0;
+}
+.gx-ai-status__text {
+  min-width: 0;
+}

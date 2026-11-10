@@ -7,6 +7,10 @@ import { useLocale } from '../core/locale'
  * Where a person writes to Gauth AI. Enter sends and Shift+Enter makes a new line. The box grows with the text, to
  * about six lines. `label` is the accessible name of the text box. The page keeps `value` and empties it in `onSend`.
  * The line under the box is always there: `note` replaces its words.
+ *
+ * `before` is rows inside the box above the text (a `Quote`, attachment chips). `tools` is buttons at the start of a
+ * bottom row (attach, microphone); with them the box has two rows. While `busy`, Send is Stop: it calls `onStop`, and
+ * Enter does not send. The person can still write the next message.
  */
 export function Composer({
   value,
@@ -15,6 +19,10 @@ export function Composer({
   label,
   placeholder,
   note,
+  before,
+  tools,
+  busy = false,
+  onStop,
   disabled = false,
   className,
 }: {
@@ -24,6 +32,10 @@ export function Composer({
   label: string
   placeholder?: string
   note?: ReactNode
+  before?: ReactNode
+  tools?: ReactNode
+  busy?: boolean
+  onStop?: () => void
   disabled?: boolean
   className?: string
 }) {
@@ -39,7 +51,7 @@ export function Composer({
   }, [value])
 
   const send = () => {
-    if (!empty && !disabled) onSend(value)
+    if (!empty && !disabled && !busy) onSend(value)
   }
   const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key !== 'Enter' || event.shiftKey || event.nativeEvent.isComposing) return
@@ -49,7 +61,8 @@ export function Composer({
 
   return (
     <div className={cx('gx-composer', className)}>
-      <div className="gx-composer__box">
+      <div className={cx('gx-composer__box', tools ? 'gx-composer__box--tools' : null)}>
+        {before ? <div className="gx-composer__before">{before}</div> : null}
         <textarea
           ref={input}
           rows={1}
@@ -61,8 +74,16 @@ export function Composer({
           disabled={disabled}
           className="gx-composer__input"
         />
-        <button type="button" aria-label={messages.send} disabled={disabled || empty} onClick={send} className="gx-composer__send">
-          <Icon name="arrow-up" size={18} />
+        {tools ? <div className="gx-composer__tools">{tools}</div> : null}
+        {/* One button for both, so keyboard focus stays on it when Gauth AI starts and ends. */}
+        <button
+          type="button"
+          aria-label={busy ? messages.stop : messages.send}
+          disabled={busy ? !onStop : disabled || empty}
+          onClick={() => (busy ? onStop?.() : send())}
+          className="gx-composer__send"
+        >
+          {busy ? <Icon name="stop" size={14} fill="currentColor" /> : <Icon name="arrow-up" size={18} />}
         </button>
       </div>
       <p className="gx-composer__note">{note ?? messages.aiNote}</p>

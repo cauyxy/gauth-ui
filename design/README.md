@@ -91,6 +91,15 @@ Line height has four steps: `leading-figure` 1 for a metric, `leading-title` 1.1
 - A formula on its own line is centered and scrolls in its own box when it is wider than the page.
 - The punctuation after a formula stays on the formula's line.
 
+## Gauth AI
+
+- The assistant is "Gauth AI", in every product and language.
+- **Don't sell AI.** No sparkle, no gradient, no glow, no text that pulses. A status line says what is being done in plain words ("Reading 28 answers"), with a spinner, and then what was done.
+- A person's message is a soft bubble at the end side. Gauth AI's reply is plain text on the page, with no bubble: it is content, not a chat.
+- Under a reply: the votes and copy, as quiet icon buttons. Under the last reply: questions to tap.
+- While Gauth AI writes, Send becomes Stop.
+- Every composer has the line that says to review AI output.
+
 ## Optical alignment
 
 Align what the eye sees, the ink, not the box. `node gallery/optical.ts` measures it in Chrome and fails when a place is off by half a pixel or more.
@@ -100,7 +109,7 @@ Align what the eye sees, the ink, not the box. `node gallery/optical.ts` measure
 - **A mark beside text** (a checkbox, a level mark, a spinner): its middle is on the first line of the text. When the text wraps, the mark stays on the first line; it does not move to the middle of the block.
 - **A formula in a line of words:** one baseline, and numbers of one height (within 5%).
 - **An icon at the end of a control.** An icon's strokes do not fill its 20px box, so the icon sits 2px closer to the edge than text does. `Button` and `Select` do this by themselves.
-- **Icons are drawn on one grid:** 20px box, 1.8px stroke, round ends, strokes inside the middle 10 to 14px. An icon from another set sits wrong next to them.
+- **One icon family: Lucide.** 20px, a 1.8px stroke, round ends, never filled. `Icon` holds the icons the components and most pages need. A product that needs another one takes it from Lucide and draws it the same way: `size={20} strokeWidth={1.8} absoluteStrokeWidth`. An icon from another family sits wrong next to them.
 
 ## Surfaces and layout
 
@@ -157,10 +166,10 @@ Core: what any product needs.
 
 | Group     | Components |
 | --------- | ---------- |
-| Actions   | [Button](components/Button/README.md), [Segmented](components/Segmented/README.md), [Switch](components/Switch/README.md), [Menu](components/Menu/README.md) |
+| Actions   | [Button](components/Button/README.md), [IconButton](components/IconButton/README.md), [Segmented](components/Segmented/README.md), [Switch](components/Switch/README.md), [ChipToggle](components/ChipToggle/README.md), [Menu](components/Menu/README.md) |
 | Forms     | [Field](components/Field/README.md), [Input](components/Input/README.md), [Textarea](components/Textarea/README.md), [Select](components/Select/README.md), [Checkbox](components/Checkbox/README.md) |
 | Labels    | [Chip](components/Chip/README.md), [Avatar](components/Avatar/README.md), [Dot](components/Dot/README.md), [IconBox](components/IconBox/README.md) |
-| Surfaces  | [Panel](components/Panel/README.md), [Stat](components/Stat/README.md), [Table](components/Table/README.md), [EmptyState](components/EmptyState/README.md) |
+| Surfaces  | [Panel](components/Panel/README.md), [Stat](components/Stat/README.md), [Table](components/Table/README.md), [CoverCard](components/CoverCard/README.md), [EmptyState](components/EmptyState/README.md) |
 | Structure | [PageTitle](components/PageTitle/README.md), [Breadcrumbs](components/Breadcrumbs/README.md), [Tabs](components/Tabs/README.md), [Stepper](components/Stepper/README.md) |
 | Overlays  | [Dialog](components/Dialog/README.md), [Popover](components/Popover/README.md), [Tooltip](components/Tooltip/README.md) |
 | Feedback  | [Toast](components/Toast/README.md), [Callout](components/Callout/README.md) |
@@ -172,7 +181,7 @@ Learning: what an education product shows.
 | ------------ | ---------- |
 | Skill levels | [LevelMark](components/LevelMark/README.md), [LevelChip](components/LevelChip/README.md), [LevelLadder](components/LevelLadder/README.md), [LevelBar](components/LevelBar/README.md) |
 | Questions    | [AnswerOption](components/AnswerOption/README.md), [Reveal](components/Reveal/README.md), [WorkedSteps](components/WorkedSteps/README.md), [StepProgress](components/StepProgress/README.md) |
-| Gauth AI     | [Composer](components/Composer/README.md), [Generating](components/Generating/README.md) |
+| Gauth AI     | [Composer](components/Composer/README.md), [Message](components/Message/README.md), [AiStatus](components/AiStatus/README.md), [ReplyActions](components/ReplyActions/README.md), [FollowUps](components/FollowUps/README.md), [Quote](components/Quote/README.md), [Generating](components/Generating/README.md) |
 
 Math: formulas, from `gauth-ui/math`.
 

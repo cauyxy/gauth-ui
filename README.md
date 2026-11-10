@@ -78,13 +78,17 @@ import { LocaleProvider } from 'gauth-ui'
 
 ## Components
 
-**Core.** Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · Dialog · Dot · EmptyState · Field · IconBox · Input · Menu · Meter · PageTitle · Panel · Popover · Progress · Segmented · Select · Skeleton · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
+**Core.** Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · ChipToggle · CoverCard · Dialog · Dot · EmptyState · Field · Icon · IconBox · IconButton · Input · Menu · Meter · PageTitle · Panel · Popover · Progress · Segmented · Select · Skeleton · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
 
 **Math** (`gauth-ui/math`). RichText · Tex
 
-**Learning.** AnswerOption · Composer · Generating · LevelBar · LevelChip · LevelLadder · LevelMark · Reveal · StepProgress · WorkedSteps
+**Learning.** AiStatus · AnswerOption · Composer · FollowUps · Generating · LevelBar · LevelChip · LevelLadder · LevelMark · Message · Quote · ReplyActions · Reveal · StepProgress · WorkedSteps
 
 Each has a guideline in [`design/components/`](design/components). `pnpm gallery` shows them all on one page, in both languages.
+
+## Credits
+
+The icons are from [Lucide](https://lucide.dev) (ISC). See `THIRD-PARTY-NOTICES.md`.
 
 ## Develop
 

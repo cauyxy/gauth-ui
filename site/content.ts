@@ -1,6 +1,7 @@
 /* What the site shows and where: the pages, read from the repository's own Markdown, and the component groups of the gallery. */
 import type { ComponentType } from 'react'
 import design from '../design/README.md?raw'
+import Chat from '../gallery/chat'
 import Core from '../gallery/core'
 import Forms from '../gallery/forms'
 import Learning from '../gallery/learning'
@@ -21,10 +22,11 @@ const sections = (markdown: string) =>
 
 /** The component groups: a page each, with the gallery's live examples. `names` are the components on it, in order. */
 export const GROUPS: { slug: string; title: string; Examples: ComponentType; names: string[] }[] = [
-  { slug: 'basics', title: 'Basics', Examples: Core, names: ['Button', 'Segmented', 'Switch', 'Chip', 'Avatar', 'Dot', 'IconBox', 'Panel', 'Stat', 'Tooltip', 'Popover', 'Meter', 'Progress', 'Spinner', 'Skeleton'] },
+  { slug: 'basics', title: 'Basics', Examples: Core, names: ['Button', 'IconButton', 'Segmented', 'Switch', 'Chip', 'ChipToggle', 'Avatar', 'Dot', 'IconBox', 'Panel', 'Stat', 'CoverCard', 'Tooltip', 'Popover', 'Meter', 'Progress', 'Spinner', 'Skeleton'] },
   { slug: 'forms', title: 'Forms', Examples: Forms, names: ['Field', 'Input', 'Textarea', 'Select', 'Checkbox'] },
   { slug: 'overlays', title: 'Overlays and feedback', Examples: Overlays, names: ['Dialog', 'Menu', 'Toast', 'EmptyState', 'Callout'] },
   { slug: 'structure', title: 'Structure and Gauth AI', Examples: Structure, names: ['Breadcrumbs', 'PageTitle', 'Tabs', 'Table', 'Stepper', 'Composer', 'Generating'] },
+  { slug: 'conversation', title: 'Conversation', Examples: Chat, names: ['Message', 'AiStatus', 'ReplyActions', 'FollowUps', 'Quote'] },
   { slug: 'learning', title: 'Learning', Examples: Learning, names: ['LevelMark', 'LevelChip', 'LevelLadder', 'LevelBar', 'AnswerOption', 'Reveal', 'WorkedSteps', 'StepProgress'] },
   { slug: 'math', title: 'Math', Examples: Formulas, names: ['Tex', 'RichText'] },
 ]

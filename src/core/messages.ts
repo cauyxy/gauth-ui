@@ -17,6 +17,13 @@ export type Messages = {
   back: string
   search: string
   send: string
+  /** Stops a reply that Gauth AI is still writing. */
+  stop: string
+  copy: string
+  /** What the copy button says for a moment after a click. */
+  copied: string
+  /** Takes one thing off: a file, a picked skill, a quote. */
+  remove: string
   /** The accessible name of a breadcrumb trail. */
   breadcrumb: string
   /** The accessible name of the region where toasts appear. */
@@ -38,6 +45,14 @@ export type Messages = {
   tryAgain: string
   /** The line under every Gauth AI composer. */
   aiNote: string
+  /** Who wrote a message, for a screen reader. */
+  you: string
+  gauthAi: string
+  /** The two votes under a reply. */
+  goodReply: string
+  badReply: string
+  /** The accessible name of the questions to tap under a reply. */
+  followUps: string
 }
 
 export const en: Messages = {
@@ -47,6 +62,10 @@ export const en: Messages = {
   back: 'Back',
   search: 'Search',
   send: 'Send',
+  stop: 'Stop',
+  copy: 'Copy',
+  copied: 'Copied',
+  remove: 'Remove',
   breadcrumb: 'Breadcrumb',
   notifications: 'Notifications',
   step: (n, state) => (state === 'done' ? `Step ${n}, done` : state === 'current' ? `Step ${n}, current` : `Step ${n}`),
@@ -61,6 +80,11 @@ export const en: Messages = {
   why: 'Why',
   tryAgain: 'Try again',
   aiNote: 'Review AI output for accuracy. Follow school policies.',
+  you: 'You',
+  gauthAi: 'Gauth AI',
+  goodReply: 'Good reply',
+  badReply: 'Bad reply',
+  followUps: 'Follow-up questions',
 }
 
 export const es: Messages = {
@@ -70,6 +94,10 @@ export const es: Messages = {
   back: 'Volver',
   search: 'Buscar',
   send: 'Enviar',
+  stop: 'Detener',
+  copy: 'Copiar',
+  copied: 'Copiado',
+  remove: 'Quitar',
   breadcrumb: 'Ruta de navegación',
   notifications: 'Notificaciones',
   step: (n, state) => (state === 'done' ? `Paso ${n}, completado` : state === 'current' ? `Paso ${n}, actual` : `Paso ${n}`),
@@ -84,6 +112,11 @@ export const es: Messages = {
   why: 'Por qué',
   tryAgain: 'Inténtalo de nuevo',
   aiNote: 'Revisa que las respuestas de la IA sean correctas. Sigue las normas de tu escuela.',
+  you: 'Tú',
+  gauthAi: 'Gauth AI',
+  goodReply: 'Buena respuesta',
+  badReply: 'Mala respuesta',
+  followUps: 'Preguntas de seguimiento',
 }
 
 export const MESSAGES: Record<Locale, Messages> = { en, es }

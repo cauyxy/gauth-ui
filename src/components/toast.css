@@ -43,6 +43,12 @@
   min-width: 0;
   padding: var(--gx-space-1-5) 0;
 }
+/* The second line: smaller and quieter. White at 72% on ink is still over 4.5:1. */
+.gx-toast__description {
+  color: color-mix(in srgb, var(--gx-color-white) 72%, transparent);
+  font-size: var(--gx-text-xs);
+  font-weight: var(--gx-font-weight-body);
+}
 
 /* The tone has a shape as well as a color: a check for good, a dot for warn, nothing for neutral. */
 .gx-toast__mark {
@@ -56,6 +62,36 @@
   height: 8px;
   border-radius: calc(infinity * 1px);
   background-color: var(--gx-color-attempted);
+}
+/* With a second line the mark stays on the first one: the text's top padding, half a line, less half the mark. */
+.gx-toast:has(.gx-toast__description) .gx-toast__mark {
+  align-self: flex-start;
+  margin-top: calc(var(--gx-space-1-5) + 0.5lh - 8px);
+}
+.gx-toast--warn:has(.gx-toast__description) .gx-toast__mark {
+  margin-top: calc(var(--gx-space-1-5) + 0.5lh - 4px);
+}
+
+/* The one action: underlined white text, as high as the dismiss button beside it. */
+.gx-toast__action {
+  flex: none;
+  height: var(--gx-h-sm);
+  margin: 0;
+  border: 0;
+  padding: 0 var(--gx-space-2);
+  border-radius: var(--gx-radius-lg);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: 0;
+  transition: background-color var(--gx-dur-fast) var(--gx-ease-standard);
+}
+.gx-toast__action + .gx-toast__dismiss {
+  margin-inline-start: calc(var(--gx-space-1-5) * -1);
 }
 
 .gx-toast__dismiss {
@@ -76,12 +112,14 @@
   transition: background-color var(--gx-dur-fast) var(--gx-ease-standard);
 }
 /* On the ink ground the ring is white and inside the button: blue on ink is under 3:1. */
+.gx-toast__action:focus-visible,
 .gx-toast__dismiss:focus-visible {
   outline: var(--gx-focus-ring);
   outline-color: var(--gx-color-white);
   outline-offset: -2px;
 }
 @media (hover: hover) {
+  .gx-toast__action:hover,
   .gx-toast__dismiss:hover {
     background-color: color-mix(in srgb, var(--gx-color-white) 16%, transparent);
   }

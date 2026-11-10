@@ -92,6 +92,11 @@ Each row is a place where gauthx writes the classes itself today. The switch is 
 | Hand-written inputs on sign-in, sign-up and authoring               | `Field`, `Input`, `Textarea`, `Select`, `Checkbox` |
 | `MASTERY_COLOR`, `MASTERY_INK`, `MASTERY_SOFT` in `packages/task`   | the level tokens; delete the second copy   |
 | Level names and "Not yet" written in each page                      | `useLocale().messages`                     |
+| Icon-only buttons written by hand (26 in gauth-teacher, 10 stroke widths) | `IconButton` with `Icon` |
+| Skill and filter chips, the chip that is a select, attachment chips | `ChipToggle`, `Select size="sm"`, `Chip onRemove` |
+| Cards with a picture on top (tools, resources, saved documents)     | `CoverCard`                                |
+| `sonner` toasts                                                     | `toast(message, { tone, description, action })` |
+| `AiStatus`, `ReplyActions`, `FollowUps`, `StopButton`, message bubbles, `QuoteLine` (gauth-teacher `chat-parts.tsx`, `ask.tsx`, `tool.tsx`) | `AiStatus`, `ReplyActions`, `FollowUps`, `Composer busy`, `Message`, `Quote` |
 | `@gauthx/math`: `Tex`, `RichText`, `MATH`, `wordsIn`, `closedMath`, `unescapeDollars` | the same names from `gauth-ui/math`; import `gauth-ui/math.css` once, in CSS |
 
 ## Stays in gauthx
@@ -99,5 +104,7 @@ Each row is a place where gauthx writes the classes itself today. The switch is 
 - The keyframes its pages use by name: `drawer-in`, `fade-in`, `build-slide`, `pop-in`.
 - `overscroll-behavior-y: none` and `scrollbar-gutter: stable` on `html`.
 - `StandardCode`, `DemoTag`, `Diagram`, the shells and sign-in.
+- Icons: both are Lucide. `Icon` here holds 34 of them at one stroke (1.8px at 20px); a product draws any other Lucide icon with `size={20} strokeWidth={1.8} absoluteStrokeWidth`. gauthx and gauth-teacher use ten stroke widths today.
+- `QuoteOnSelect` (the Quote button over selected text), `useStream`, the skill suggestion and the infinite canvas of gauth-teacher: one product's flows.
 - The logo and the app tiles (`@gauthx/icons`). They are not in this package: moving them makes the logo public on npm, and nobody has decided that.
 - The student `PRIMARY` and `SECONDARY` class strings, until someone picks how they map to `Button`.

@@ -53,6 +53,47 @@ it('leaves by itself after 4 seconds', () => {
   }
 })
 
+it('shows a description as a second line under the message', async () => {
+  render(<Toaster />)
+  act(() => toast('Assigned', { tone: 'good', description: 'Exit ticket · Geometry · Period 3' }))
+  const item = list().getByRole('listitem')
+  const description = list().getByText('Exit ticket · Geometry · Period 3')
+  expect(description).toHaveClass('gx-toast__description')
+  expect(description.previousElementSibling).toHaveTextContent('Assigned')
+  expect(item.querySelector('.gx-toast__text')).toContainElement(description)
+  expect(list().queryByRole('button', { name: 'Undo' })).not.toBeInTheDocument()
+  await userEvent.click(list().getByRole('button', { name: 'Dismiss' }))
+  expect(list().queryByRole('listitem')).not.toBeInTheDocument()
+})
+
+it('runs its action and closes', async () => {
+  const onClick = vi.fn()
+  render(<Toaster />)
+  act(() => toast('Removed Geometry · Period 3', { action: { label: 'Undo', onClick } }))
+  const item = list().getByRole('listitem')
+  const action = list().getByRole('button', { name: 'Undo' })
+  expect(action).toHaveClass('gx-toast__action')
+  expect(action.compareDocumentPosition(list().getByRole('button', { name: 'Dismiss' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  expect(item.querySelector('.gx-toast__description')).toBeNull()
+  await userEvent.click(action)
+  expect(onClick).toHaveBeenCalledOnce()
+  expect(list().queryByRole('listitem')).not.toBeInTheDocument()
+})
+
+it('stays for 8 seconds when it has an action', () => {
+  vi.useFakeTimers()
+  try {
+    render(<Toaster />)
+    act(() => toast('Removed Geometry · Period 3', { action: { label: 'Undo', onClick: () => {} } }))
+    act(() => void vi.advanceTimersByTime(7900))
+    expect(list().getByText('Removed Geometry · Period 3')).toBeInTheDocument()
+    act(() => void vi.advanceTimersByTime(200))
+    expect(list().queryByText('Removed Geometry · Period 3')).not.toBeInTheDocument()
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
 it('names the list and the dismiss button in the language of the page', async () => {
   render(
     <LocaleProvider locale="es">

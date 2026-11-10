@@ -34,6 +34,14 @@ it('takes a size and passes native props to the select', () => {
   expect(select).not.toHaveAttribute('size')
 })
 
+it('has a small size for a filter row', () => {
+  render(<Select label="Class" size="sm" value="thu" options={options} onChange={() => {}} />)
+  const select = screen.getByRole('combobox', { name: 'Class' })
+  expect(select.parentElement).toHaveClass('gx-select--sm')
+  expect(select.parentElement).not.toHaveClass('gx-select--md')
+  expect(select).not.toHaveAttribute('size')
+})
+
 it('does not change when disabled', async () => {
   const onChange = vi.fn()
   render(<Select label="Due" disabled value="thu" options={options} onChange={onChange} />)

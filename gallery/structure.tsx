@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Breadcrumbs } from '../src/components/Breadcrumbs'
 import { Button } from '../src/components/Button'
+import { IconButton } from '../src/components/IconButton'
 import { PageTitle } from '../src/components/PageTitle'
 import { Stepper } from '../src/components/Stepper'
 import { Table, TableCell, TableHead, TableRow } from '../src/components/Table'
 import { Tab, TabList, TabPanel, Tabs } from '../src/components/Tabs'
+import { Icon } from '../src/core/Icon'
 import { Composer } from '../src/learning/Composer'
 import { Generating } from '../src/learning/Generating'
 import { Section } from './section'
@@ -24,6 +26,7 @@ export default function Structure() {
   const [tab, setTab] = useState('students')
   const [question, setQuestion] = useState('')
   const [asked, setAsked] = useState('Why do the triangles have to be similar?')
+  const [request, setRequest] = useState('')
   return (
     <>
       <Section title="Breadcrumbs">
@@ -116,6 +119,26 @@ export default function Structure() {
               setAsked(text)
               setQuestion('')
             }}
+          />
+          <Composer
+            label="Ask Gauth AI"
+            placeholder="Ask about this class, or attach student work"
+            value={request}
+            onChange={setRequest}
+            onSend={(text) => {
+              setAsked(text)
+              setRequest('')
+            }}
+            tools={
+              <>
+                <IconButton label="Attach a file">
+                  <Icon name="attach" />
+                </IconButton>
+                <IconButton label="Dictate">
+                  <Icon name="mic" />
+                </IconButton>
+              </>
+            }
           />
         </div>
       </Section>

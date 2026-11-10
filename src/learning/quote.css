@@ -1,0 +1,32 @@
+.gx-quote {
+  display: flex;
+  align-items: center;
+  gap: var(--gx-space-2-5);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+/* The bar is a shape at the start, as tall as the quote. The quote has no ground. */
+.gx-quote::before {
+  content: '';
+  flex: none;
+  align-self: stretch;
+  width: 3px;
+  border-radius: calc(infinity * 1px);
+  background-color: var(--gx-color-rule);
+}
+/* Two lines at most: the quote points at the text, it does not repeat it. */
+.gx-quote__text {
+  display: -webkit-box;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  color: var(--gx-color-muted);
+  font-size: var(--gx-text-sm);
+  line-height: var(--gx-leading-body);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

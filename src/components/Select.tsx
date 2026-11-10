@@ -3,7 +3,7 @@ import { cx } from '../core/cx'
 import { Icon } from '../core/Icon'
 import { useField } from './Field'
 
-export type SelectSize = 'md' | 'xl'
+export type SelectSize = 'sm' | 'md' | 'xl'
 export type SelectOption<T extends string> = { value: T; label: string }
 
 /**

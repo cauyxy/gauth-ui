@@ -103,6 +103,11 @@ export default function Forms() {
 
       <Section title="Select">
         <div className="g-col">
+          <div className="g-row" style={{ gap: 'var(--gx-space-2)' }}>
+            <Select size="sm" label="Class" value={period} options={PERIODS} onChange={setPeriod} />
+            <Select size="sm" label="Due" value={due} options={DUE} onChange={setDue} />
+            <Select size="sm" label="Due, disabled" value={due} options={DUE} onChange={setDue} disabled />
+          </div>
           <div className="g-row">
             <Select label="Due" value={due} options={DUE} onChange={setDue} />
             <Select label="Class" value={period} options={PERIODS} onChange={setPeriod} />

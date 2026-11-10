@@ -41,6 +41,7 @@ for (const width of [1120, 375]) {
       ['.gx-checkbox__box', '.gx-checkbox'],
       ['.gx-level-mark', '.gx-level-chip'],
       ['.gx-generating__mark', '.gx-generating__step'],
+      ['.gx-ai-status__mark', '.gx-ai-status'],
       ['.gx-answer-option__mark', '.gx-answer-option'],
       ['.gx-breadcrumbs__separator', '.gx-breadcrumbs__item'],
       ['svg', '.gx-btn'],
@@ -82,11 +83,16 @@ for (const width of [1120, 375]) {
     }
     /** The strokes of an icon, without the empty space of its box. */
     const strokesOf = (svg: Element) => {
-      const shape = svg.querySelector('path, circle, rect')
-      if (!shape) return svg.getBoundingClientRect()
-      const box = shape.getBoundingClientRect()
-      const half = (parseFloat(getComputedStyle(shape).strokeWidth) || 0) * (svg.getBoundingClientRect().width / 20) * 0.5
-      return { left: box.left - half, right: box.right + half, top: box.top - half, bottom: box.bottom + half }
+      const shapes = [...svg.querySelectorAll('path, circle, rect, line, polyline, ellipse')].map((shape) => shape.getBoundingClientRect())
+      if (!shapes.length) return svg.getBoundingClientRect()
+      const grid = (svg as SVGSVGElement).viewBox.baseVal.width || 24
+      const half = ((parseFloat(getComputedStyle(svg).strokeWidth) || 0) * (svg.getBoundingClientRect().width / grid)) / 2
+      return {
+        left: Math.min(...shapes.map((b) => b.left)) - half,
+        right: Math.max(...shapes.map((b) => b.right)) + half,
+        top: Math.min(...shapes.map((b) => b.top)) - half,
+        bottom: Math.max(...shapes.map((b) => b.bottom)) + half,
+      }
     }
     const name = (el: Element) => [...el.classList].filter((c) => c.startsWith('gx-')).join('.')
     const out: string[] = []

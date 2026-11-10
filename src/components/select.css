@@ -41,6 +41,16 @@
   opacity: 0.5;
 }
 
+/* A dense filter row: as high as a small button or a ChipToggle. */
+.gx-select--sm > .gx-select__control {
+  height: var(--gx-h-sm);
+  padding-inline: var(--gx-space-2-5) calc(var(--gx-space-3-5) * 2);
+  border-radius: var(--gx-radius-lg);
+  font-size: var(--gx-text-sm);
+}
+.gx-select--sm > .gx-select__icon {
+  inset-inline-end: calc(var(--gx-space-2) - 1px); /* 10px, as the text starts */
+}
 .gx-select--md > .gx-select__control {
   height: var(--gx-h-md);
   padding-inline: var(--gx-space-3) var(--gx-space-8);

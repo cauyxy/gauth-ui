@@ -38,6 +38,7 @@ it('lets a product replace one string and keeps the rest', () => {
 it('has every string in every language, and none left in English', () => {
   for (const locale of Object.keys(MESSAGES) as (keyof typeof MESSAGES)[]) expect(Object.keys(MESSAGES[locale]).sort()).toEqual(Object.keys(en).sort())
   const same = (Object.keys(en) as (keyof typeof en)[]).filter((k) => typeof en[k] === 'string' && en[k] === es[k])
-  expect(same).toEqual([])
+  /* A product name is the same in every language. */
+  expect(same).toEqual(['gauthAi'])
   for (const level of LEVELS) expect(es.levels[level]).not.toBe(en.levels[level])
 })

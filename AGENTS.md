@@ -21,6 +21,7 @@ gallery/                 every component on one page, in both languages (pnpm ga
 site/                    the docs site (ui.gauthx.app): the design rules, the tokens and the gallery's examples with each guideline
 GLOSSARY.md              what each shared word means, in en and es
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
+scripts/icons.ts         the list of icons; copies their drawings from Lucide into src/core/icons.ts
 compare/                 compares each component with the gauthx one it replaces (pnpm compare)
 docs/from-gauthx.md      what changes for gauthx when it switches to this package
 design/README.md         the design rules: content, color, type, surfaces
@@ -71,8 +72,9 @@ A learning component has the same four files, under `src/learning/`. Then export
 ## Accessibility
 
 - Use the native element: a button is `<button type="button">`, a link is `<a>`.
-- A control with no visible text needs a `label` prop for its accessible name.
-- **Focus is one ring.** Every control that takes a click shows `outline: var(--gx-focus-ring)` on `:focus-visible` (2px blue), with `outline-offset` 1 or 2px. No other focus style. On an ink ground the ring is white (`outline-color`), because blue on ink is under 3:1.
+- A control with no visible text needs a `label` prop for its accessible name. A button that shows only an icon is an `IconButton`.
+- Text only a screen reader needs (who wrote a message) has the class `gx-visually-hidden`.
+- **Focus is one ring.** Every control that takes a click shows `outline: var(--gx-focus-ring)` on `:focus-visible` (2px blue), with `outline-offset` 1 or 2px. No other focus style. On an ink ground the ring is white (`outline-color`), because blue on ink is under 3:1. A small button inside a control (a chip's remove, a toast's dismiss) draws the ring inside itself, so it does not cover the text beside it.
 - **A group is one Tab stop.** Inside a radio group, a tab list or a menu, the arrow keys move and Tab leaves.
 - **Text reaches 4.5:1.** `src/contrast.test.ts` lists the allowed pairs. Text on a level's fill or on `correct` is ink, never white. `faint` and `good-mid` are not text colors.
 - Color is never the only signal: a state also has a shape, a mark or a word.
@@ -104,6 +106,7 @@ pnpm typecheck
 pnpm test        # component tests and rules.test.ts
 pnpm build       # dist/: index.js, types, styles.css, tokens.css, theme.css
 pnpm tokens      # after a change to tokens.css
+pnpm icons       # after adding an icon's name to scripts/icons.ts
 node gallery/optical.ts          # after a change to a control's size, padding, font or icon: ink alignment, measured in Chrome
 node gallery/shot.ts <folder>    # screenshots of every component, both languages, desktop and phone
 ```

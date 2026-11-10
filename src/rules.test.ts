@@ -2,6 +2,7 @@
 /* The rules in AGENTS.md that a machine can check. A component that breaks one fails here, not in review. */
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { staleIcons } from '../scripts/icons.ts'
 import { parse, stale } from '../scripts/tokens.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -56,6 +57,10 @@ const offToken = (css: string, property: string, allowed: RegExp) =>
 
 it('theme.css and tokens.json match tokens.css', () => {
   expect(stale()).toEqual([])
+})
+
+it('icons.ts matches the list in scripts/icons.ts', () => {
+  expect(staleIcons()).toEqual([])
 })
 
 it('core does not import learning', () => {

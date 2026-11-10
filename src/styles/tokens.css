@@ -9,6 +9,7 @@
   --gx-font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; /* Worked steps and standard codes */
 
   /* Weights: body text is 400 and needs no token. Controls are medium, not bold: a page full of semibold reads heavy. */
+  --gx-font-weight-body: 400; /* Running text, and a quiet second line inside a control */
   --gx-font-weight-control: 500; /* Buttons, chips, labels, table rows, the options of a Segmented control */
   --gx-font-weight-title: 600; /* Panel and card titles */
   --gx-font-weight-strong: 700; /* Page titles and metrics */

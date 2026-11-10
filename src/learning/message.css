@@ -1,0 +1,21 @@
+/* Each direct child is one row: a run of text, a file card, a status line, the reply's actions. The font size is the page's. */
+.gx-message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gx-space-2);
+  min-width: 0;
+  color: var(--gx-color-ink);
+  line-height: var(--gx-leading-body);
+  overflow-wrap: anywhere;
+}
+/* The bubble is as wide as its text and sits at the end side, in a block, a flex column or a grid. */
+.gx-message--user {
+  width: fit-content;
+  max-width: min(85%, 36rem);
+  margin-inline-start: auto;
+  padding: var(--gx-space-2-5) var(--gx-space-4);
+  border-radius: var(--gx-radius-2xl);
+  background-color: var(--gx-color-surface);
+  /* The lines a person made with Shift+Enter stay. */
+  white-space: pre-wrap;
+}
