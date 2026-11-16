@@ -6,6 +6,7 @@
 :root {
   /* Google Sans, as on gauth.com; a metric-matched Arial while it loads, the system font if neither is there. */
   --gx-font-sans: 'Google Sans', 'Google Sans Fallback', -apple-system, system-ui, Roboto, Arial, sans-serif;
+  --gx-font-reading: 'Literata', Georgia, 'Times New Roman', serif; /* A reading passage in a Prose only: never a control, a label or a title */
   --gx-font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; /* Worked steps and standard codes */
 
   /* Weights: body text is 400 and needs no token. Controls are medium, not bold: a page full of semibold reads heavy. */

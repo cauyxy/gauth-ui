@@ -4,6 +4,8 @@ Long text: a lesson, an explanation, a reading passage, a help page. `Prose` in 
 
 - Put plain elements in it: `h2` to `h4`, `p`, `ul`, `ol`, `blockquote`, `figure` with a `figcaption`, `dl`, `table`, `hr`, `code`, `pre`, `a`, `strong`. Text that comes from Markdown is these elements already.
 - `size` is the size of the running text: `sm` 14px on a staff page, `md` 16px (default), `lg` 18px where a student reads a problem or a lesson. Line height is `leading-body`, and lines break with `text-wrap: pretty`.
+- `font="reading"` sets a reading passage in Literata: a story, an article, a source text a student reads for itself. Every other text stays in Google Sans (the default): a lesson, an explanation, a math problem, a help page, and every staff page. Its headings, lists and quotes are in Literata too; a component that stands in the passage (`Callout`, `Reveal`, a button) keeps Google Sans, because there the product speaks, not the author.
+- A page that uses the reading face loads Literata with Google Sans (the `<link>` in the package's README). Without it the passage is in Georgia.
 - It is `container-read` (720px) wide at most. A wider page sets its own width with `className`.
 - A heading in the text is `h2`: two steps above the text (18, 20 or 24px) at 600. `h3` and `h4` are the size of the text at 600. The page's own title is a `PageTitle`, not an `h1` here.
 - A heading belongs to what follows: 40px above an `h2`, 24px above an `h3`, then 12 or 8px below. Blocks are 16px apart.

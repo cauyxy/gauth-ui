@@ -48,3 +48,19 @@ it('adds no class to what it holds: a component inside keeps its own', () => {
   expect(screen.getByText('Meta').className).toBe('text-muted')
   expect(screen.getByRole('link', { name: 'Next lesson' }).className).toBe('')
 })
+
+it('is in the face of the interface, or in the reading face for a passage', () => {
+  const { rerender } = render(
+    <Prose data-testid="text">
+      <p>Read the passage.</p>
+    </Prose>,
+  )
+  expect(screen.getByTestId('text')).toHaveClass('gx-prose--sans')
+  expect(screen.getByTestId('text')).not.toHaveClass('font-reading')
+  rerender(
+    <Prose font="reading" data-testid="text">
+      <p>I had no regular teacher.</p>
+    </Prose>,
+  )
+  expect(screen.getByTestId('text')).toHaveClass('gx-prose--reading', 'font-reading')
+})

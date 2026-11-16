@@ -34,7 +34,8 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const OUT = `${ROOT}artifact/out/`
 const PROJECT = `${OUT}project/`
 const NAMESPACE = 'GauthUI'
-const FONT = 'https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap'
+const FONT =
+  'https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..700&display=swap'
 
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
 const write = (path: string, text: string) => {
@@ -104,6 +105,7 @@ export function tokensJson(commit: string) {
       groups: [
         { name: 'Scale', family: 'sans', styles: of('text').toReversed().map((t) => style(t, { fontSize: t.value, fontWeight: 400 })) }, // oxfmt-ignore
         { name: 'Weights', family: 'sans', styles: weights.map((t) => style(t, { fontSize: body, fontWeight: Number(t.value) })) },
+        { name: 'Reading', family: 'reading', styles: stacks.filter((t) => t.name === 'font-reading').map((t) => style(t, { fontSize: valueOf.get('text-lg')!, fontWeight: 400 })) }, // oxfmt-ignore
         { name: 'Mono', family: 'mono', styles: stacks.filter((t) => t.name === 'font-mono').map((t) => style(t, { fontSize: body, fontWeight: 400 })) }, // oxfmt-ignore
       ],
     },

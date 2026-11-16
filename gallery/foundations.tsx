@@ -44,6 +44,14 @@ export function TypeScale() {
           <span style={{ fontWeight: `var(--gx-${token.name})` }}>Needs support</span>
         </Row>
       ))}
+      {/* The faces that are not the face of the page (they have a note on their line), each set in itself. */}
+      {tokens('font')
+        .filter((token) => !token.name.startsWith('font-weight-') && token.usage)
+        .map((token) => (
+          <Row key={token.name} name={token.name} note={token.usage}>
+            <span style={{ fontFamily: `var(--gx-${token.name})` }}>I had no regular teacher. 6² + 8² = 100</span>
+          </Row>
+        ))}
     </div>
   )
 }

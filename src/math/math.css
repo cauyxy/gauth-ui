@@ -17,6 +17,11 @@
   font-size: calc(1em / 1.1);
 }
 
+/* In a reading passage the words around a formula are the reading face, so the words inside it are too. Literata's numbers are as tall as Google Sans's, so the formula keeps its size. */
+.gx-prose--reading .gx-tex .katex .text {
+  font-family: var(--gx-font-reading);
+}
+
 /* On its own line, centered. A formula wider than the page scrolls in its own box; the page does not. */
 .gx-tex--display {
   display: block;

@@ -134,16 +134,18 @@ describe('cn()', () => {
   const TAILWINDS: Record<string, string[]> = {
     text: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
     animate: ['spin', 'ping', 'pulse', 'bounce'],
+    font: ['sans', 'serif', 'mono'],
   }
   const theme = read('src/core/cn.ts').match(/theme: \{([\s\S]*?)\n {4}\},/)?.[1] ?? ''
   const lists = [...theme.matchAll(/^\s*'?([\w-]+)'?: \[([^\]]*)\]/gm)].map((m) => [m[1]!, named(m[2]!.replaceAll("'", '`'))] as const)
 
   it('knows the families of the theme', () => {
-    expect(lists.map(([family]) => family)).toEqual(['shadow', 'text', 'font-weight', 'leading', 'tracking', 'ease', 'container', 'animate'])
+    expect(lists.map(([family]) => family)).toEqual(['shadow', 'text', 'font', 'font-weight', 'leading', 'tracking', 'ease', 'container', 'animate'])
   })
 
   it.each(lists)('knows every %s token, so a later class replaces an earlier one', (family, names) => {
-    const all = of(family)
+    /* `font-weight-*` starts with `font-` too: the weights have their own list. */
+    const all = of(family).filter((name) => family !== 'font' || !name.startsWith('weight-'))
     expect(names.filter((name) => !all.includes(name))).toEqual([])
     expect(all.filter((name) => !names.includes(name) && !TAILWINDS[family]?.includes(name))).toEqual([])
   })

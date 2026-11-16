@@ -7,6 +7,7 @@
   --inset-shadow-*: initial;
   --drop-shadow-*: initial;
   --font-sans: 'Google Sans', 'Google Sans Fallback', -apple-system, system-ui, Roboto, Arial, sans-serif;
+  --font-reading: 'Literata', Georgia, 'Times New Roman', serif;
   --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --font-weight-body: 400;
   --font-weight-control: 500;

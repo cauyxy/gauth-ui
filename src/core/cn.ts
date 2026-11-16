@@ -13,6 +13,7 @@ const merge = extendTailwindMerge({
     theme: {
       shadow: ['card', 'edge', 'edge-strong', 'pop', 'raise', 'outline', 'box', 'invalid'],
       text: ['3xs', '2xs'],
+      font: ['reading'],
       'font-weight': ['body', 'control', 'title', 'strong'],
       leading: ['figure', 'title', 'heading', 'body'],
       tracking: ['display', 'title', 'label'],

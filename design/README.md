@@ -59,6 +59,8 @@ One ladder in every product: **Attempted, Familiar, Proficient, Mastered**, plus
 
 Google Sans (`--gx-font-sans`), loaded from Google Fonts by each product, with a metric-matched fallback so text does not shift when it loads. Mono (`--gx-font-mono`) for worked steps. The page keeps the browser's `normal` line height.
 
+A reading passage (a story, an article, a source text) can be set in Literata (`--gx-font-reading`): `<Prose font="reading">`, and nowhere else. A control, a label, a page's title and a math lesson stay in Google Sans. A product that sets a passage loads Literata beside Google Sans; until it loads, the passage is in Georgia, which is not metric-matched, so its lines can break again once.
+
 | Token  | Size  | Role                                                         |
 | ------ | ----- | ------------------------------------------------------------ |
 | `6xl`  | 60 px | Marketing hero                                               |
@@ -88,7 +90,7 @@ Line height has four steps: `leading-figure` 1 for a metric, `leading-title` 1.1
 
 - KaTeX draws every formula. `Tex` for one formula, `RichText` for words with formulas in them.
 - A formula in a line of words stands on their baseline, and its numbers are as tall as theirs. KaTeX's own size (1.21em) is for a serif text face; next to Google Sans it is 1.1em.
-- A formula is ink, or the color of the text it is in. Words and units inside a formula are Google Sans.
+- A formula is ink, or the color of the text it is in. Words and units inside a formula are the face of the words around it: Google Sans, or Literata in a reading passage. Literata's numbers are as tall as Google Sans's, so the formula keeps its 1.1em there.
 - A formula on its own line is centered and scrolls in its own box when it is wider than the page. The box then takes keyboard focus, so the arrow keys scroll it.
 - The punctuation after a formula stays on the formula's line.
 

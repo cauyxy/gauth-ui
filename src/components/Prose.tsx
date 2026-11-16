@@ -3,6 +3,7 @@ import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
 
 export type ProseSize = 'sm' | 'md' | 'lg'
+export type ProseFont = 'sans' | 'reading'
 
 /*
  * Long text sets the elements it holds: headings, paragraphs, lists, a quote, a figure, a table, code.
@@ -50,6 +51,14 @@ const prose = cva(
         md: 'gx-prose--md text-base [:where(&)>h2]:text-xl [:where(&)_:not(pre)>code]:text-sm [:where(&)>figure>figcaption]:text-sm',
         lg: 'gx-prose--lg text-lg [:where(&)>h2]:text-2xl [:where(&)_:not(pre)>code]:text-base [:where(&)>figure>figcaption]:text-sm',
       },
+      /*
+       * The reading face is for the passage: its headings, paragraphs, lists and quotes. A component that stands in the
+       * text (a Callout, a Reveal, a button) is the product speaking, so it keeps the face of the interface.
+       */
+      font: {
+        sans: 'gx-prose--sans',
+        reading: 'gx-prose--reading font-reading [:where(&>[class*=gx-])]:font-sans',
+      },
     },
   },
 )
@@ -58,7 +67,8 @@ const prose = cva(
  * Long text: a lesson, an explanation, a reading passage, a help page. It sets the plain elements a product puts in it
  * (`h2` to `h4`, `p`, lists, `blockquote`, `figure`, `dl`, `table`, `code`), so text that comes from Markdown or from a
  * person reads as one page. `size` is the size of the running text: `sm` on a staff page, `lg` where a student reads.
+ * `font="reading"` sets a reading passage (a story, an article, a source text) in the reading face.
  */
-export function Prose({ size = 'md', className, ...props }: ComponentProps<'div'> & { size?: ProseSize }) {
-  return <div className={cn(prose({ size }), className)} {...props} />
+export function Prose({ size = 'md', font = 'sans', className, ...props }: ComponentProps<'div'> & { size?: ProseSize; font?: ProseFont }) {
+  return <div className={cn(prose({ size, font }), className)} {...props} />
 }

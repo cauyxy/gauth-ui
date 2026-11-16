@@ -79,3 +79,22 @@ export function StaffNote() {
     </Prose>
   )
 }
+
+/* A reading passage: a source text a student reads for itself, in the reading face. What the product says about it stays in the face of the interface. */
+export function Reading() {
+  return (
+    <Prose size="lg" font="reading">
+      <h2>Learning to read</h2>
+      <p>
+        I lived in Master Hugh&rsquo;s family about seven years. During this time, I succeeded in learning to read and write. In accomplishing this, I was
+        compelled to resort to various stratagems. I had no regular teacher.
+      </p>
+      <p>
+        The plan which I adopted, and the one by which I was most successful, was that of making friends of all the little white boys whom I met in the street.
+        As many of these as I could, I converted into teachers.
+      </p>
+      <p>With their kindly aid, obtained at different times and in different places, I finally succeeded in learning to read.</p>
+      <Callout>From Narrative of the Life of Frederick Douglass (1845), chapter 7. As you read, mark each plan he makes.</Callout>
+    </Prose>
+  )
+}

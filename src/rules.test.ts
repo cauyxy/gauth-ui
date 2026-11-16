@@ -33,7 +33,7 @@ const KINDS: [what: string, kind: RegExp, allowed: (value: string) => boolean][]
     /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/,
     (v) => SPACE.has(v) || /^\[calc\(.+\)\]$/.test(v),
   ],
-  ['a font weight that is not a token', /^font-(.+)$/, (v) => /^(?:sans|mono|body|control|title|strong)$/.test(v)],
+  ['a font weight that is not a token', /^font-(.+)$/, (v) => /^(?:sans|reading|mono|body|control|title|strong)$/.test(v)],
   ['a line height that is not a token', /^leading-(.+)$/, (v) => /^(?:figure|title|heading|body|normal)$/.test(v)],
   ['letter spacing that is not a token', /^tracking-(.+)$/, (v) => /^(?:display|title|label|normal)$/.test(v)],
   ['a layer that is not a token', /^z-(.+)$/, (v) => /^(?:0|1|auto|\(--gx-z-(?:overlay|pop|toast)\))$/.test(v)],
