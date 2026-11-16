@@ -1,8 +1,8 @@
 # gauth-ui
 
-The Gauth design system: tokens, React components and the design rules they follow. White ground, ink text, hairline-edged cards instead of drop shadows, and the red Gauth mark as the only red on the page.
+An unofficial design system in the look of [gauth.com](https://gauth.com): tokens, React components and the design rules they follow. White ground, ink text, hairline-edged cards instead of drop shadows, and the red Gauth mark as the only red on the page.
 
-The look is recreated from the public website [gauth.com](https://gauth.com): its colors, type and surfaces were read from the site, rebuilt as tokens and components, and refined.
+The look is recreated from the public website: its colors, type and surfaces were read from the site, rebuilt as tokens and components, and refined. gauth-ui is an independent project. It is not affiliated with Gauth, and Gauth does not endorse it.
 
 The design rules ship with the package: [`design/README.md`](design/README.md) says what each color, type size and component means.
 
@@ -87,7 +87,7 @@ Each has a guideline in [`design/components/`](design/components) and examples w
 
 [MIT](LICENSE): the code, the tokens and the design rules in `design/`. Third-party material stays under its own license (`THIRD-PARTY-NOTICES.md`).
 
-The license does not cover the Gauth name or the Gauth mark. A product that is not Gauth's may use the components; it may not present itself as Gauth.
+Gauth and the Gauth mark belong to their owner. The license covers this project's own code and documents: it gives no right to the name or the mark, and nobody may use the components to present a product as Gauth's.
 
 ## Credits
 

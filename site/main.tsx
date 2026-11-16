@@ -146,7 +146,7 @@ function Site() {
 
   /* A new page starts at its top, or at the component the address names. */
   useEffect(() => {
-    document.title = `${page.title} · Gauth design system`
+    document.title = `${page.title} · gauth-ui`
     const target = window.location.hash ? document.getElementById(decodeURIComponent(window.location.hash.slice(1))) : null
     if (target) target.scrollIntoView()
     else window.scrollTo(0, 0)
@@ -159,7 +159,7 @@ function Site() {
       <div className="s-shell" onClick={onLinkClick}>
         <header className="s-top">
           <a href="/" className="s-brand">
-            Gauth design system
+            gauth-ui
           </a>
           <Chip>v{pkg.version}</Chip>
           <span className="s-top__end">
