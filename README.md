@@ -83,7 +83,9 @@ Each has a guideline in [`design/components/`](design/components) and examples w
 
 ## License
 
-All rights reserved. See `LICENSE`. The package is on npm so that Gauth products can install it; that gives no right to use it elsewhere.
+[MIT](LICENSE): the code, the tokens and the design rules in `design/`. Third-party material stays under its own license (`THIRD-PARTY-NOTICES.md`).
+
+The license does not cover the Gauth name or the Gauth mark. A product that is not Gauth's may use the components; it may not present itself as Gauth.
 
 ## Credits
 
