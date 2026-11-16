@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { LocaleProvider } from '../core/locale'
 import { Spinner } from './Spinner'
 
-it('is a status named Loading, in the page\'s language', () => {
+it("is a status named Loading, in the page's language", () => {
   const { rerender } = render(<Spinner />)
   expect(screen.getByRole('status', { name: 'Loading' })).toHaveStyle({ width: '18px', height: '18px' })
   rerender(

@@ -3,7 +3,7 @@ import { LocaleProvider } from '../core/locale'
 import { Generating, type GeneratingStep } from './Generating'
 
 const STEPS: readonly GeneratingStep[] = [
-  { label: 'Read the class\'s readiness results', state: 'done' },
+  { label: "Read the class's readiness results", state: 'done' },
   { label: 'Writing Form B', state: 'current' },
   { label: 'Check each answer', state: 'upcoming' },
 ]
@@ -12,7 +12,11 @@ it('is one status that lists the steps of the work', () => {
   render(<Generating steps={STEPS} label="Building Form B" className="mine" />)
   const status = screen.getByRole('status', { name: 'Building Form B' })
   expect(status).toHaveClass('gx-generating', 'mine')
-  expect(within(status).getAllByRole('listitem').map((item) => item.textContent)).toEqual(STEPS.map((step) => step.label))
+  expect(
+    within(status)
+      .getAllByRole('listitem')
+      .map((item) => item.textContent),
+  ).toEqual(STEPS.map((step) => step.label))
 })
 
 it('marks the done, current and upcoming steps with a shape each', () => {
@@ -28,7 +32,7 @@ it('marks the done, current and upcoming steps with a shape each', () => {
   expect(container.querySelectorAll('.gx-spinner')).toHaveLength(1)
 })
 
-it('is named Loading in the page\'s language, once', () => {
+it("is named Loading in the page's language, once", () => {
   const { rerender } = render(<Generating steps={STEPS} />)
   expect(screen.getAllByRole('status')).toHaveLength(1)
   expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument()

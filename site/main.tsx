@@ -90,7 +90,13 @@ function Code({ code }: { code: string }) {
           <pre>
             <code>{code}</code>
           </pre>
-          <IconButton size="sm" variant="outline" label={copied ? 'Copied' : 'Copy the code'} className="s-code__copy" onClick={() => void navigator.clipboard?.writeText(code).then(() => setCopied(true))}>
+          <IconButton
+            size="sm"
+            variant="outline"
+            label={copied ? 'Copied' : 'Copy the code'}
+            className="s-code__copy"
+            onClick={() => void navigator.clipboard?.writeText(code).then(() => setCopied(true))}
+          >
             <Icon name={copied ? 'check' : 'copy'} />
           </IconButton>
         </div>
@@ -148,6 +154,8 @@ function Site() {
 
   return (
     <LocaleProvider locale={locale}>
+      {/* Catches clicks on the links inside it, which the keyboard reaches as links. */}
+      {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div className="s-shell" onClick={onLinkClick}>
         <header className="s-top">
           <a href="/" className="s-brand">
@@ -171,7 +179,13 @@ function Site() {
           ))}
         </nav>
         <div className="s-jump">
-          <Select label="Page" size="xl" value={page.path} onChange={go} options={PAGES.map((p) => ({ value: p.path, label: p.group ? `${p.group} · ${p.title}` : p.title }))} />
+          <Select
+            label="Page"
+            size="xl"
+            value={page.path}
+            onChange={go}
+            options={PAGES.map((p) => ({ value: p.path, label: p.group ? `${p.group} · ${p.title}` : p.title }))}
+          />
         </div>
         <main className={page.kind === 'home' ? 's-main s-main--wide' : 's-main'} lang={page.kind === 'home' || page.kind === 'component' ? locale : 'en'}>
           <h1 className="s-title">{page.title}</h1>

@@ -37,7 +37,9 @@ export function DialogContent({
         {/* The title leaves room for the close button. */}
         <DialogPrimitive.Title className="gx-dialog__title pe-8 text-xl leading-heading font-strong tracking-title text-balance">{title}</DialogPrimitive.Title>
         {description ? (
-          <DialogPrimitive.Description className="gx-dialog__description text-sm leading-body text-pretty text-muted">{description}</DialogPrimitive.Description>
+          <DialogPrimitive.Description className="gx-dialog__description text-sm leading-body text-pretty text-muted">
+            {description}
+          </DialogPrimitive.Description>
         ) : null}
         {children}
         {/* Last in the markup, so focus goes to the body's first control when the dialog opens. */}

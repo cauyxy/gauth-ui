@@ -33,13 +33,5 @@ export function ChipToggle({
   onChange: (pressed: boolean) => void
   size?: 'sm' | 'md'
 }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={pressed}
-      {...props}
-      onClick={() => onChange(!pressed)}
-      className={cn(chipToggle({ size }), className)}
-    />
-  )
+  return <button type="button" aria-pressed={pressed} {...props} onClick={() => onChange(!pressed)} className={cn(chipToggle({ size }), className)} />
 }

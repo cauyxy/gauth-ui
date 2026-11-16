@@ -23,7 +23,7 @@ it('ends with a small Remove button when it can be taken off', async () => {
   expect(onRemove).toHaveBeenCalledOnce()
 })
 
-it('names the button in the page\'s language', () => {
+it("names the button in the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <Quote onRemove={() => {}}>Seis estudiantes sumaron los catetos.</Quote>

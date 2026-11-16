@@ -11,20 +11,14 @@ export function Skeleton({ className, style }: { className?: string; style?: CSS
  * A page's body while its data loads: a title, then panels of rows, so the page takes its shape at once instead of
  * reading "Loading…". It fades in after 150 ms, so a page whose data is already on the way never flashes it.
  */
-export function PageSkeleton({
-  panels = 2,
-  rows = 3,
-  label,
-  className,
-}: {
-  panels?: number
-  rows?: number
-  label?: string
-  className?: string
-}) {
+export function PageSkeleton({ panels = 2, rows = 3, label, className }: { panels?: number; rows?: number; label?: string; className?: string }) {
   const { messages } = useLocale()
   return (
-    <div role="status" aria-label={label ?? messages.loading} className={cn('gx-page-skeleton flex animate-fade-in flex-col gap-5 [animation-delay:var(--gx-delay-loading)]', className)}>
+    <div
+      role="status"
+      aria-label={label ?? messages.loading}
+      className={cn('gx-page-skeleton flex animate-fade-in flex-col gap-5 [animation-delay:var(--gx-delay-loading)]', className)}
+    >
       <span className="gx-page-skeleton__title flex flex-col gap-2.5">
         <Skeleton style={{ height: '2rem', width: 'min(340px, 70%)' }} />
         <Skeleton style={{ height: '1rem', width: 'min(220px, 50%)' }} />

@@ -62,18 +62,29 @@ export function Toaster() {
         >
           {/* The tone has a shape as well as a color: a check for good, a dot for warn, nothing for neutral. With a second line the mark stays on the first one: the text's top padding, half a line, less half the mark. */}
           {tone === 'good' ? (
-            <Icon name="check" size={16} className={cn('gx-toast__mark flex-none text-correct', description && 'mt-[calc(var(--gx-space-1-5)+0.5lh-8px)] self-start')} />
+            <Icon
+              name="check"
+              size={16}
+              className={cn('gx-toast__mark flex-none text-correct', description && 'mt-[calc(var(--gx-space-1-5)+0.5lh-8px)] self-start')}
+            />
           ) : null}
           {tone === 'warn' ? (
             <span
               aria-hidden="true"
-              className={cn('gx-toast__mark size-[8px] flex-none rounded-full bg-attempted', description && 'mt-[calc(var(--gx-space-1-5)+0.5lh-4px)] self-start')}
+              className={cn(
+                'gx-toast__mark size-[8px] flex-none rounded-full bg-attempted',
+                description && 'mt-[calc(var(--gx-space-1-5)+0.5lh-4px)] self-start',
+              )}
             />
           ) : null}
           <div className="gx-toast__text min-w-0 py-1.5">
             <ToastPrimitive.Title>{message}</ToastPrimitive.Title>
             {/* The second line: smaller and quieter. White at 72% on ink is still over 4.5:1. */}
-            {description ? <ToastPrimitive.Description className="gx-toast__description text-xs font-body [color:color-mix(in_srgb,var(--gx-color-white)_72%,transparent)]">{description}</ToastPrimitive.Description> : null}
+            {description ? (
+              <ToastPrimitive.Description className="gx-toast__description text-xs font-body [color:color-mix(in_srgb,var(--gx-color-white)_72%,transparent)]">
+                {description}
+              </ToastPrimitive.Description>
+            ) : null}
           </div>
           {/* The one action: underlined white text, as high as the dismiss button beside it. On the ink ground the ring is white and inside the button: blue on ink is under 3:1. */}
           {action ? (

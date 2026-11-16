@@ -6,8 +6,7 @@ function Probe() {
   const { messages, formatDay, formatDelta } = useLocale()
   return (
     <p>
-      {messages.notYet} · {messages.stepOf(2, 6)} · {messages.levels.proficient} · {formatDay(new Date(2026, 9, 23))} · {formatDelta(8)} ·{' '}
-      {formatDelta(-3)}
+      {messages.notYet} · {messages.stepOf(2, 6)} · {messages.levels.proficient} · {formatDay(new Date(2026, 9, 23))} · {formatDelta(8)} · {formatDelta(-3)}
     </p>
   )
 }

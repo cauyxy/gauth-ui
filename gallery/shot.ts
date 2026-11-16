@@ -27,7 +27,10 @@ await server.listen()
 const browser = await chromium.launch({ channel: 'chrome' })
 const problems: string[] = []
 
-for (const [name, width] of [['desktop', 1120], ['phone', 375]] as const) {
+for (const [name, width] of [
+  ['desktop', 1120],
+  ['phone', 375],
+] as const) {
   for (const locale of ['en', 'es'] as const) {
     const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 2 })
     page.on('console', (m) => m.type() === 'error' && problems.push(`${name} ${locale}: ${m.text()}`))
@@ -72,7 +75,10 @@ for (const [name, width] of [['desktop', 1120], ['phone', 375]] as const) {
       await page.keyboard.press('Enter')
       await gone('.gx-toast')
       /* Keyboard focus: the ring on a field and on an answer option. */
-      for (const [what, target] of [['input', page.locator('.gx-input__control').first()], ['answer', page.locator('.gx-answer-option:not(:disabled)').first()]] as const) {
+      for (const [what, target] of [
+        ['input', page.locator('.gx-input__control').first()],
+        ['answer', page.locator('.gx-answer-option:not(:disabled)').first()],
+      ] as const) {
         await target.scrollIntoViewIfNeeded()
         await target.focus()
         await page.keyboard.press('Shift+Tab')

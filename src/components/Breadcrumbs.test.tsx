@@ -42,7 +42,7 @@ it('puts a chevron between items and none after the last', () => {
   expect(screen.getAllByRole('listitem')[1]!.querySelector('svg')).toBeNull()
 })
 
-it('is named in the page\'s language', () => {
+it("is named in the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <Breadcrumbs>Clases</Breadcrumbs>

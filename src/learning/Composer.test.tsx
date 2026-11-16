@@ -91,7 +91,7 @@ it('stops when disabled', () => {
   expect(sendButton()).toBeDisabled()
 })
 
-it('speaks the page\'s language', () => {
+it("speaks the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <Composer label="Pregunta a Gauth AI" value="x" onChange={() => {}} onSend={() => {}} />
@@ -110,13 +110,7 @@ it('takes its own note in place of the default', () => {
 it('shows the rows of before inside the box, above the text', async () => {
   const onRemove = vi.fn()
   const { container } = render(
-    <Composer
-      label="Ask Gauth AI"
-      value=""
-      onChange={() => {}}
-      onSend={() => {}}
-      before={<Quote onRemove={onRemove}>Six students added the legs.</Quote>}
-    />,
+    <Composer label="Ask Gauth AI" value="" onChange={() => {}} onSend={() => {}} before={<Quote onRemove={onRemove}>Six students added the legs.</Quote>} />,
   )
   const quote = screen.getByRole('blockquote')
   expect(quote.closest('.gx-composer__box')).toBe(container.querySelector('.gx-composer__box'))
@@ -191,7 +185,7 @@ it('keeps Stop on when the text box is off, and has no Stop to press without onS
   expect(screen.getByRole('button', { name: 'Stop' })).toBeDisabled()
 })
 
-it('names Stop in the page\'s language', () => {
+it("names Stop in the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <Composer label="Pregunta a Gauth AI" value="" onChange={() => {}} onSend={() => {}} busy onStop={() => {}} />

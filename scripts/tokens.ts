@@ -46,7 +46,7 @@ export function themeCss(tokens: Token[]) {
   const inner = new RegExp(`var\\(--gx-(${TAILWIND.join('|')})-`, 'g')
   return [
     '/* Generated from tokens.css by scripts/tokens.ts. Do not edit. */',
-    '/* The Gauth tokens as a Tailwind v4 theme. Tailwind\'s own palette, type sizes and shadows are cleared: only these exist. */',
+    "/* The Gauth tokens as a Tailwind v4 theme. Tailwind's own palette, type sizes and shadows are cleared: only these exist. */",
     '@theme {',
     ...CLEARED.map((name) => `  ${name}: initial;`),
     ...mapped.map((t) => `  --${t.name}: ${t.value.replace(inner, 'var(--$1-')};`),
@@ -101,7 +101,10 @@ const read = (file: string) => {
 }
 
 /** The generated files that no longer match tokens.css. */
-export const stale = () => outputs().filter((o) => read(o.file) !== o.text).map((o) => o.file.slice(ROOT.length))
+export const stale = () =>
+  outputs()
+    .filter((o) => read(o.file) !== o.text)
+    .map((o) => o.file.slice(ROOT.length))
 
 if (import.meta.main) {
   if (process.argv.includes('--check')) {

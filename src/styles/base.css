@@ -87,6 +87,11 @@ button {
     transform: translateX(-100%);
   }
 }
+@keyframes gx-slide-in-end {
+  from {
+    transform: translateX(100%);
+  }
+}
 @keyframes gx-mark-right {
   40% {
     transform: scale(1.015);

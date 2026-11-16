@@ -40,9 +40,13 @@ export function Segmented<T extends string>({
     const from = current < 0 ? 0 : current
     const to =
       event.key === 'ArrowRight' || event.key === 'ArrowDown'
-        ? from === last ? 0 : from + 1
+        ? from === last
+          ? 0
+          : from + 1
         : event.key === 'ArrowLeft' || event.key === 'ArrowUp'
-          ? from === 0 ? last : from - 1
+          ? from === 0
+            ? last
+            : from - 1
           : event.key === 'Home'
             ? 0
             : event.key === 'End'

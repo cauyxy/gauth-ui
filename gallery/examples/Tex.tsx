@@ -38,7 +38,10 @@ export function OnItsOwnLine() {
     <div className="grid w-full max-w-[34rem] gap-4">
       <Tex display tex="x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}" />
       <Tex display tex="\begin{aligned} 2x + 10 &= 28 \\ 2x &= 18 \\ x &= 9 \end{aligned}" />
-      <Tex display tex="(a + b)^6 = a^6 + 6a^5b + 15a^4b^2 + 20a^3b^3 + 15a^2b^4 + 6ab^5 + b^6 \quad \text{and} \quad (a - b)^6 = a^6 - 6a^5b + 15a^4b^2 - 20a^3b^3" />
+      <Tex
+        display
+        tex="(a + b)^6 = a^6 + 6a^5b + 15a^4b^2 + 20a^3b^3 + 15a^2b^4 + 6ab^5 + b^6 \quad \text{and} \quad (a - b)^6 = a^6 - 6a^5b + 15a^4b^2 - 20a^3b^3"
+      />
       <Tex tex="\frac{1" />
     </div>
   )

@@ -24,7 +24,9 @@ export function CoverCard({ cover, title, description, meta, className, ...props
   const content = (
     <>
       {/* The picture: 16 by 10, with the card's top corners. What is put in it fills it. */}
-      <span className="gx-cover-card__cover relative grid aspect-16/10 flex-none grid-cols-1 grid-rows-1 overflow-hidden rounded-t-2xl bg-surface [&>img]:absolute [&>img]:inset-0 [&>img]:size-full [&>img]:object-cover">{cover}</span>
+      <span className="gx-cover-card__cover relative grid aspect-16/10 flex-none grid-cols-1 grid-rows-1 overflow-hidden rounded-t-2xl bg-surface [&>img]:absolute [&>img]:inset-0 [&>img]:size-full [&>img]:object-cover">
+        {cover}
+      </span>
       <span className="gx-cover-card__body flex min-w-0 flex-1 flex-col gap-1 p-4">
         <span className="gx-cover-card__title truncate text-sm leading-heading font-title">{title}</span>
         {description ? <span className="gx-cover-card__description line-clamp-2 text-xs leading-body text-pretty text-muted">{description}</span> : null}

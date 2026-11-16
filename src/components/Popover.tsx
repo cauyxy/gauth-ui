@@ -27,7 +27,9 @@ export function PopoverContent({
         {...props}
       >
         {children}
-        {arrow ? <PopoverPrimitive.Arrow width={18} height={9} className="gx-popover__arrow fill-white [filter:drop-shadow(0_1px_0_var(--gx-color-edge))]" /> : null}
+        {arrow ? (
+          <PopoverPrimitive.Arrow width={18} height={9} className="gx-popover__arrow fill-white [filter:drop-shadow(0_1px_0_var(--gx-color-edge))]" />
+        ) : null}
       </PopoverPrimitive.Content>
     </PopoverPrimitive.Portal>
   )

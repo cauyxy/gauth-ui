@@ -4,7 +4,11 @@ import { GROUPS } from '../gallery/examples'
 import glossary from '../GLOSSARY.md?raw'
 import readme from '../README.md?raw'
 
-const slug = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+const slug = (title: string) =>
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
 
 /** A Markdown file as its `## ` sections, in order. */
 const sections = (markdown: string) =>

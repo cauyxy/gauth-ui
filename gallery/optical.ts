@@ -36,7 +36,8 @@ for (const width of [1120, 375]) {
   await page.waitForSelector('.g-section')
   await page.evaluate(() => document.fonts.ready)
   const found = await page.evaluate(() => {
-    const LABELS = '.gx-btn, .gx-chip, .gx-chip-toggle, .gx-follow-ups__item, .gx-segmented__option, .gx-tabs__tab, .gx-level-chip, .gx-menu__item, .gx-table__head .gx-table__cell'
+    const LABELS =
+      '.gx-btn, .gx-chip, .gx-chip-toggle, .gx-follow-ups__item, .gx-segmented__option, .gx-tabs__tab, .gx-level-chip, .gx-menu__item, .gx-table__head .gx-table__cell'
     const ROUND = '.gx-answer-option__mark, .gx-stepper__mark, .gx-avatar'
     const MARKS: [mark: string, row: string][] = [
       ['.gx-checkbox__box', '.gx-checkbox'],
@@ -77,7 +78,7 @@ for (const width of [1120, 375]) {
       return {
         text,
         baseline,
-        digit: (canvas.measureText('0').actualBoundingBoxAscent),
+        digit: canvas.measureText('0').actualBoundingBoxAscent,
         capMiddle,
         exMiddle: /[a-z]/.test(text) ? baseline - ex.actualBoundingBoxAscent / 2 : capMiddle,
         left: rect.left - own.actualBoundingBoxLeft,
@@ -100,7 +101,8 @@ for (const width of [1120, 375]) {
     }
     const name = (el: Element) => [...el.classList].filter((c) => c.startsWith('gx-')).join('.')
     const out: string[] = []
-    const say = (kind: string, el: Element, text: string, what: string) => out.push(`${kind.padEnd(6)} ${name(el).padEnd(40).slice(0, 40)} ${text.padEnd(22).slice(0, 22)} ${what}`)
+    const say = (kind: string, el: Element, text: string, what: string) =>
+      out.push(`${kind.padEnd(6)} ${name(el).padEnd(40).slice(0, 40)} ${text.padEnd(22).slice(0, 22)} ${what}`)
     const px = (n: number) => `${n > 0 ? '+' : ''}${n.toFixed(2)}px`
     /* A list that finds nothing checks nothing, so that is a failure too: a class name changed, or the gallery lost a case. */
     const all = (selector: string) => {
@@ -138,13 +140,12 @@ for (const width of [1120, 375]) {
       }
     }
     /* Two things on one line: [the first, the second, the row that holds both]. */
-    const LINES: [first: string, second: string, row: string][] = [
-      ['.gx-worked-steps__number', '.gx-worked-steps__text', '.gx-worked-steps__step'],
-    ]
+    const LINES: [first: string, second: string, row: string][] = [['.gx-worked-steps__number', '.gx-worked-steps__text', '.gx-worked-steps__step']]
     for (const [first, second, rowSelector] of LINES) {
       for (const row of all(rowSelector)) {
         const [a, b] = [row.querySelector(first), row.querySelector(second)].map((el) => el && inkOf(el))
-        if (a && b && Math.abs(a.baseline - b.baseline) >= TOLERANCE) say('base', row, b.text, `${px(b.baseline - a.baseline)} under the baseline of "${a.text.slice(0, 12)}"`)
+        if (a && b && Math.abs(a.baseline - b.baseline) >= TOLERANCE)
+          say('base', row, b.text, `${px(b.baseline - a.baseline)} under the baseline of "${a.text.slice(0, 12)}"`)
       }
     }
     /* A formula in a line of words. An empty inline box stands on the baseline, so one in the words and one in the formula show both. */
@@ -188,7 +189,8 @@ for (const width of [1120, 375]) {
       const [box, icon] = [el.getBoundingClientRect(), svg.getBoundingClientRect()]
       const right = icon.left + icon.width / 2 - (box.left + box.width / 2)
       const down = icon.top + icon.height / 2 - (box.top + box.height / 2)
-      if (Math.abs(right) >= TOLERANCE || Math.abs(down) >= TOLERANCE) say('round', el, el.getAttribute('aria-label') ?? '', `the icon is ${px(right)} right and ${px(down)} down of the middle`)
+      if (Math.abs(right) >= TOLERANCE || Math.abs(down) >= TOLERANCE)
+        say('round', el, el.getAttribute('aria-label') ?? '', `the icon is ${px(right)} right and ${px(down)} down of the middle`)
     }
     for (const el of all(ENDS)) {
       const svg = el.querySelector(':scope > svg:last-child, :scope > .gx-select__icon, :scope > .gx-chip__remove svg')

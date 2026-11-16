@@ -31,7 +31,7 @@ it('moves with current', () => {
   expect(screen.getAllByRole('listitem')[3]).toHaveAttribute('aria-current', 'step')
 })
 
-it('names the steps in the page\'s language', () => {
+it("names the steps in the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <Stepper steps={['Estándar', 'Problemas']} current={1} />

@@ -163,6 +163,7 @@
   --gx-animate-tip-in: gx-fade-in var(--gx-dur-fast) var(--gx-ease-enter) both; /* A tooltip: it appears faster than content does */
   --gx-animate-rise-in: gx-rise-in var(--gx-dur-enter) var(--gx-ease-enter) both; /* A hint, a worked step or a card that is revealed */
   --gx-animate-slide-in: gx-slide-in var(--gx-dur-enter) var(--gx-ease-enter) both; /* A drawer from the left edge */
+  --gx-animate-slide-in-end: gx-slide-in-end var(--gx-dur-enter) var(--gx-ease-enter) both; /* A sheet from the right edge */
   --gx-animate-mark-right: gx-mark-right var(--gx-dur-mark) var(--gx-ease-enter); /* A right answer: one small swell */
   --gx-animate-mark-retry: gx-mark-retry var(--gx-dur-mark) ease-in-out; /* A wrong answer: a short side-to-side nudge, never red */
   --gx-animate-pulse: gx-pulse calc(2s * var(--gx-ms)) cubic-bezier(0.4, 0, 0.6, 1) infinite; /* A skeleton block while content loads */

@@ -23,20 +23,32 @@ for (const variant of ['ink', 'soft', 'outline', 'ghost', 'link'] as const)
   for (const size of ['sm', 'md', 'lg', 'xl'] as const)
     add(
       `button-${variant}-${size}`,
-      <Old.Button variant={variant} size={size}>Send practice</Old.Button>,
-      <New.Button variant={variant} size={size}>Send practice</New.Button>,
+      <Old.Button variant={variant} size={size}>
+        Send practice
+      </Old.Button>,
+      <New.Button variant={variant} size={size}>
+        Send practice
+      </New.Button>,
     )
 add('button-disabled', <Old.Button disabled>Publish</Old.Button>, <New.Button disabled>Publish</New.Button>)
 /* Names that start with tw- pass Tailwind utilities to the component: the caller's class must win on both sides. */
 add(
   'tw-button-utility-override',
-  <Old.Button variant="outline" className="h-12 w-full rounded-2xl text-base">Continue with Google</Old.Button>,
-  <New.Button variant="outline" className="h-12 w-full rounded-2xl text-base">Continue with Google</New.Button>,
+  <Old.Button variant="outline" className="h-12 w-full rounded-2xl text-base">
+    Continue with Google
+  </Old.Button>,
+  <New.Button variant="outline" className="h-12 w-full rounded-2xl text-base">
+    Continue with Google
+  </New.Button>,
 )
 add(
   'button-as-link',
-  <a href="#x" className={Old.buttonVariants({ variant: 'outline', size: 'md' })}>Review</a>,
-  <a href="#x" className={New.buttonClass({ variant: 'outline', size: 'md' })}>Review</a>,
+  <a href="#x" className={Old.buttonVariants({ variant: 'outline', size: 'md' })}>
+    Review
+  </a>,
+  <a href="#x" className={New.buttonClass({ variant: 'outline', size: 'md' })}>
+    Review
+  </a>,
 )
 for (const tone of ['neutral', 'blue', 'violet', 'good', 'warn', 'pink', 'ink'] as const)
   add(`chip-${tone}`, <Old.Chip tone={tone}>A-REI.B.3</Old.Chip>, <New.Chip tone={tone}>A-REI.B.3</New.Chip>)
@@ -71,12 +83,20 @@ add(
 add(
   'segmented-links',
   <span className={Old.segmentedTrack}>
-    <a href="#a" className={Old.segmentedOption(true)}>Form A</a>
-    <a href="#b" className={Old.segmentedOption(false)}>Form B</a>
+    <a href="#a" className={Old.segmentedOption(true)}>
+      Form A
+    </a>
+    <a href="#b" className={Old.segmentedOption(false)}>
+      Form B
+    </a>
   </span>,
   <span className={New.segmentedTrackClass()}>
-    <a href="#a" className={New.segmentedOptionClass(true)}>Form A</a>
-    <a href="#b" className={New.segmentedOptionClass(false)}>Form B</a>
+    <a href="#a" className={New.segmentedOptionClass(true)}>
+      Form A
+    </a>
+    <a href="#b" className={New.segmentedOptionClass(false)}>
+      Form B
+    </a>
   </span>,
 )
 add('switch-on', <OldSwitch on onChange={() => {}} label="Hints" />, <New.Switch checked onChange={() => {}} label="Hints" />)

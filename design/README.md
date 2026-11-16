@@ -138,7 +138,7 @@ Motion says what changed and then stops. It is short, it never loops for decorat
 | `dur-mark`  | 360 ms | Feedback on an answer                                            |
 
 - Two easings: `ease-standard` for a change in place, `ease-enter` for content that arrives (fast at first, then it settles).
-- Named movements (`--gx-animate-*`, `animate-*` in Tailwind): `fade-in`, `fade-out`, `pop-in`, `pop-out`, `tip-in`, `rise-in`, `slide-in`, `pulse`, `spin`, `sweep`, `mark-right`, `mark-retry`.
+- Named movements (`--gx-animate-*`, `animate-*` in Tailwind): `fade-in`, `fade-out`, `pop-in`, `pop-out`, `tip-in`, `rise-in`, `slide-in`, `slide-in-end`, `pulse`, `spin`, `sweep`, `mark-right`, `mark-retry`.
 - Things leave faster than they arrive: an exit is `dur-fast`.
 - **A right answer** gets one small swell (`mark-right`). **A wrong answer** gets a short side-to-side nudge (`mark-retry`) in the `attempted` orange, never red, and the words "Not yet".
 - **Only three things loop:** a skeleton's pulse, a spinner, and the segment of a bar with no known end. Each one means "wait".
@@ -160,18 +160,54 @@ Motion says what changed and then stops. It is short, it never loops for decorat
 - Dates and deltas come from `useLocale()`: "Fri, Oct 23" and "+8 pts" in English, "vie, 23 oct" in Spanish.
 - A translated label can be a third longer. Do not fix a width around a word.
 
+## Learning
+
+What every education page shares: the icons for the work, the marks of progress, and how a subject looks.
+
+**Icons for the work.** One name for each thing a student does or a teacher gives, so a lesson has the same icon in every product. The names say what the icon is for; the drawings are Lucide's.
+
+| Icon | For |
+| ---- | --- |
+| `lesson`, `course` | A lesson; a course or a unit's library |
+| `assignment`, `practice`, `quiz`, `checklist` | Work a teacher gives; practice a student does; a check of what they know; a list of steps to finish |
+| `hint`, `question` | A hint under a question (with `Reveal`); asking about a step |
+| `goal`, `report`, `timer` | A daily or weekly goal; a report or a chart of progress; time on a task |
+| `scan`, `camera` | Taking a photo of a problem, the way Gauth starts |
+| `video`, `bookmark`, `flag` | A video lesson; something saved for later; a question reported or marked for review |
+| `school`, `graduation` | A school or a class; finishing a course |
+| `streak`, `xp`, `trophy`, `badge` | Days in a row; XP; a finished challenge; an earned badge |
+
+**Subjects.** A subject is an icon and its name: `subject-math`, `subject-geometry`, `subject-science`, `subject-reading`, `subject-language`, `subject-social-studies`, `subject-art`, `subject-music`. Tools: `calculator`, `ruler`.
+
+- A subject has no color of its own. Color on a learning page means a level, a right answer, XP or a celebration; a blue Math and a green Science would compete with them. Put the subject's icon in an `IconBox` beside its name.
+- Write the course as the school writes it ("Algebra 1", "English 9"), not the subject alone.
+
+**Progress and reward.**
+
+- A level is always the level ladder (`LevelMark`, `LevelChip`, `LevelBar`): Attempted, Familiar, Proficient, Mastered. A percent or a grade never stands in for a level.
+- XP, a streak and a badge are `violet` (`Chip tone="violet"`, an icon in `violet` on `violet-soft`). They count effort, so they never use a level's color and never go down.
+- A celebration (a finished unit, a badge earned) is `pink`, once, at the moment it happens.
+- A wrong answer is "Not yet" in `attempted` orange, with the next try. Never red, never a lost point or a broken streak shown in red.
+- A goal reads as what is left: "2 more questions today", with a `Meter` or a `StepProgress`.
+
+**Where the work lives.**
+
+- A student page uses `xl` controls, `lg` (18px) reading text and 24px card radii; a staff page uses `md`, `sm` and 16px.
+- A question, a lesson or a form is at most `container-read` (720px) wide.
+- A student sees one next step: one `ink` button ("Start", "Keep going"), every other action `soft`.
+
 ## Components
 
 Core: what any product needs.
 
 | Group     | Components |
 | --------- | ---------- |
-| Actions   | [Button](components/Button/README.md), [IconButton](components/IconButton/README.md), [Segmented](components/Segmented/README.md), [Switch](components/Switch/README.md), [ChipToggle](components/ChipToggle/README.md), [Menu](components/Menu/README.md) |
-| Forms     | [Field](components/Field/README.md), [Input](components/Input/README.md), [Textarea](components/Textarea/README.md), [Select](components/Select/README.md), [Checkbox](components/Checkbox/README.md) |
+| Actions   | [Button](components/Button/README.md), [IconButton](components/IconButton/README.md), [Segmented](components/Segmented/README.md), [Switch](components/Switch/README.md), [ChipToggle](components/ChipToggle/README.md), [Menu](components/Menu/README.md), [Kbd](components/Kbd/README.md) |
+| Forms     | [Field](components/Field/README.md), [Input](components/Input/README.md), [NumberInput](components/NumberInput/README.md), [Textarea](components/Textarea/README.md), [Select](components/Select/README.md), [Combobox](components/Combobox/README.md), [DatePicker](components/DatePicker/README.md), [DateRangePicker](components/DateRangePicker/README.md), [Checkbox](components/Checkbox/README.md), [RadioGroup](components/RadioGroup/README.md), [Slider](components/Slider/README.md), [FileDropzone](components/FileDropzone/README.md) |
 | Labels    | [Chip](components/Chip/README.md), [Avatar](components/Avatar/README.md), [Dot](components/Dot/README.md), [IconBox](components/IconBox/README.md) |
 | Surfaces  | [Panel](components/Panel/README.md), [Stat](components/Stat/README.md), [Table](components/Table/README.md), [CoverCard](components/CoverCard/README.md), [EmptyState](components/EmptyState/README.md) |
-| Structure | [PageTitle](components/PageTitle/README.md), [Breadcrumbs](components/Breadcrumbs/README.md), [Tabs](components/Tabs/README.md), [Stepper](components/Stepper/README.md) |
-| Overlays  | [Dialog](components/Dialog/README.md), [Popover](components/Popover/README.md), [Tooltip](components/Tooltip/README.md) |
+| Structure | [PageTitle](components/PageTitle/README.md), [Breadcrumbs](components/Breadcrumbs/README.md), [Tabs](components/Tabs/README.md), [Pagination](components/Pagination/README.md), [Accordion](components/Accordion/README.md), [Separator](components/Separator/README.md), [Stepper](components/Stepper/README.md) |
+| Overlays  | [Dialog](components/Dialog/README.md), [Sheet](components/Sheet/README.md), [Popover](components/Popover/README.md), [Tooltip](components/Tooltip/README.md) |
 | Feedback  | [Toast](components/Toast/README.md), [Callout](components/Callout/README.md) |
 | Waiting   | [Skeleton](components/Skeleton/README.md), [Spinner](components/Spinner/README.md), [Progress](components/Progress/README.md), [Meter](components/Meter/README.md) |
 

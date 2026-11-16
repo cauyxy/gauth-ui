@@ -36,7 +36,7 @@ it('shows nothing when there are no questions', () => {
   expect(container).toBeEmptyDOMElement()
 })
 
-it('names the group in the page\'s language', () => {
+it("names the group in the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <FollowUps items={['¿Quiénes sumaron los catetos?']} onPick={() => {}} />

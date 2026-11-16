@@ -51,7 +51,10 @@ async function take(out: string) {
     await page.waitForSelector('.g-section')
     if (locale === 'es') await page.getByRole('radio', { name: 'Español' }).click()
     await page.evaluate(() => document.fonts.ready)
-    if (still) await page.addStyleTag({ content: '*, *::before, *::after { animation: none !important; transition: none !important; caret-color: transparent !important; }' })
+    if (still)
+      await page.addStyleTag({
+        content: '*, *::before, *::after { animation: none !important; transition: none !important; caret-color: transparent !important; }',
+      })
     return page
   }
 
@@ -61,15 +64,33 @@ async function take(out: string) {
     [...document.querySelectorAll('.g-section *')].map((el) => {
       const s = getComputedStyle(el)
       const hook = [...el.classList].filter((c) => c.startsWith('gx-')).join('.')
-      return [`${el.closest('.g-section')!.id}: ${el.tagName.toLowerCase()}.${hook}`, s.animationName, s.animationDuration, s.animationTimingFunction, s.animationIterationCount, s.transitionDuration, s.transitionTimingFunction].join(' | ')
+      return [
+        `${el.closest('.g-section')!.id}: ${el.tagName.toLowerCase()}.${hook}`,
+        s.animationName,
+        s.animationDuration,
+        s.animationTimingFunction,
+        s.animationIterationCount,
+        s.transitionDuration,
+        s.transitionTimingFunction,
+      ].join(' | ')
     }),
   )
   const wanted = (title: string) => !ONLY || ONLY.includes(title)
-  writeFileSync(`${out}/motion.json`, JSON.stringify(motion.filter((line) => wanted(line.slice(0, line.indexOf(':')))), null, 1))
+  writeFileSync(
+    `${out}/motion.json`,
+    JSON.stringify(
+      motion.filter((line) => wanted(line.slice(0, line.indexOf(':')))),
+      null,
+      1,
+    ),
+  )
   writeFileSync(`${out}/only.json`, JSON.stringify(ONLY ?? null))
   await moving.close()
 
-  for (const [size, width] of [['desktop', 1120], ['phone', 375]] as const)
+  for (const [size, width] of [
+    ['desktop', 1120],
+    ['phone', 375],
+  ] as const)
     for (const locale of ['en', 'es'] as const) {
       const page = await open(width, locale)
       const sections = page.locator('.g-section')
@@ -161,7 +182,12 @@ async function compare(before: string, after: string) {
         let most = 0
         let [top, left, bottom, right] = [p.height, p.width, 0, 0]
         for (let i = 0; i < p.data.length; i += 4) {
-          const d = Math.max(Math.abs(p.data[i]! - q.data[i]!), Math.abs(p.data[i + 1]! - q.data[i + 1]!), Math.abs(p.data[i + 2]! - q.data[i + 2]!), Math.abs(p.data[i + 3]! - q.data[i + 3]!))
+          const d = Math.max(
+            Math.abs(p.data[i]! - q.data[i]!),
+            Math.abs(p.data[i + 1]! - q.data[i + 1]!),
+            Math.abs(p.data[i + 2]! - q.data[i + 2]!),
+            Math.abs(p.data[i + 3]! - q.data[i + 3]!),
+          )
           if (!d) continue
           pixels++
           most = Math.max(most, d)

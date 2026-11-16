@@ -3,7 +3,8 @@ import { AiStatus, Composer, FollowUps, Icon, IconButton, Message, Quote, ReplyA
 import { RichText } from '../../src/math'
 
 const QUESTION = 'Which mistake did Period 3 make most on the hypotenuse problems?'
-const REPLY = 'Six students added the legs: for legs 6 and 8 they wrote $c = 6 + 8 = 14$. The theorem squares the legs first: $c = \\sqrt{6^2 + 8^2} = 10$. The other 22 students answered 10.'
+const REPLY =
+  'Six students added the legs: for legs 6 and 8 they wrote $c = 6 + 8 = 14$. The theorem squares the legs first: $c = \\sqrt{6^2 + 8^2} = 10$. The other 22 students answered 10.'
 /* The dot stays with the word before it. */
 const SOURCE = 'Read 28 answers in Geometry · Period 3'
 const WHO = 'Which six students added the legs?'

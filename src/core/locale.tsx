@@ -6,6 +6,8 @@ const INTL: Record<Locale, string> = { en: 'en-US', es: 'es-US' }
 
 export type LocaleValue = {
   locale: Locale
+  /** The `Intl` tag for the language, for a format the content rules do not fix (a month in a calendar). */
+  intl: string
   messages: Messages
   /** A day the way the product writes it: "Fri, Oct 23". */
   formatDay: (date: Date) => string
@@ -17,6 +19,7 @@ function valueFor(locale: Locale, messages: Messages): LocaleValue {
   const day = new Intl.DateTimeFormat(INTL[locale], { weekday: 'short', month: 'short', day: 'numeric' })
   return {
     locale,
+    intl: INTL[locale],
     messages,
     formatDay: (date) => day.format(date),
     formatDelta: (points) => `${points > 0 ? '+' : points < 0 ? '−' : ''}${Math.abs(points)} pts`,
