@@ -158,7 +158,7 @@ it('the class rules catch what they are for', () => {
     '-outline-offset-2',
     'shadow-edge',
     'shadow-correct',
-    'shadow-(--gx-avatar-edge)',
+    'shadow-(--gx-shadow-pop)',
     'text-sm',
     'text-muted',
     'max-w-[34rem]',

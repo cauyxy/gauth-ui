@@ -169,15 +169,6 @@
   --gx-animate-pulse: gx-pulse calc(2s * var(--gx-ms)) cubic-bezier(0.4, 0, 0.6, 1) infinite; /* A skeleton block while content loads */
   --gx-animate-spin: gx-spin calc(1s * var(--gx-ms)) linear infinite; /* A spinner */
   --gx-animate-sweep: gx-sweep calc(1.4s * var(--gx-ms)) ease-in-out infinite; /* The segment of a bar with no known end */
-
-  /* Avatar fills: a name always lands on the same one. */
-  --gx-avatar-1: linear-gradient(135deg, #6cc6de, #2685ae);
-  --gx-avatar-2: linear-gradient(135deg, #a49deb, #6556c8);
-  --gx-avatar-3: linear-gradient(135deg, #ff9aa8, #e8476b);
-  --gx-avatar-4: linear-gradient(135deg, #6fd0a4, #2f9466);
-  --gx-avatar-5: linear-gradient(135deg, #7b95f7, #2e5ce5);
-  --gx-avatar-6: linear-gradient(135deg, #f7c26b, #d9822b);
-  --gx-avatar-edge: inset 0 0 0 1px rgb(255 255 255 / 0.18), 0 1px 2px rgb(33 37 46 / 0.12);
 }
 
 @media (prefers-reduced-motion: reduce) {

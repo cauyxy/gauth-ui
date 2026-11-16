@@ -16,7 +16,7 @@ export const JSON_FILE = `${ROOT}design/tokens.json`
 
 export type Token = { name: string; value: string; usage: string }
 
-/** The families Tailwind has a theme namespace for. Control heights, durations and avatar fills stay `--gx-*` only. */
+/** The families Tailwind has a theme namespace for. Control heights and durations stay `--gx-*` only. */
 const TAILWIND = ['font', 'leading', 'tracking', 'container', 'color', 'radius', 'text', 'shadow', 'ease', 'animate'] as const
 const CLEARED = ['--color-*', '--text-*', '--shadow-*', '--inset-shadow-*', '--drop-shadow-*']
 

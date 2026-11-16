@@ -76,6 +76,7 @@ gauthx spells each animation by hand (`animate-[fade-in_200ms_ease-out]`), at te
 - A formula is smaller: 1.1em, not KaTeX's 1.21em, so its numbers match the numbers in Google Sans. Places that set a size on `Tex` by hand (`text-base` in apps/teach `review.tsx`) need a look.
 - `Tex` now also writes MathML for screen readers (gauthx passed `output: 'html'`), and unreadable TeX is `attempted-ink`, not KaTeX's red.
 - `RichText` keeps the punctuation next to a formula on the formula's line.
+- `Avatar` has no gradient (the owner's decision, Nov 16, 2026). The six avatar gradient tokens and the avatar's edge token are gone: an avatar is one of five soft grounds of the palette with the initials in its own text color, not white. White initials were 1.6 to 2.8:1 on the light end of a gradient. A person's color changes once at the switch.
 - `PageSkeleton` says "Loading" from the language list. Under `<LocaleProvider locale="es">` it says "Cargando".
 
 ## Built by hand in gauthx, a component here
