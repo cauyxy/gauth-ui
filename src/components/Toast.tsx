@@ -32,9 +32,14 @@ const close = (id: number) => set(entries.map((entry) => (entry.id === id ? { ..
  * Says in one line what just happened. `description` is a quieter second line: what, or where. `action` is one
  * button that takes it back ("Undo"); pressing it closes the toast.
  * It leaves by itself after 4 seconds, or after 8 when it has an action.
+ * A toast that says the same as one still on screen takes its place: one toast, with a new 4 seconds.
+ * A toast with an action is never taken away by another: each one takes back its own thing.
  */
 export function toast(message: string, { tone = 'neutral', description, action }: { tone?: ToastTone; description?: string; action?: ToastAction } = {}) {
-  set([...entries.filter((entry) => entry.open), { id: nextId++, message, tone, description, action, open: true }])
+  /* The same words and tone are the same toast to the person who reads it, whatever caused it: five presses on "Copy link" are one "Link copied". */
+  const repeats = (entry: Entry) => !action && !entry.action && entry.message === message && entry.tone === tone && entry.description === description
+  /* It gets a new id, so it is a new toast for React and Radix: the old one goes at once, and this one comes in where the newest stands and is said again. */
+  set([...entries.filter((entry) => entry.open && !repeats(entry)), { id: nextId++, message, tone, description, action, open: true }])
 }
 
 /** Where toasts appear. A product mounts it once, near the root. */

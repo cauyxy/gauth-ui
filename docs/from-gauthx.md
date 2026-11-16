@@ -77,6 +77,7 @@ gauthx spells each animation by hand (`animate-[fade-in_200ms_ease-out]`), at te
 - `Tex` now also writes MathML for screen readers (gauthx passed `output: 'html'`), and unreadable TeX is `attempted-ink`, not KaTeX's red.
 - `RichText` keeps the punctuation next to a formula on the formula's line.
 - `Avatar` has no gradient (the owner's decision, Nov 16, 2026). The six avatar gradient tokens and the avatar's edge token are gone: an avatar is one of five soft grounds of the palette with the initials in its own text color, not white. White initials were 1.6 to 2.8:1 on the light end of a gradient. A person's color changes once at the switch.
+- `toast()` does not stack a repeat. A toast with the words and tone of one still on screen takes its place and starts its 4 seconds again; a toast with an action always stays. `sonner` adds a toast for each call unless the calls share an `id`.
 - `PageSkeleton` says "Loading" from the language list. Under `<LocaleProvider locale="es">` it says "Cargando".
 
 ## Built by hand in gauthx, a component here
