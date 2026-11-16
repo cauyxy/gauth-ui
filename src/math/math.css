@@ -24,6 +24,11 @@
   overflow-x: auto;
   overflow-y: hidden;
 }
+/* When it scrolls, the keyboard reaches it (Tex sets the tab stop) and it shows the shared ring, inside its box. */
+.gx-tex--display:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: -2px;
+}
 .gx-tex--display > .katex-display {
   margin: var(--gx-space-3) 0;
 }

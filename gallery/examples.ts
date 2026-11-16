@@ -53,7 +53,7 @@ export const GROUPS: { slug: string; title: string; names: string[] }[] = [
   {
     slug: 'structure',
     title: 'Structure and Gauth AI',
-    names: ['Breadcrumbs', 'PageTitle', 'Tabs', 'Table', 'Pagination', 'Accordion', 'Separator', 'Kbd', 'Stepper', 'Composer', 'Generating'],
+    names: ['Breadcrumbs', 'PageTitle', 'Prose', 'Tabs', 'Table', 'Pagination', 'Accordion', 'Separator', 'Kbd', 'Stepper', 'Composer', 'Generating'],
   },
   { slug: 'conversation', title: 'Conversation', names: ['Message', 'AiStatus', 'ReplyActions', 'FollowUps', 'Quote'] },
   {

@@ -17,8 +17,10 @@ src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and 
 src/styles.css           what a product imports after Tailwind: the tokens, the theme, the base styles, and where Tailwind finds the classes; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
+src/docs.test.ts         every size, name and role design/README.md gives is the one in tokens.css
 gallery/examples/        the examples: one file for each component, each `export function` one example a product can copy
 gallery/                 every example on one page, in both languages (pnpm gallery); shot.ts, optical.ts and pixels.ts check it in Chrome
+gallery/foundations.tsx  the type scale and the movements, drawn from tokens.css: for the docs site's Tokens page and the artifact
 site/                    the docs site (ui.gauthx.app): every component live on the first page, a page for each with its examples and their code first, then the design rules and the tokens
 GLOSSARY.md              what each shared word means, in en and es
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
@@ -27,7 +29,8 @@ compare/                 compares each component with the gauthx one it replaces
 docs/from-gauthx.md      what changes for gauthx when it switches to this package
 design/README.md         the design rules: content, color, type, surfaces
 design/components/       one guideline per component
-design/tokens.json       the tokens for the Design System artifact. Generated.
+design/tokens.json       the tokens as data, for the docs site's Tokens page. Generated.
+artifact/                builds the Design System artifact on claude.ai from all of the above (artifact/README.md)
 ```
 
 ## A component is four files
@@ -110,7 +113,7 @@ A page, a flow, or a component that carries one product's data (a roster, a prin
 pnpm typecheck
 pnpm lint        # oxlint: bugs, React, hooks, accessibility, vitest (.oxlintrc.json); a warning fails too
 pnpm format      # oxfmt writes every file; CI runs pnpm format:check
-pnpm test        # component tests and rules.test.ts
+pnpm test        # component tests, rules.test.ts and docs.test.ts
 pnpm build       # dist/: index.js, types, styles.css (what a product imports after Tailwind), tokens.css, theme.css
 pnpm tokens      # after a change to tokens.css
 pnpm icons       # after adding an icon's name to scripts/icons.ts
@@ -119,6 +122,8 @@ node gallery/pixels.ts take <folder>   # before and after a change that must not
 node gallery/pixels.ts compare <a> <b> # then every picture that differs: each block, each control hovered and focused, each floating part open
 node gallery/shot.ts <folder>    # screenshots of every component, both languages, desktop and phone
 node site/shot.ts <folder>       # after a change to site/ or gallery/: screenshots of the docs site, and a check that every component's page shows an example
+pnpm artifact                    # the files of the Design System artifact, in artifact/out/; every preview is drawn in Chrome and must draw
+pnpm artifact:check              # every preview of the artifact is the gallery's picture, pixel for pixel; with --published <folder>, what the artifact is behind on
 ```
 
 The tools are oxc's: oxlint lints and oxfmt formats (`.oxlintrc.json`, `.oxfmtrc.json`). Not ESLint: typescript-eslint does not run on TypeScript 7, and oxc needs no TypeScript. A rule that is off in `.oxlintrc.json` is off because the code does that on purpose (a `role` on a `span`, a radio group with a roving tab stop). Turn a rule off for one line with `// oxlint-disable-next-line <rule>` and a comment that says why. oxfmt does not touch Markdown or the generated files (`ignorePatterns`); `// oxfmt-ignore` keeps one statement as written.

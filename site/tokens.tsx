@@ -1,4 +1,5 @@
 import tokens from '../design/tokens.json'
+import { Motion, TypeSpacing } from '../gallery/foundations'
 
 type Token = { name: string; value: string; usage?: string }
 
@@ -17,7 +18,7 @@ function families(list: Token[]) {
   return ORDER.map((title) => ({ title, tokens: list.filter((token) => of(token) === title) }))
 }
 
-/** Every token, drawn with itself: a color as a swatch, a size as a line of text, a space as a bar. */
+/** Every token, drawn with itself: a color as a swatch, a size as a line of text, a space as a bar, a movement as a tile that plays it. */
 export function TokensPage() {
   return (
     <div className="s-tokens">
@@ -60,6 +61,12 @@ export function TokensPage() {
           </div>
         ))}
       </div>
+
+      <h2>Line height and letter spacing</h2>
+      <TypeSpacing />
+
+      <h2>Motion</h2>
+      <Motion />
 
       <h2>Space</h2>
       <div className="s-rows">

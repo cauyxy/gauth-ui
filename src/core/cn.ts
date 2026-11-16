@@ -17,7 +17,8 @@ const merge = extendTailwindMerge({
       leading: ['figure', 'title', 'heading', 'body'],
       tracking: ['display', 'title', 'label'],
       ease: ['standard', 'enter'],
-      animate: ['fade-in', 'fade-out', 'pop-in', 'pop-out', 'tip-in', 'rise-in', 'slide-in', 'mark-right', 'mark-retry', 'pulse', 'spin', 'sweep'],
+      container: ['read', 'doc', 'page'],
+      animate: ['fade-in', 'fade-out', 'pop-in', 'pop-out', 'tip-in', 'rise-in', 'slide-in', 'slide-in-end', 'mark-right', 'mark-retry', 'pulse', 'spin', 'sweep'], // oxfmt-ignore
     },
   },
 })

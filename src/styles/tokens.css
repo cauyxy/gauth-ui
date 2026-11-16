@@ -12,7 +12,7 @@
   --gx-font-weight-body: 400; /* Running text, and a quiet second line inside a control */
   --gx-font-weight-control: 500; /* Buttons, chips, labels, table rows, the options of a Segmented control */
   --gx-font-weight-title: 600; /* Panel and card titles */
-  --gx-font-weight-strong: 700; /* Page titles and metrics */
+  --gx-font-weight-strong: 700; /* Page titles, dialog and sheet titles, metrics */
 
   /* Line heights and letter spacing: one value for each role. Body text keeps the page's line height. */
   --gx-leading-figure: 1; /* A metric */
@@ -118,11 +118,11 @@
   /* Type scale: Tailwind's sizes plus 2xs and 3xs. Text keeps the inherited line height. */
   --gx-text-3xs: 0.625rem; /* 10px. Print sheets and tiny badges only */
   --gx-text-2xs: 0.6875rem; /* 11px. Captions, column heads, chart labels */
-  --gx-text-xs: 0.75rem; /* 12px. Meta text, chips, small labels */
-  --gx-text-sm: 0.875rem; /* 14px. Staff UI body, rows, buttons, nav */
-  --gx-text-base: 1rem; /* 16px. Student body, phone inputs, panel titles */
-  --gx-text-lg: 1.125rem; /* 18px. Student reading size: problems, steps, answers */
-  --gx-text-xl: 1.25rem; /* 20px. Card titles */
+  --gx-text-xs: 0.75rem; /* 12px. Meta, chips, small labels */
+  --gx-text-sm: 0.875rem; /* 14px. Staff rows, buttons, nav, table cells */
+  --gx-text-base: 1rem; /* 16px. Student body, phone inputs */
+  --gx-text-lg: 1.125rem; /* 18px. Student reading size: problems, steps, answers. Panel titles */
+  --gx-text-xl: 1.25rem; /* 20px. Dialog and sheet titles, a heading in long text */
   --gx-text-2xl: 1.5rem; /* 24px. Staff page titles, question stems */
   --gx-text-3xl: 1.875rem; /* 30px. Page titles on phones, metrics */
   --gx-text-4xl: 2.25rem; /* 36px. Student page titles */
