@@ -109,18 +109,19 @@ export function tokensJson(commit: string) {
     },
     spacing: list(of('space')),
     radius: list(of('radius')),
-    shadow: list([...of('shadow'), ...tokens.filter((t) => t.name === 'avatar-edge')]),
+    shadow: list(of('shadow')),
     height: list(of('h')),
     leading: list(of('leading')),
     tracking: list(of('tracking')),
     container: list(of('container')),
     zIndex: list(of('z')),
     focus: list(of('focus')),
-    avatar: list(of('avatar').filter((t) => t.name !== 'avatar-edge')),
   }
 }
 /** The tokens no family above holds: motion, which the page has no section for. The README's Motion section names them. */
 export const leftOut = () => tokens.filter((t) => ['ms', 'dur', 'delay', 'ease', 'animate'].includes(t.name.split('-')[0]!)).map((t) => t.name)
+/** The tokens one component keeps for itself: nobody picks one of them, so a list of them tells a reader nothing. */
+export const inside = () => tokens.filter((t) => t.name.startsWith('avatar-')).map((t) => t.name)
 
 /* ---------- the components, in the groups of design/README.md ---------- */
 
@@ -266,19 +267,7 @@ function types() {
 
 /** The page's own tokens.css, near enough for a preview drawn here: each token as `--name`. */
 function localTokens(json: Omit<ReturnType<typeof tokensJson>, 'meta'>) {
-  const lists = [
-    json.color,
-    json.spacing,
-    json.radius,
-    json.shadow,
-    json.height,
-    json.leading,
-    json.tracking,
-    json.container,
-    json.zIndex,
-    json.focus,
-    json.avatar,
-  ]
+  const lists = [json.color, json.spacing, json.radius, json.shadow, json.height, json.leading, json.tracking, json.container, json.zIndex, json.focus]
   const families = Object.entries(json.type.families).map(([key, stack]) => `--font-${key}:${stack}`)
   return `:root{${[...lists.flatMap((l) => l.tokens.map((t) => `--${t.name}:${t.value}`)), ...families].join(';')}}`
 }
@@ -346,7 +335,7 @@ if (import.meta.main) {
   write('project/tokens.json', `${JSON.stringify(json, null, 2)}\n`)
   write(
     'project/README.md',
-    `${read('design/README.md').replace(/^# .*\n+/, '')}\n## Not in the tokens\n\nMotion (\`${leftOut().join('`, `')}\`) has no section among the tokens: the Motion rules above name each one. Google Sans has no font file here: a product loads it from Google Fonts.\n`,
+    `${read('design/README.md').replace(/^# .*\n+/, '')}\n## Not in the tokens\n\nMotion (\`${leftOut().join('`, `')}\`) has no section among the tokens: the Motion rules above name each one. The fills and the edge of an \`Avatar\` (\`${inside().join('`, `')}\`) are that component's own: use the component. Google Sans has no font file here: a product loads it from Google Fonts.\n`,
   )
   write('project/glossary.md', read('GLOSSARY.md'))
 
@@ -402,5 +391,7 @@ if (import.meta.main) {
     for (const name of names) write(`project/components/${name}/preview.html`, cards[name]!(heights[name]!))
   }
   write('build.json', `${JSON.stringify({ commit, components: names, icons: icons.map(({ folder, names }) => ({ folder, names })), heights }, null, 2)}\n`)
-  console.log(`artifact/out: ${names.length} components, ${Object.keys(ICONS).length} icons, ${tokens.length - leftOut().length} tokens, from ${commit}`)
+  console.log(
+    `artifact/out: ${names.length} components, ${Object.keys(ICONS).length} icons, ${tokens.length - leftOut().length - inside().length} tokens, from ${commit}`,
+  )
 }
