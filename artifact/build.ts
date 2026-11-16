@@ -337,7 +337,9 @@ async function render(names: string[]) {
 }
 
 if (import.meta.main) {
-  const commit = `main@${execFileSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim()}`
+  const git = (...args: string[]) => execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' }).trim()
+  /* The branch and the commit the files come from, so the artifact says when it shows work that is not on main yet. */
+  const commit = `${git('rev-parse', '--abbrev-ref', 'HEAD')}@${git('rev-parse', '--short', 'HEAD')}`
   rmSync(OUT, { recursive: true, force: true })
 
   const json = tokensJson(commit)
