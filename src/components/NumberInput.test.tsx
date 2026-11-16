@@ -63,3 +63,14 @@ it('takes its label and error from a Field', () => {
   expect(input).toHaveAccessibleDescription('Not yet. Give a number from 1 to 100.')
   expect(input.parentElement).toHaveClass('gx-number-input--xl')
 })
+
+it('keeps its own number without `value`', async () => {
+  const onChange = vi.fn()
+  render(<NumberInput label="Questions" name="count" defaultValue={3} min={0} max={5} onChange={onChange} />)
+  const field = screen.getByRole('spinbutton', { name: 'Questions' })
+  expect(field).toHaveValue(3)
+  await userEvent.click(screen.getByRole('button', { name: 'Increase' }))
+  expect(field).toHaveValue(4)
+  expect(onChange).toHaveBeenLastCalledWith(4)
+  expect(field).toHaveAttribute('name', 'count')
+})

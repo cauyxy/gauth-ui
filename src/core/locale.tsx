@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useMemo, type ReactNode } from 'react'
 import { MESSAGES, type Locale, type Messages } from './messages'
 
@@ -26,13 +28,16 @@ function valueFor(locale: Locale, messages: Messages): LocaleValue {
   }
 }
 
+export type LocaleProviderProps = { locale: Locale; messages?: Partial<Messages>; children: ReactNode }
+
 const LocaleContext = createContext<LocaleValue>(valueFor('en', MESSAGES.en))
+LocaleContext.displayName = 'Locale'
 
 /**
  * Sets the language of every component inside it. Without one, components speak English.
  * `messages` replaces single strings, for a product that needs its own word for one of them.
  */
-export function LocaleProvider({ locale, messages, children }: { locale: Locale; messages?: Partial<Messages>; children: ReactNode }) {
+export function LocaleProvider({ locale, messages, children }: LocaleProviderProps) {
   const value = useMemo(() => valueFor(locale, { ...MESSAGES[locale], ...messages }), [locale, messages])
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
 }

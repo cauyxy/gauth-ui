@@ -1,14 +1,49 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { Popover as PopoverPrimitive } from 'radix-ui'
 import { useId, useRef, useState, type KeyboardEvent } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+import { useControllable } from '../core/useControllable'
 import { useField } from './Field'
 import { IconButton } from './IconButton'
 import { PopoverContent } from './Popover'
 
 export type DatePickerSize = 'sm' | 'md' | 'xl'
+export type CalendarProps = Props<
+  'div',
+  {
+    value?: Date | null
+    defaultValue?: Date | null
+    onChange?: (value: Date) => void
+    /** Marks the days from `from` to `to` as picked, for `DateRangePicker`. `value` is then the day the calendar opens on. */
+    range?: { from: Date | null; to: Date | null }
+    min?: Date
+    max?: Date
+    /** Puts focus on the picked day when the calendar appears. */
+    focusOnMount?: boolean
+  },
+  'children'
+>
+export type DatePickerProps = Props<
+  'button',
+  {
+    value?: Date | null
+    defaultValue?: Date | null
+    onChange?: (value: Date) => void
+    min?: Date
+    max?: Date
+    size?: DatePickerSize
+    label?: string
+    placeholder?: string
+    /** Sends the day as YYYY-MM-DD with a form. */
+    name?: string
+  },
+  'children' | 'type'
+>
 
 /* A day is a local date at midnight: the time of a Date is never read. */
 const dayOf = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate())
@@ -49,27 +84,11 @@ const day =
  * A month of days to pick one from. `DatePicker` shows it in a popover; alone, it sits on the page.
  * Tab reaches the picked day (or today); the arrow keys move a day or a week, Home and End go to the week's ends,
  * Page Up and Page Down move a month (with Shift, a year). Days before `min` or after `max` cannot be picked.
+ * `value` is the day the product keeps, `null` for none; `defaultValue` when the calendar keeps its own.
  */
-export function Calendar({
-  value,
-  onChange,
-  min,
-  max,
-  range,
-  focusOnMount = false,
-  className,
-}: {
-  value: Date | null
-  onChange: (value: Date) => void
-  /** Marks the days from `from` to `to` as picked, for `DateRangePicker`. `value` is then the day the calendar opens on. */
-  range?: { from: Date | null; to: Date | null }
-  min?: Date
-  max?: Date
-  /** Puts focus on the picked day when the calendar appears. */
-  focusOnMount?: boolean
-  className?: string
-}) {
+export function Calendar({ value: kept, defaultValue = null, onChange, min, max, range, focusOnMount = false, className, ...props }: CalendarProps) {
   const { intl, messages } = useLocale()
+  const [value, set] = useControllable<Date | null, Date>(kept, defaultValue, onChange)
   const [today] = useState(() => dayOf(new Date()))
   const [active, setActive] = useState(() => clamp(value ? dayOf(value) : today, min, max))
   /* After a key moves the active day, focus follows it, also into another month: the active day's ref takes it. */
@@ -122,7 +141,7 @@ export function Calendar({
   const weekday = new Intl.DateTimeFormat(intl, { weekday: 'long' })
 
   return (
-    <div className={cn('gx-calendar inline-flex flex-col gap-2', className)}>
+    <div {...props} className={cn('gx-calendar inline-flex flex-col gap-2', className)}>
       <div className="gx-calendar__head flex items-center justify-between gap-2">
         <IconButton label={messages.previousMonth} size="sm" disabled={!canBack} onClick={() => go(addMonths(active, -1), false)}>
           <Icon name="chevron-left" />
@@ -169,7 +188,7 @@ export function Calendar({
                       disabled={outside(date)}
                       onClick={() => {
                         setActive(date)
-                        onChange(date)
+                        set(date)
                       }}
                       className={day}
                     >
@@ -207,50 +226,41 @@ export const datePickerTrigger = cva(
 /**
  * One day, picked from a calendar that opens under the field. The field shows the day as the product writes it
  * ("Fri, Oct 23"), or `placeholder` before one is picked. Inside a `Field` it takes its label, hint and error from the
- * Field; alone, `label` is its accessible name. `className` goes to the button.
+ * Field; alone, `label` is its accessible name. `value` is the day the product keeps, `null` for none; `defaultValue`
+ * when the field keeps its own. `className`, every other prop (`disabled`) and `ref` go to the button.
  */
 export function DatePicker({
-  value,
+  value: kept,
+  defaultValue = null,
   onChange,
   min,
   max,
   size = 'md',
   label,
   placeholder,
-  disabled,
   name,
   className,
-}: {
-  value: Date | null
-  onChange: (value: Date) => void
-  min?: Date
-  max?: Date
-  size?: DatePickerSize
-  label?: string
-  placeholder?: string
-  disabled?: boolean
-  /** Sends the day as YYYY-MM-DD with a form. */
-  name?: string
-  className?: string
-}) {
+  ...props
+}: DatePickerProps) {
   const { messages, formatDay } = useLocale()
   const field = useField()
+  const [value, set] = useControllable<Date | null, Date>(kept, defaultValue, onChange)
   const [open, setOpen] = useState(false)
   const ownId = useId()
-  const id = field?.id ?? ownId
+  const id = props.id ?? field?.id ?? ownId
   const valueId = `${id}-value`
   const iso = value ? `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}` : ''
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
       <PopoverPrimitive.Trigger
-        id={id}
-        disabled={disabled}
         aria-label={field ? undefined : label}
         /* The name is the label and then the day, so a screen reader says both. */
         aria-labelledby={field ? `${field.labelId} ${valueId}` : label ? `${id} ${valueId}` : undefined}
         aria-describedby={field?.describedBy}
         aria-invalid={field?.invalid || undefined}
+        {...props}
+        id={id}
         className={cn('gx-date-picker', `gx-date-picker--${size}`, datePickerTrigger({ size }), className)}
       >
         <span id={valueId} className={cn('gx-date-picker__value truncate', !value && 'text-muted')}>
@@ -258,7 +268,7 @@ export function DatePicker({
         </span>
         <Icon name="calendar" size={16} className="gx-date-picker__icon shrink-0" />
       </PopoverPrimitive.Trigger>
-      {name ? <input type="hidden" name={name} value={iso} /> : null}
+      {name ? <input type="hidden" name={name} value={iso} disabled={props.disabled} /> : null}
       <PopoverContent arrow={false} align="start" sideOffset={6} className="w-auto p-3" onOpenAutoFocus={(event) => event.preventDefault()}>
         <Calendar
           value={value}
@@ -266,7 +276,7 @@ export function DatePicker({
           max={max}
           focusOnMount
           onChange={(date) => {
-            onChange(date)
+            set(date)
             setOpen(false)
           }}
         />

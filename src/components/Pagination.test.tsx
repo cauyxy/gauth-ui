@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { LocaleProvider } from '../core/locale'
-import { Pagination, pagesOf } from './Pagination'
+import { Pagination } from './Pagination'
+import { pagesOf } from './Pagination.pages'
 
 it('shows every page up to seven, and the ends and the neighbours past that', () => {
   expect(pagesOf(1, 5)).toEqual([1, 2, 3, 4, 5])

@@ -1,3 +1,5 @@
+'use client'
+
 import { Toast as ToastPrimitive } from 'radix-ui'
 import { useSyncExternalStore } from 'react'
 import { cn } from '../core/cn'
@@ -6,7 +8,8 @@ import { useLocale } from '../core/locale'
 
 export type ToastTone = 'neutral' | 'good' | 'warn'
 
-type ToastAction = { label: string; onClick: () => void }
+export type ToastAction = { label: string; onClick: () => void }
+export type ToastOptions = { tone?: ToastTone; description?: string; action?: ToastAction }
 type Entry = { id: number; message: string; tone: ToastTone; description?: string; action?: ToastAction; open: boolean }
 
 /* The toasts on screen. It lives outside React, so `toast()` works from an event handler, a fetch or a store. */
@@ -35,7 +38,7 @@ const close = (id: number) => set(entries.map((entry) => (entry.id === id ? { ..
  * A toast that says the same as one still on screen takes its place: one toast, with a new 4 seconds.
  * A toast with an action is never taken away by another: each one takes back its own thing.
  */
-export function toast(message: string, { tone = 'neutral', description, action }: { tone?: ToastTone; description?: string; action?: ToastAction } = {}) {
+export function toast(message: string, { tone = 'neutral', description, action }: ToastOptions = {}) {
   /* The same words and tone are the same toast to the person who reads it, whatever caused it: five presses on "Copy link" are one "Link copied". */
   const repeats = (entry: Entry) => !action && !entry.action && entry.message === message && entry.tone === tone && entry.description === description
   /* It gets a new id, so it is a new toast for React and Radix: the old one goes at once, and this one comes in where the newest stands and is said again. */

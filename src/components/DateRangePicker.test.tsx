@@ -72,3 +72,15 @@ it('takes its label and error from a Field', () => {
   expect(button).toHaveAttribute('aria-invalid', 'true')
   expect(button).toHaveClass('gx-date-range-picker--sm')
 })
+
+it('keeps its own range without `value`', async () => {
+  const onChange = vi.fn()
+  render(<DateRangePicker label="Days" defaultValue={{ from: day(2026, 10, 5), to: day(2026, 10, 9) }} onChange={onChange} />)
+  const field = screen.getByRole('button', { name: /Days/ })
+  expect(field).toHaveTextContent('Mon, Oct 5 – Fri, Oct 9')
+  await userEvent.click(field)
+  await userEvent.click(screen.getByRole('button', { name: /October 12, 2026/ }))
+  await userEvent.click(screen.getByRole('button', { name: /October 16, 2026/ }))
+  expect(field).toHaveTextContent('Mon, Oct 12 – Fri, Oct 16')
+  expect(onChange).toHaveBeenCalledTimes(1)
+})

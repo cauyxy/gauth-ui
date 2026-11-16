@@ -2,11 +2,15 @@ import { DropdownMenu as MenuPrimitive } from 'radix-ui'
 import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
 
+export type MenuContentProps = ComponentProps<typeof MenuPrimitive.Content>
+export type MenuItemProps = ComponentProps<typeof MenuPrimitive.Item>
+export type MenuSeparatorProps = ComponentProps<typeof MenuPrimitive.Separator>
+
 /** A short list of actions that opens from a button. The arrow keys move, typing a letter jumps, Escape closes. */
 export const Menu = MenuPrimitive.Root
 export const MenuTrigger = MenuPrimitive.Trigger
 
-export function MenuContent({ className, sideOffset = 6, align = 'start', collisionPadding = 16, ...props }: ComponentProps<typeof MenuPrimitive.Content>) {
+export function MenuContent({ className, sideOffset = 6, align = 'start', collisionPadding = 16, ...props }: MenuContentProps) {
   return (
     <MenuPrimitive.Portal>
       <MenuPrimitive.Content
@@ -28,7 +32,7 @@ export function MenuContent({ className, sideOffset = 6, align = 'start', collis
  * It is 34px for one line; a long label wraps and the row grows. Radix moves focus to the row under the pointer, and a
  * browser can count that as keyboard focus: the ring is for the arrow keys, so it is off while the pointer is on the menu.
  */
-export function MenuItem({ className, ...props }: ComponentProps<typeof MenuPrimitive.Item>) {
+export function MenuItem({ className, ...props }: MenuItemProps) {
   return (
     <MenuPrimitive.Item
       className={cn(
@@ -40,6 +44,6 @@ export function MenuItem({ className, ...props }: ComponentProps<typeof MenuPrim
   )
 }
 
-export function MenuSeparator({ className, ...props }: ComponentProps<typeof MenuPrimitive.Separator>) {
+export function MenuSeparator({ className, ...props }: MenuSeparatorProps) {
   return <MenuPrimitive.Separator className={cn('gx-menu__separator my-1.5 h-px bg-line', className)} {...props} />
 }

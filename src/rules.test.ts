@@ -180,8 +180,56 @@ it('the package has no stylesheet of its own rules: the base styles are in the b
     ).toEqual([])
 })
 
+describe('server components', () => {
+  /*
+   * A file runs in the browser only when it starts with 'use client'. A file without that line can be drawn by a
+   * server component: it keeps no state, reads no context and sets no event handler. What it takes from a client file
+   * is a component or a type, because a server component cannot call a client file's function.
+   */
+  const files = ['core', 'components', 'learning', 'math'].flatMap((dir) =>
+    readdirSync(`${ROOT}src/${dir}`)
+      .filter((f) => /\.tsx?$/.test(f) && !f.includes('.test.'))
+      .map((f) => `src/${dir}/${f}`),
+  )
+  const isClient = (path: string) => read(path).startsWith("'use client'")
+  const fileOf = (from: string, path: string) => {
+    const base = new URL(path, `file:///${from}`).pathname.slice(1)
+    return [`${base}.ts`, `${base}.tsx`].find((f) => existsSync(`${ROOT}${f}`))!
+  }
+
+  it.each(files.filter((f) => !isClient(f)))('%s needs no browser', (path) => {
+    const code = read(path).replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '')
+    expect(
+      code.match(
+        /\b(?:useState|useEffect|useLayoutEffect|useRef|useContext|createContext|useSyncExternalStore|useReducer|useTransition|useOptimistic|useActionState)\b/g,
+      ) ?? [],
+      "a hook that needs the browser: the file starts with 'use client'",
+    ).toEqual([])
+    expect(code.match(/\son[A-Z]\w*=\{/g) ?? [], "an event handler: the file starts with 'use client'").toEqual([])
+    for (const [, names, from] of code.matchAll(/import \{([^}]*)\} from '(\.[^']+)'/g)) {
+      if (!isClient(fileOf(path, from!))) continue
+      const values = names!.split(',').map((n) => n.trim()).filter((n) => n && !n.startsWith('type ')) // oxfmt-ignore
+      expect(
+        values.filter((n) => !/^[A-Z][a-z]/.test(n)),
+        `a function of the client file ${from}`,
+      ).toEqual([])
+    }
+  })
+
+  it('the entries are not client files, so what they pass on keeps its own kind', () => {
+    expect(isClient('src/index.ts')).toBe(false)
+    expect(isClient('src/math/index.ts')).toBe(false)
+  })
+
+  it('the build keeps each file apart, so each keeps its line and a product bundles only what it imports', () => {
+    expect(read('vite.config.ts')).toContain('preserveModules: true')
+  })
+})
+
 describe.each(components)('%s', (name, dir) => {
-  const source = read(`src/${dir}/${name}.tsx`)
+  /* The component, with the helpers that stand beside it (`Segmented.classes.ts`). */
+  const beside = readdirSync(`${ROOT}src/${dir}`).filter((f) => f.startsWith(`${name}.`) && f.endsWith('.ts') && !f.includes('.test.'))
+  const source = [`${name}.tsx`, ...beside].map((f) => read(`src/${dir}/${f}`)).join('\n')
   const classes = classesOf(source)
 
   it('has its test, guideline and export, and a gx- name on its root', () => {

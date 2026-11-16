@@ -1,9 +1,14 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { Dialog as DialogPrimitive } from 'radix-ui'
-import type { ComponentProps, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+
+export type SheetContentProps = Props<typeof DialogPrimitive.Content, { title: string; description?: ReactNode; side?: 'start' | 'end' }>
 
 /** A panel that slides in from an edge of the page: a student's details beside a roster, the filters on a phone. Focus stays inside; Escape closes it. */
 export const Sheet = DialogPrimitive.Root
@@ -24,14 +29,7 @@ const panel = cva(
 )
 
 /** The panel, on its scrim. `title` is its accessible name; `children` are the body. `side` is the edge it comes from. */
-export function SheetContent({
-  title,
-  description,
-  side = 'end',
-  className,
-  children,
-  ...props
-}: Omit<ComponentProps<typeof DialogPrimitive.Content>, 'title'> & { title: string; description?: ReactNode; side?: 'start' | 'end' }) {
+export function SheetContent({ title, description, side = 'end', className, children, ...props }: SheetContentProps) {
   const { messages } = useLocale()
   return (
     <DialogPrimitive.Portal>

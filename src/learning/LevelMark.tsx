@@ -1,7 +1,12 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
 import type { Level } from '../core/messages'
+import type { Props } from '../core/props'
+
+export type LevelMarkProps = Props<'span', { level: Level; size?: number; label?: boolean }, 'children'>
 
 /* One shape for each level, so a level never relies on its color: a full disc, three quarters, a half, a ring, a dash. */
 const mark = cva('gx-level-mark inline-block flex-none rounded-full align-middle', {
@@ -21,15 +26,16 @@ const mark = cva('gx-level-mark inline-block flex-none rounded-full align-middle
  * The small mark of a skill level: its own shape in its own color. `size` is in pixels.
  * It is decoration beside the level's name; `label` makes it an image that says the name, for a mark that stands alone.
  */
-export function LevelMark({ level, size = 14, label = false, className }: { level: Level; size?: number; label?: boolean; className?: string }) {
+export function LevelMark({ level, size = 14, label = false, className, style, ...props }: LevelMarkProps) {
   const { messages } = useLocale()
   return (
     <span
       role={label ? 'img' : undefined}
       aria-label={label ? messages.levels[level] : undefined}
       aria-hidden={label ? undefined : 'true'}
+      {...props}
       className={cn(mark({ level }), className)}
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, ...style }}
     />
   )
 }

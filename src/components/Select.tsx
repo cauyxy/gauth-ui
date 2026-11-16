@@ -1,11 +1,18 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
-import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
+import type { Props } from '../core/props'
 import { useField } from './Field'
 
 export type SelectSize = 'sm' | 'md' | 'xl'
-export type SelectOption<T extends string> = { value: T; label: string }
+export type SelectOption<T extends string = string> = { value: T; label: string }
+export type SelectProps<T extends string = string> = Props<
+  'select',
+  { options: readonly SelectOption<T>[]; value?: T; defaultValue?: T; onChange?: (value: T) => void; size?: SelectSize; label?: string },
+  'children' | 'multiple'
+>
 
 /* An error is an attempted outline on the attempted-soft ground, the look of "Not yet". The Field's error text says what is wrong. */
 const control = cva(
@@ -34,23 +41,10 @@ const icon = cva('gx-select__icon pointer-events-none absolute inset-y-0 my-auto
 
 /**
  * One choice from a list, with the browser's own menu. Inside a `Field` it takes its label, hint and error from the
- * Field; alone, `label` is its accessible name. `className` goes to the wrapper, every other prop to the `<select>`.
+ * Field; alone, `label` is its accessible name. `value` is the choice the product keeps; `defaultValue` when the select
+ * keeps its own. `className` goes to the wrapper, every other prop and `ref` to the `<select>`.
  */
-export function Select<T extends string>({
-  options,
-  value,
-  onChange,
-  size = 'md',
-  label,
-  className,
-  ...props
-}: Omit<ComponentProps<'select'>, 'size' | 'onChange' | 'value' | 'children' | 'multiple'> & {
-  options: readonly SelectOption<T>[]
-  value: T
-  onChange: (value: T) => void
-  size?: SelectSize
-  label?: string
-}) {
+export function Select<T extends string>({ options, onChange, size = 'md', label, className, ...props }: SelectProps<T>) {
   const field = useField()
   return (
     <span className={cn('gx-select relative block min-w-0', `gx-select--${size}`, className)}>
@@ -60,8 +54,7 @@ export function Select<T extends string>({
         aria-invalid={field?.invalid || undefined}
         aria-label={label}
         {...props}
-        value={value}
-        onChange={(event) => onChange(event.target.value as T)}
+        onChange={onChange && ((event) => onChange(event.target.value as T))}
         className={control({ size })}
       >
         {options.map((o) => (

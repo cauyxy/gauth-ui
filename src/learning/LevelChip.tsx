@@ -1,8 +1,13 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
 import type { Level } from '../core/messages'
+import type { Props } from '../core/props'
 import { LevelMark } from './LevelMark'
+
+export type LevelChipProps = Props<'span', { level: Level }, 'children'>
 
 const chip = cva('gx-level-chip inline-flex h-[1.5rem] flex-none items-center gap-1.5 rounded-md px-2 text-xs font-control whitespace-nowrap', {
   variants: {
@@ -17,10 +22,10 @@ const chip = cva('gx-level-chip inline-flex h-[1.5rem] flex-none items-center ga
 })
 
 /** A skill level as a chip: its mark and its name, in the level's ink on the level's soft ground. */
-export function LevelChip({ level, className }: { level: Level; className?: string }) {
+export function LevelChip({ level, className, ...props }: LevelChipProps) {
   const { messages } = useLocale()
   return (
-    <span className={cn(chip({ level }), className)}>
+    <span {...props} className={cn(chip({ level }), className)}>
       <LevelMark level={level} size={10} />
       {messages.levels[level]}
     </span>

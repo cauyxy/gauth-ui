@@ -56,3 +56,20 @@ it('does not change when disabled', async () => {
   await userEvent.click(screen.getByText('A-CED.A.1 Write equations'))
   expect(onChange).not.toHaveBeenCalled()
 })
+
+it('keeps its own answer without `checked`, and goes with a form', async () => {
+  const onChange = vi.fn()
+  render(
+    <form aria-label="Settings">
+      <Checkbox name="agree" value="yes" defaultChecked onChange={onChange}>
+        Agree
+      </Checkbox>
+    </form>,
+  )
+  const box = screen.getByRole('checkbox', { name: 'Agree' })
+  expect(box).toBeChecked()
+  expect(screen.getByRole('form')).toHaveFormValues({ agree: true })
+  await userEvent.click(box)
+  expect(box).not.toBeChecked()
+  expect(onChange).toHaveBeenLastCalledWith(false)
+})

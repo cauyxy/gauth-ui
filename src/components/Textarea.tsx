@@ -1,9 +1,15 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
-import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
+import type { Props } from '../core/props'
 import { useField } from './Field'
 
 export type TextareaSize = 'md' | 'xl'
+export type TextareaProps = Props<
+  'textarea',
+  { size?: TextareaSize; label?: string; value?: string; defaultValue?: string; onChange?: (value: string) => void }
+>
 
 /* An error is an attempted outline on the attempted-soft ground, the look of "Not yet". The Field's error text says what is wrong. */
 const textarea = cva(
@@ -20,19 +26,7 @@ const textarea = cva(
 )
 
 /** Several lines of text, in the same box as `Input`. It grows downward only. Inside a `Field` it takes its label, hint and error from the Field; alone, `label` is its accessible name. */
-export function Textarea({
-  size = 'md',
-  rows = 3,
-  label,
-  onChange,
-  className,
-  ...props
-}: Omit<ComponentProps<'textarea'>, 'onChange' | 'value'> & {
-  size?: TextareaSize
-  label?: string
-  value?: string
-  onChange?: (value: string) => void
-}) {
+export function Textarea({ size = 'md', rows = 3, label, onChange, className, ...props }: TextareaProps) {
   const field = useField()
   return (
     <textarea

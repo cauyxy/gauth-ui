@@ -49,3 +49,17 @@ it('moves a step with the arrow keys and to the end with End', async () => {
   expect(onChange).toHaveBeenLastCalledWith(30)
   expect(screen.getByRole('slider')).toHaveAttribute('aria-valuetext', '30 questions')
 })
+
+it('keeps its own number without `value`, starting at `defaultValue` or at `min`', async () => {
+  const onChange = vi.fn()
+  const { unmount } = render(<Slider label="Daily goal" min={5} max={30} step={5} defaultValue={10} onChange={onChange} />)
+  const thumb = screen.getByRole('slider', { name: 'Daily goal' })
+  expect(thumb).toHaveAttribute('aria-valuenow', '10')
+  thumb.focus()
+  await userEvent.keyboard('{ArrowRight}')
+  expect(thumb).toHaveAttribute('aria-valuenow', '15')
+  expect(onChange).toHaveBeenLastCalledWith(15)
+  unmount()
+  render(<Slider label="Daily goal" min={5} max={30} />)
+  expect(screen.getByRole('slider')).toHaveAttribute('aria-valuenow', '5')
+})

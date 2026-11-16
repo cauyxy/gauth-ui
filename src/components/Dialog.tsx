@@ -1,8 +1,14 @@
+'use client'
+
 import { Dialog as DialogPrimitive } from 'radix-ui'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+
+export type DialogActionsProps = ComponentProps<'div'>
+export type DialogContentProps = Props<typeof DialogPrimitive.Content, { title: string; description?: ReactNode }>
 
 /** A question or a short task that takes over the page until the person answers it. Focus stays inside; Escape closes it. */
 export const Dialog = DialogPrimitive.Root
@@ -10,18 +16,12 @@ export const DialogTrigger = DialogPrimitive.Trigger
 export const DialogClose = DialogPrimitive.Close
 
 /** The row of answers at the end of a dialog: right-aligned, the main answer last. */
-export function DialogActions({ className, ...props }: ComponentProps<'div'>) {
+export function DialogActions({ className, ...props }: DialogActionsProps) {
   return <div className={cn('gx-dialog__actions flex flex-wrap justify-end gap-2', className)} {...props} />
 }
 
 /** The panel, on its scrim. `title` is its accessible name; `children` are the body, then `DialogActions`. */
-export function DialogContent({
-  title,
-  description,
-  className,
-  children,
-  ...props
-}: Omit<ComponentProps<typeof DialogPrimitive.Content>, 'title'> & { title: string; description?: ReactNode }) {
+export function DialogContent({ title, description, className, children, ...props }: DialogContentProps) {
   const { messages } = useLocale()
   return (
     <DialogPrimitive.Portal>

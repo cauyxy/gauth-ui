@@ -10,12 +10,13 @@ type Own = {
 }
 type AsLink = Own & Omit<ComponentProps<'a'>, keyof Own | 'children'> & { href: string }
 type AsButton = Own & Omit<ComponentProps<'button'>, keyof Own | 'children'> & { href?: undefined }
+export type CoverCardProps = AsLink | AsButton
 
 /**
  * A card with a picture on top, then a title and one line: a tool, a resource, a saved document.
  * The whole card is one target: a link with `href`, a button without. So `cover` and `meta` hold nothing to click.
  */
-export function CoverCard({ cover, title, description, meta, className, ...props }: AsLink | AsButton) {
+export function CoverCard({ cover, title, description, meta, className, ...props }: CoverCardProps) {
   /* The hairline lies over the card (::after), so the picture does not hide it. */
   const classes = cn(
     "gx-cover-card relative flex w-full min-w-0 cursor-pointer flex-col rounded-2xl bg-white text-start text-ink no-underline outline-0 after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-edge after:transition-shadow after:duration-(--gx-dur-fast) after:ease-standard after:content-[''] hover:after:shadow-edge-strong focus-visible:focus-ring focus-visible:outline-offset-2",

@@ -193,3 +193,23 @@ it("names Stop in the page's language", () => {
   )
   expect(screen.getByRole('button', { name: 'Detener' })).toBeEnabled()
 })
+
+it('keeps its own text without `value`, and empties it after it sends', async () => {
+  const onSend = vi.fn()
+  render(<Composer label="Ask Gauth AI" onSend={onSend} />)
+  const box = screen.getByRole('textbox', { name: 'Ask Gauth AI' })
+  await userEvent.type(box, 'Why is it 4?{Enter}')
+  expect(onSend).toHaveBeenCalledWith('Why is it 4?')
+  expect(box).toHaveValue('')
+})
+
+it('gives the text box to the product: its ref, its props and its keys', async () => {
+  const onSend = vi.fn()
+  const ref = { current: null as HTMLTextAreaElement | null }
+  render(<Composer label="Ask Gauth AI" onSend={onSend} ref={ref} maxLength={200} onKeyDown={(event) => event.key === 'Enter' && event.preventDefault()} />)
+  const box = screen.getByRole('textbox')
+  expect(ref.current).toBe(box)
+  expect(box).toHaveAttribute('maxlength', '200')
+  await userEvent.type(box, 'Hello{Enter}')
+  expect(onSend).not.toHaveBeenCalled()
+})

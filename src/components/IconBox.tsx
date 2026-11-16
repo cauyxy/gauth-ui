@@ -1,8 +1,10 @@
 import { cva } from 'class-variance-authority'
 import type { ReactNode } from 'react'
 import { cn } from '../core/cn'
+import type { Props } from '../core/props'
 
 export type IconBoxTone = 'neutral' | 'blue' | 'violet' | 'good' | 'warn' | 'pink'
+export type IconBoxProps = Props<'span', { size?: number; tone?: IconBoxTone; children: ReactNode }>
 
 /* Each tone is a text and ground pair that contrast.test.ts allows. */
 const box = cva('gx-icon-box grid flex-none place-items-center rounded-lg', {
@@ -22,9 +24,9 @@ const box = cva('gx-icon-box grid flex-none place-items-center rounded-lg', {
  * A line icon on a square. Neutral says what kind of thing a row is; a `tone` says what the icon means (XP is violet,
  * done is good, a celebration is pink), with the same meanings as a `Chip`. `size` is in pixels.
  */
-export function IconBox({ size = 32, tone = 'neutral', className, children }: { size?: number; tone?: IconBoxTone; className?: string; children: ReactNode }) {
+export function IconBox({ size = 32, tone = 'neutral', className, style, children, ...props }: IconBoxProps) {
   return (
-    <span className={cn(box({ tone }), className)} style={{ width: size, height: size }}>
+    <span {...props} className={cn(box({ tone }), className)} style={{ width: size, height: size, ...style }}>
       {children}
     </span>
   )

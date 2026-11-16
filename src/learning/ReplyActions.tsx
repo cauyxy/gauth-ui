@@ -1,10 +1,14 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
 import { IconButton } from '../components/IconButton'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
 
 export type ReplyVote = 'good' | 'bad'
+export type ReplyActionsProps = Props<'div', { onCopy: () => void; vote?: ReplyVote | null; onVote?: (vote: ReplyVote | null) => void }>
 
 /** How long the copy button says "Copied". */
 const COPIED_MS = 2000
@@ -14,19 +18,7 @@ const COPIED_MS = 2000
  * (`IconButton` `ghost` `sm`). A vote is a toggle: the page keeps `vote`, and pressing the pressed one gives `null`.
  * Copy calls `onCopy` and shows a check for a moment; the page writes to the clipboard.
  */
-export function ReplyActions({
-  onCopy,
-  vote = null,
-  onVote,
-  children,
-  className,
-}: {
-  onCopy: () => void
-  vote?: ReplyVote | null
-  onVote?: (vote: ReplyVote | null) => void
-  children?: ReactNode
-  className?: string
-}) {
+export function ReplyActions({ onCopy, vote = null, onVote, children, className, ...props }: ReplyActionsProps) {
   const { messages } = useLocale()
   const [copied, setCopied] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -45,7 +37,7 @@ export function ReplyActions({
      * The row starts flush with the text above it. A small icon button holds its icon 7px in and the icon's strokes start
      * about half a pixel further, so the row moves 8px toward the start: the first icon's strokes are then on the text edge.
      */
-    <div className={cn('gx-reply-actions -ms-2 flex flex-wrap items-center gap-0.5', className)}>
+    <div {...props} className={cn('gx-reply-actions -ms-2 flex flex-wrap items-center gap-0.5', className)}>
       {onVote ? (
         <>
           <IconButton size="sm" label={messages.goodReply} pressed={vote === 'good'} onClick={() => toggle('good')}>

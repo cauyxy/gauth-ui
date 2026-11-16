@@ -1,9 +1,14 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { useId, type ReactNode } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
 import type { AnswerState } from './AnswerOption'
+
+export type AnswerFeedbackProps = Props<'div', { state: AnswerState; aside?: ReactNode }>
 
 /* The same grounds, fills and words as an answered AnswerOption. The mark on a fill is ink, never white. */
 const feedback = cva('gx-answer-feedback flex animate-rise-in flex-col gap-3 rounded-2xl p-4 text-ink', {
@@ -25,11 +30,11 @@ const word = cva('gx-answer-feedback__word min-w-0 flex-1 text-xl leading-headin
  * What a student sees after an answer: "Correct" or "Not yet" with its mark, then the reason or the step to try again.
  * The words come from the shared list. `aside` sits at the end of the first line: the XP the answer earned.
  */
-export function AnswerFeedback({ state, aside, children, className }: { state: AnswerState; aside?: ReactNode; children?: ReactNode; className?: string }) {
+export function AnswerFeedback({ state, aside, children, className, ...props }: AnswerFeedbackProps) {
   const { messages } = useLocale()
   const id = useId()
   return (
-    <div role="note" aria-labelledby={id} className={cn(feedback({ state }), className)}>
+    <div role="note" aria-labelledby={id} {...props} className={cn(feedback({ state }), className)}>
       <div className="gx-answer-feedback__head flex items-center gap-2.5">
         <span className={mark({ state })}>
           <Icon name={state === 'right' ? 'check' : 'undo'} />

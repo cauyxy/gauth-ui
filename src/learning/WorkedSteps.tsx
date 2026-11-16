@@ -1,13 +1,15 @@
 import type { ReactNode } from 'react'
 import { cn } from '../core/cn'
+import type { Props } from '../core/props'
 
 /** One line of work. `flag` marks it as the step that went wrong and says what happened ("Sign dropped here"). */
 export type WorkedStep = { text: ReactNode; flag?: ReactNode }
+export type WorkedStepsProps = Props<'ol', { steps: readonly WorkedStep[] }, 'children'>
 
 /** A student's or a solution's steps, numbered. Plain text is in mono; a formula is a `Tex`. A flagged step is the one to look at again. */
-export function WorkedSteps({ steps, className }: { steps: readonly WorkedStep[]; className?: string }) {
+export function WorkedSteps({ steps, className, ...props }: WorkedStepsProps) {
   return (
-    <ol className={cn('gx-worked-steps flex flex-col gap-1.5 font-mono text-sm', className)}>
+    <ol {...props} className={cn('gx-worked-steps flex flex-col gap-1.5 font-mono text-sm', className)}>
       {steps.map((step, i) => (
         /*
          * Every step keeps room for the bar, so the numbers line up when one step is flagged. The number stands on the

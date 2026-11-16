@@ -1,12 +1,17 @@
+'use client'
+
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+
+export type StepperProps = Props<'ol', { steps: readonly string[]; current: number }, 'children'>
 
 /** The steps of a flow, in order, with where the person is. `current` is the index of the current step, from 0. */
-export function Stepper({ steps, current, className }: { steps: readonly string[]; current: number; className?: string }) {
+export function Stepper({ steps, current, className, ...props }: StepperProps) {
   const { messages } = useLocale()
   return (
-    <ol className={cn('gx-stepper flex', className)}>
+    <ol {...props} className={cn('gx-stepper flex', className)}>
       {steps.map((name, i) => {
         const state = i < current ? 'done' : i === current ? 'current' : 'upcoming'
         return (

@@ -1,18 +1,24 @@
+'use client'
+
 import type { ReactNode } from 'react'
 import { IconButton } from '../components/IconButton'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+
+export type QuoteProps = Props<'blockquote', { onRemove?: () => void; children: ReactNode }>
 
 /**
  * Text quoted from a reply or a document, shown above what is being written: a bar, then the text, at most two lines.
  * With `onRemove` it ends with a button that takes the quote off.
  */
-export function Quote({ children, onRemove, className }: { children: ReactNode; onRemove?: () => void; className?: string }) {
+export function Quote({ children, onRemove, className, ...props }: QuoteProps) {
   const { messages } = useLocale()
   return (
     /* The bar is a shape at the start, as tall as the quote. The quote has no ground. */
     <blockquote
+      {...props}
       className={cn(
         "gx-quote flex min-w-0 items-center gap-2.5 before:w-[3px] before:flex-none before:self-stretch before:rounded-full before:bg-rule before:content-['']",
         className,

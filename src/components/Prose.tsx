@@ -4,6 +4,7 @@ import { cn } from '../core/cn'
 
 export type ProseSize = 'sm' | 'md' | 'lg'
 export type ProseFont = 'sans' | 'reading'
+export type ProseProps = ComponentProps<'div'> & { size?: ProseSize; font?: ProseFont }
 
 /*
  * Long text sets the elements it holds: headings, paragraphs, lists, a quote, a figure, a table, code.
@@ -69,6 +70,6 @@ const prose = cva(
  * person reads as one page. `size` is the size of the running text: `sm` on a staff page, `lg` where a student reads.
  * `font="reading"` sets a reading passage (a story, an article, a source text) in the reading face.
  */
-export function Prose({ size = 'md', font = 'sans', className, ...props }: ComponentProps<'div'> & { size?: ProseSize; font?: ProseFont }) {
+export function Prose({ size = 'md', font = 'sans', className, ...props }: ProseProps) {
   return <div className={cn(prose({ size, font }), className)} {...props} />
 }

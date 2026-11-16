@@ -1,9 +1,14 @@
 import { cva } from 'class-variance-authority'
-import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
+import type { Props } from '../core/props'
 
 export type IconButtonVariant = 'ghost' | 'soft' | 'outline' | 'ink'
 export type IconButtonSize = 'sm' | 'md' | 'lg' | 'xl'
+export type IconButtonProps = Props<
+  'button',
+  { label: string; variant?: IconButtonVariant; size?: IconButtonSize; pressed?: boolean },
+  'aria-label' | 'aria-pressed'
+>
 
 /*
  * A toggle that is on has an ink icon on the soft ground, whatever its variant: the ground is the shape signal, the ink is the color one.
@@ -34,19 +39,6 @@ const iconButton = cva(
  * A button that shows only an icon. `label` is its name for a screen reader, so it is required.
  * `pressed` makes it a toggle (bold in a toolbar, a vote under a reply): leave it out for a plain action.
  */
-export function IconButton({
-  label,
-  variant = 'ghost',
-  size = 'md',
-  pressed,
-  type = 'button',
-  className,
-  ...props
-}: Omit<ComponentProps<'button'>, 'aria-label' | 'aria-pressed'> & {
-  label: string
-  variant?: IconButtonVariant
-  size?: IconButtonSize
-  pressed?: boolean
-}) {
+export function IconButton({ label, variant = 'ghost', size = 'md', pressed, type = 'button', className, ...props }: IconButtonProps) {
   return <button type={type} aria-label={label} aria-pressed={pressed} className={cn(iconButton({ variant, size }), className)} {...props} />
 }
