@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": false,
+  "singleQuote": true,
+  "printWidth": 160,
+  "trailingComma": "all",
+  "sortPackageJson": false,
+  "ignorePatterns": ["dist", "site/dist", "node_modules", "pnpm-lock.yaml", "src/core/icons.ts", "src/styles/theme.css", "design/tokens.json", "*.md"]
+}

@@ -10,7 +10,7 @@ const IMPORT = /^import \{([\s\S]*?)\} from '([^']+)'\n/gm
 const uses = (code: string, name: string) => new RegExp(`(?<![\\w.])${name}(?!\\w)`).test(code)
 
 export function snippetsOf(source: string): Snippet[] {
-  const imports = [...source.matchAll(IMPORT)].map((m) => ({ names: m[1]!.split(',').map((n) => n.trim()).filter(Boolean), from: m[2]! })) // prettier-ignore
+  const imports = [...source.matchAll(IMPORT)].map((m) => ({ names: m[1]!.split(',').map((n) => n.trim()).filter(Boolean), from: m[2]! })) // oxfmt-ignore
   for (const { from } of imports) if (!FROM[from]) throw new Error(`An example imports from '${from}'. It may use the package's entries and react only.`)
 
   /* The file below its imports, cut at each declaration that starts a line. A comment above a declaration goes with it. */

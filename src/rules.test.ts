@@ -124,7 +124,7 @@ describe('math', () => {
 })
 
 it('the class rules catch what they are for', () => {
-  const broken = (c: string) => KINDS.some(([, kind, allowed]) => { const value = utilityOf(c).match(kind)?.[1]; return value !== undefined && !allowed(value) }) // prettier-ignore
+  const broken = (c: string) => KINDS.some(([, kind, allowed]) => { const value = utilityOf(c).match(kind)?.[1]; return value !== undefined && !allowed(value) }) // oxfmt-ignore
   for (const bad of [
     'p-7',
     'hover:mt-[3px]',
@@ -209,7 +209,7 @@ describe.each(components)('%s', (name, dir) => {
       'reduced motion is handled once, by --gx-ms',
     ).toEqual([])
     for (const [what, kind, allowed] of KINDS)
-      expect(classes.filter((c) => { const value = utilityOf(c).match(kind)?.[1]; return value !== undefined && !allowed(value) }), what).toEqual([]) // prettier-ignore
+      expect(classes.filter((c) => { const value = utilityOf(c).match(kind)?.[1]; return value !== undefined && !allowed(value) }), what).toEqual([]) // oxfmt-ignore
     /* Tailwind reads the files as text: a class it must write is whole in the source. Only a gx- name is put together. */
     const built = [...source.matchAll(/`([^`]*\$\{[^`]*)`/g)].map((m) => m[1]!)
     const utility =

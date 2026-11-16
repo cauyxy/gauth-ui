@@ -109,7 +109,7 @@ A page, a flow, or a component that carries one product's data (a roster, a prin
 ```bash
 pnpm typecheck
 pnpm lint        # oxlint: bugs, React, hooks, accessibility, vitest (.oxlintrc.json); a warning fails too
-pnpm format      # Prettier writes every file; CI runs pnpm format:check
+pnpm format      # oxfmt writes every file; CI runs pnpm format:check
 pnpm test        # component tests and rules.test.ts
 pnpm build       # dist/: index.js, types, styles.css (what a product imports after Tailwind), tokens.css, theme.css
 pnpm tokens      # after a change to tokens.css
@@ -121,7 +121,7 @@ node gallery/shot.ts <folder>    # screenshots of every component, both language
 node site/shot.ts <folder>       # after a change to site/ or gallery/: screenshots of the docs site, and a check that every component's page shows an example
 ```
 
-The linter is oxlint, not ESLint: typescript-eslint does not run on TypeScript 7, and oxlint needs no TypeScript. A rule that is off in `.oxlintrc.json` is off because the code does that on purpose (a `role` on a `span`, a radio group with a roving tab stop). Turn a rule off for one line with `// oxlint-disable-next-line <rule>` and a comment that says why. Prettier does not touch Markdown or the generated files (`.prettierignore`).
+The tools are oxc's: oxlint lints and oxfmt formats (`.oxlintrc.json`, `.oxfmtrc.json`). Not ESLint: typescript-eslint does not run on TypeScript 7, and oxc needs no TypeScript. A rule that is off in `.oxlintrc.json` is off because the code does that on purpose (a `role` on a `span`, a radio group with a roving tab stop). Turn a rule off for one line with `// oxlint-disable-next-line <rule>` and a comment that says why. oxfmt does not touch Markdown or the generated files (`ignorePatterns`); `// oxfmt-ignore` keeps one statement as written.
 
 ## Release
 

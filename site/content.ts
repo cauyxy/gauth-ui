@@ -31,7 +31,10 @@ export const pathOf = (component: string) => `/components/${component.toLowerCas
 
 /** `group` is the title the page sits under in the list of pages; the first pages have none. */
 export type Page = { path: string; title: string; group: string } & (
-  { kind: 'home' } | { kind: 'markdown'; body: string } | { kind: 'tokens' } | { kind: 'component'; name: string }
+  | { kind: 'home' }
+  | { kind: 'markdown'; body: string }
+  | { kind: 'tokens' }
+  | { kind: 'component'; name: string }
 )
 
 const start = readme.slice(readme.indexOf('\n') + 1, readme.indexOf('## Components'))
