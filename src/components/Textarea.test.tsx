@@ -30,7 +30,7 @@ it('is a medium, three-row text box that reports the new value, not the event', 
   expect(textarea).toHaveValue('Show\nwork')
 })
 
-it('takes a size, rows, the caller\'s class and native props', () => {
+it("takes a size, rows, the caller's class and native props", () => {
   render(<Textarea size="xl" rows={5} className="mine" aria-label="Note to students" placeholder="Show your work" name="note" />)
   const textarea = screen.getByRole('textbox', { name: 'Note to students' })
   expect(textarea).toHaveClass('gx-textarea--xl', 'mine')

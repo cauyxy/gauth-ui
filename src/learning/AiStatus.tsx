@@ -9,7 +9,11 @@ import { cn } from '../core/cn'
 export function AiStatus({ state, children, className }: { state: 'working' | 'done'; children: ReactNode; className?: string }) {
   const working = state === 'working'
   return (
-    <div role={working ? 'status' : undefined} data-state={state} className={cn('gx-ai-status flex min-w-0 items-start gap-2 text-sm text-muted data-[state=working]:text-ink-soft', className)}>
+    <div
+      role={working ? 'status' : undefined}
+      data-state={state}
+      className={cn('gx-ai-status flex min-w-0 items-start gap-2 text-sm text-muted data-[state=working]:text-ink-soft', className)}
+    >
       {/* The spinner sits on the first line of the text, also when the text wraps. */}
       {working ? (
         <span aria-hidden="true" className="gx-ai-status__mark my-[calc((1lh_-_14px)/2)] flex-none">

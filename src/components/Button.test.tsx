@@ -9,7 +9,7 @@ it('is an ink, medium button that does not submit a form by default', () => {
   expect(button).toHaveAttribute('type', 'button')
 })
 
-it('takes a variant, a size and the caller\'s class', () => {
+it("takes a variant, a size and the caller's class", () => {
   render(
     <Button variant="outline" size="xl" className="mine">
       Review

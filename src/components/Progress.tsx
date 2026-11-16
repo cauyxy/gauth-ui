@@ -6,17 +6,7 @@ import { useLocale } from '../core/locale'
  * A bar for how far along something is. `value` is 0 to 100; leave it out when the end is not known, and a segment
  * sweeps across. `label` is its accessible name. `children` sit after the bar ("2 of 6", "Building").
  */
-export function Progress({
-  value,
-  label,
-  children,
-  className,
-}: {
-  value?: number
-  label?: string
-  children?: ReactNode
-  className?: string
-}) {
+export function Progress({ value, label, children, className }: { value?: number; label?: string; children?: ReactNode; className?: string }) {
   const { messages } = useLocale()
   const known = value !== undefined
   const width = known ? Math.min(100, Math.max(0, value)) : undefined

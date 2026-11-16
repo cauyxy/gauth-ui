@@ -2,17 +2,7 @@ import type { ReactNode } from 'react'
 import { cn } from '../core/cn'
 
 /** The top of a staff page: where it sits, its name, and its actions at the end of the row. */
-export function PageTitle({
-  title,
-  crumbs,
-  children,
-  className,
-}: {
-  title: string
-  crumbs?: ReactNode
-  children?: ReactNode
-  className?: string
-}) {
+export function PageTitle({ title, crumbs, children, className }: { title: string; crumbs?: ReactNode; children?: ReactNode; className?: string }) {
   return (
     <div className={cn('gx-page-title flex flex-wrap items-end justify-between gap-3', className)}>
       <div className="gx-page-title__main grid min-w-0 gap-1">

@@ -3,7 +3,12 @@ import { Chip, CoverCard } from '../../src'
 /* A cover drawn with tokens: a soft ground and a sheet of paper. A product puts its own picture here. */
 function Cover({ tone }: { tone: 'violet' | 'blue' | 'good' }) {
   return (
-    <svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style={{ width: '100%', height: '100%', background: `var(--gx-color-${tone}-soft)` }}>
+    <svg
+      viewBox="0 0 160 100"
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      style={{ width: '100%', height: '100%', background: `var(--gx-color-${tone}-soft)` }}
+    >
       <rect x="46" y="20" width="68" height="96" rx="6" style={{ fill: 'var(--gx-color-white)' }} />
       <rect x="56" y="33" width="28" height="5" rx="2.5" style={{ fill: `var(--gx-color-${tone})` }} />
       {[48, 58, 68, 78, 88].map((y, i) => (
@@ -28,7 +33,12 @@ export function Cards() {
           </>
         }
       />
-      <CoverCard cover={<Cover tone="good" />} title="Pythagorean theorem: guided notes" description="Notes for one class period." meta={<Chip>Grade 8</Chip>} />
+      <CoverCard
+        cover={<Cover tone="good" />}
+        title="Pythagorean theorem: guided notes"
+        description="Notes for one class period."
+        meta={<Chip>Grade 8</Chip>}
+      />
     </div>
   )
 }

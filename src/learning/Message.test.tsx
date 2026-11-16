@@ -14,7 +14,7 @@ it('shows what the person wrote, with their name for a screen reader first', () 
   expect(screen.getByText('You')).toHaveClass('gx-visually-hidden')
 })
 
-it('names Gauth AI before a reply and keeps the product\'s content', () => {
+it("names Gauth AI before a reply and keeps the product's content", () => {
   const { container } = render(
     <Message from="ai">
       <p>Six students added the legs.</p>
@@ -29,7 +29,7 @@ it('names Gauth AI before a reply and keeps the product\'s content', () => {
   expect(screen.getByRole('button', { name: 'Open the answers' })).toBeInTheDocument()
 })
 
-it('names the speaker in the page\'s language', () => {
+it("names the speaker in the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <Message from="user">¿Quién necesita apoyo?</Message>

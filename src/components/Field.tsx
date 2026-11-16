@@ -38,7 +38,10 @@ export function Field({
       <FieldContext.Provider value={{ id, describedBy: note ? noteId : undefined, invalid }}>{children}</FieldContext.Provider>
       {/* attempted is the color of a field error. Nothing is red. */}
       {note ? (
-        <span id={noteId} className={invalid ? 'gx-field__error text-xs font-control text-pretty text-attempted-ink' : 'gx-field__hint text-xs text-pretty text-muted'}>
+        <span
+          id={noteId}
+          className={invalid ? 'gx-field__error text-xs font-control text-pretty text-attempted-ink' : 'gx-field__hint text-xs text-pretty text-muted'}
+        >
           {note}
         </span>
       ) : null}

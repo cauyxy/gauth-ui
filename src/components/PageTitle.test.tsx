@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { Breadcrumbs } from './Breadcrumbs'
 import { PageTitle } from './PageTitle'
 
-it('is the page\'s h1', () => {
+it("is the page's h1", () => {
   const { container } = render(<PageTitle title="Needs support" className="mine" />)
   expect(screen.getByRole('heading', { level: 1, name: 'Needs support' })).toBeInTheDocument()
   expect(container.firstChild).toHaveClass('gx-page-title', 'mine')

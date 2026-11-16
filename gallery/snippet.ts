@@ -22,13 +22,19 @@ export function snippetsOf(source: string): Snippet[] {
     while (at > 0 && /^(?:\/\*| \*|\/\/)/.test(lines[at - 1]!)) at--
     return [{ at, name: declared[2]!, exported: Boolean(declared[1]) }]
   })
-  const blocks = starts.map((start, i) => ({ ...start, text: lines.slice(start.at, starts[i + 1]?.at).join('\n').trim() }))
+  const blocks = starts.map((start, i) => ({
+    ...start,
+    text: lines
+      .slice(start.at, starts[i + 1]?.at)
+      .join('\n')
+      .trim(),
+  }))
 
   return blocks
     .filter((block) => block.exported)
     .map((example) => {
       const helpers = new Set<(typeof blocks)[number]>()
-      for (let code = example.text, found = true; found; ) {
+      for (let code = example.text, found = true; found;) {
         found = false
         for (const block of blocks)
           if (!block.exported && !helpers.has(block) && uses(code, block.name)) {
@@ -42,6 +48,10 @@ export function snippetsOf(source: string): Snippet[] {
         .map(({ names, from }) => ({ names: names.filter((name) => uses(body, name.replace(/^type /, ''))), from: FROM[from]! }))
         .filter(({ names }) => names.length)
         .map(({ names, from }) => `import { ${names.join(', ')} } from '${from}'`)
-      return { name: example.name, title: example.name.replace(/([a-z0-9])([A-Z])/g, (_, a: string, b: string) => `${a} ${b.toLowerCase()}`), code: `${head.join('\n')}\n\n${body}\n` }
+      return {
+        name: example.name,
+        title: example.name.replace(/([a-z0-9])([A-Z])/g, (_, a: string, b: string) => `${a} ${b.toLowerCase()}`),
+        code: `${head.join('\n')}\n\n${body}\n`,
+      }
     })
 }

@@ -23,7 +23,7 @@ function Page({ onVote }: { onVote: (vote: ReplyVote | null) => void }) {
 
 const button = (name: string) => screen.getByRole('button', { name })
 
-it('is thumbs up, thumbs down, copy, then the product\'s actions, all small ghost icon buttons', () => {
+it("is thumbs up, thumbs down, copy, then the product's actions, all small ghost icon buttons", () => {
   const { container } = render(
     <ReplyActions onCopy={() => {}} onVote={() => {}} className="mine">
       <IconButton size="sm" label="Quote">
@@ -93,7 +93,7 @@ describe('copy', () => {
   })
 })
 
-it('speaks the page\'s language', () => {
+it("speaks the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <ReplyActions onCopy={() => {}} onVote={() => {}} vote="good" />

@@ -18,7 +18,7 @@ async function build(candidates: string[], entry = './src/styles/theme.css') {
   return compiler.build(candidates)
 }
 
-it('gives the tokens as utilities, and nothing from Tailwind\'s own palette', async () => {
+it("gives the tokens as utilities, and nothing from Tailwind's own palette", async () => {
   const css = await build(['bg-ink', 'text-muted', 'text-sm', 'rounded-2xl', 'font-control', 'bg-red-500', 'shadow-lg', 'text-subtle'])
   expect(css).toContain('.bg-ink')
   expect(css).toMatch(/--color-ink:\s*#21252e/)

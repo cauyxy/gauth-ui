@@ -29,7 +29,7 @@ it('is a medium outline text box that reports the new value, not the event', asy
   expect(input).toHaveValue('GEO')
 })
 
-it('takes a size and the caller\'s class on the wrapper, and passes native props to the input', () => {
+it("takes a size and the caller's class on the wrapper, and passes native props to the input", () => {
   render(<Input size="xl" className="mine" label="Class code" placeholder="8 letters" maxLength={8} name="code" />)
   const input = screen.getByPlaceholderText('8 letters')
   expect(input.parentElement).toHaveClass('gx-input--xl', 'mine')

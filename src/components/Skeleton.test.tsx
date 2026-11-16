@@ -15,7 +15,7 @@ it('announces a loading page and draws the asked panels and rows', () => {
   expect(container.querySelectorAll('.gx-page-skeleton__row')).toHaveLength(6)
 })
 
-it('says Loading in the page\'s language', () => {
+it("says Loading in the page's language", () => {
   render(
     <LocaleProvider locale="es">
       <PageSkeleton />

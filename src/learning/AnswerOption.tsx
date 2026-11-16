@@ -62,9 +62,13 @@ export function AnswerGroup({
     if (from < 0) return
     const to =
       event.key === 'ArrowRight' || event.key === 'ArrowDown'
-        ? from === last ? 0 : from + 1
+        ? from === last
+          ? 0
+          : from + 1
         : event.key === 'ArrowLeft' || event.key === 'ArrowUp'
-          ? from === 0 ? last : from - 1
+          ? from === 0
+            ? last
+            : from - 1
           : event.key === 'Home'
             ? 0
             : event.key === 'End'
@@ -76,7 +80,13 @@ export function AnswerGroup({
     options[to]!.focus()
   }
   return (
-    <div role="radiogroup" aria-label={label} aria-disabled={disabled || undefined} onKeyDown={onKeyDown} className={cn('gx-answer-group grid w-full grid-cols-[repeat(auto-fit,minmax(min(14.5rem,100%),1fr))] gap-2.5', className)}>
+    <div
+      role="radiogroup"
+      aria-label={label}
+      aria-disabled={disabled || undefined}
+      onKeyDown={onKeyDown}
+      className={cn('gx-answer-group grid w-full grid-cols-[repeat(auto-fit,minmax(min(14.5rem,100%),1fr))] gap-2.5', className)}
+    >
       <GroupContext.Provider value={{ value, tabStop, onChange, disabled }}>{children}</GroupContext.Provider>
     </div>
   )

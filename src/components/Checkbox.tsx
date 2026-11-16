@@ -24,7 +24,12 @@ export function Checkbox({
   const Root = children ? 'label' : 'span'
   /* `items-start` and the `1lh` margins keep the box on the first line of the text, also when the text wraps. */
   return (
-    <Root className={cn('gx-checkbox relative inline-flex min-w-0 cursor-pointer items-start gap-2.5 text-sm has-disabled:cursor-default has-disabled:opacity-50', className)}>
+    <Root
+      className={cn(
+        'gx-checkbox relative inline-flex min-w-0 cursor-pointer items-start gap-2.5 text-sm has-disabled:cursor-default has-disabled:opacity-50',
+        className,
+      )}
+    >
       {/* The native checkbox lies over the box and takes the click, the focus and the keyboard. */}
       <input
         type="checkbox"
