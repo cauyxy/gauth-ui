@@ -29,8 +29,8 @@ const spot = cva(
       rung: {
         attempted: 'group-aria-[current]/rung:bg-attempted-soft',
         familiar: 'group-aria-[current]/rung:bg-familiar-soft',
-        proficient: 'group-aria-[current]/rung:bg-proficient-soft',
-        mastered: 'group-aria-[current]/rung:bg-mastered-soft',
+        proficient: 'group-aria-[current]/rung:bg-good-soft',
+        mastered: 'group-aria-[current]/rung:bg-good-soft',
       },
     },
   },

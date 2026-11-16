@@ -26,9 +26,9 @@ Ink on white carries the page. Color appears only where it means something. A to
 | ------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | Text         | `ink`, `ink-soft`, `muted`, `faint`                                 | `ink` for text and primary buttons; `muted` for meta lines; `faint` never for running text.       |
 | Surfaces     | `canvas`, `surface`, `line`                                         | White cards on `canvas`; `surface` for soft cards, row hover, secondary buttons and icon squares; `line` for dividers. |
-| Edges        | `edge`, `edge-strong`, `ring`, `rule`, `track`                      | Card outlines are an inset 1px shadow (`shadow-edge`); `rule` for firmer lines and off toggles; `track` is the empty part of any bar and the ground of a Segmented control. |
+| Edges        | `edge`, `edge-strong`, `ring`, `rule`, `track`                      | Card outlines are an inset 1px shadow (`shadow-edge`); `rule` for firmer lines and off toggles; `track` is the empty part of any bar or level mark, the not-started part of a level bar and the ground of a Segmented control; it has the value of `line`. |
 | Brand        | `brand`                                                             | The Gauth mark only. Never text, buttons or states.                                               |
-| Skill levels | `attempted`, `familiar`, `proficient`, `mastered`, `not-started`    | Level marks and level bars. See Skill levels.                                                     |
+| Skill levels | `attempted`, `familiar`, `proficient`, `mastered`                   | Level marks and level bars. See Skill levels.                                                     |
 | XP and AI    | `violet`, `violet-deep`, `violet-soft`                              | XP and Gauth AI accents. Never a level, never a button.                                           |
 | Standards    | `blue`, `blue-soft`                                                 | Standard-code chips and links. The focus ring.                                                    |
 | Done, right  | `good`, `good-soft`, `good-mid`, `correct`                          | Checked, the right answer, a positive delta.                                                      |
@@ -44,16 +44,16 @@ One ladder in every product: **Attempted, Familiar, Proficient, Mastered**, plus
 
 | Level       | Fill          | Text on soft     | Soft              |
 | ----------- | ------------- | ---------------- | ----------------- |
-| Mastered    | `mastered`    | `mastered-ink`   | `mastered-soft`   |
-| Proficient  | `proficient`  | `proficient-ink` | `proficient-soft` |
+| Mastered    | `mastered`    | `mastered-ink`   | `good-soft`       |
+| Proficient  | `proficient`  | `mastered-ink`   | `good-soft`       |
 | Familiar    | `familiar`    | `familiar-ink`   | `familiar-soft`   |
 | Attempted   | `attempted`   | `attempted-ink`  | `attempted-soft`  |
-| Not started | `not-started` | `muted`          | `surface`         |
+| Not started | `track`       | `muted`          | `surface`         |
 
 - The ramp runs from warm to cool: orange, gold, mint, teal.
 - `attempted` is also the color of a wrong answer and of a field error. There is no separate error color, and nothing is red.
 - Each level also has its own shape, so no level relies on color alone.
-- Text in a level's color uses its `-ink` value on its `-soft` ground.
+- Text in a level's color uses its `-ink` value on its `-soft` ground. Mastered and Proficient share one ink and the ground of done and right (`mastered-ink` on `good-soft`): their fills, their marks and their names tell them apart, and no soft ground of their own did.
 
 ## Type
 

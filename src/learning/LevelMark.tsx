@@ -8,8 +8,8 @@ const mark = cva('gx-level-mark inline-block flex-none rounded-full align-middle
   variants: {
     level: {
       mastered: 'gx-level-mark--mastered bg-mastered',
-      proficient: 'gx-level-mark--proficient bg-[conic-gradient(var(--gx-color-proficient)_0_75%,var(--gx-color-not-started)_0)]',
-      familiar: 'gx-level-mark--familiar bg-[conic-gradient(var(--gx-color-familiar)_0_50%,var(--gx-color-not-started)_0)]',
+      proficient: 'gx-level-mark--proficient bg-[conic-gradient(var(--gx-color-proficient)_0_75%,var(--gx-color-track)_0)]',
+      familiar: 'gx-level-mark--familiar bg-[conic-gradient(var(--gx-color-familiar)_0_50%,var(--gx-color-track)_0)]',
       attempted: 'gx-level-mark--attempted border-2 border-attempted',
       not_started:
         'gx-level-mark--not-started rounded-none bg-[linear-gradient(var(--gx-color-ring),var(--gx-color-ring))] bg-size-[84%_2px] bg-center bg-no-repeat',
