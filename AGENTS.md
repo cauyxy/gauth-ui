@@ -17,7 +17,7 @@ src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and 
 src/styles.css           what a product imports after Tailwind: the tokens, the theme, the base styles, and where Tailwind finds the classes; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
-src/docs.test.ts         every size, name and role design/README.md gives is the one in tokens.css
+src/docs.test.ts         every size, name and role design/README.md gives is the one in tokens.css; README.md lists every component
 gallery/examples/        the examples: one file for each component, each `export function` one example a product can copy
 gallery/                 every example on one page, in both languages (pnpm gallery); shot.ts, optical.ts and pixels.ts check it in Chrome
 gallery/foundations.tsx  the type scale and the movements, drawn from tokens.css: for the docs site's Tokens page and the artifact
