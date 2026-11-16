@@ -5,6 +5,7 @@ import { cn } from '../core/cn'
 
 export type ButtonVariant = 'ink' | 'soft' | 'outline' | 'ghost' | 'link'
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl'
+export type ButtonProps = ComponentProps<'button'> & { variant?: ButtonVariant; size?: ButtonSize; asChild?: boolean }
 
 /* An icon's strokes do not fill its box, so an icon at an end sits 2px closer to the edge: the space the eye sees is then equal on both sides. */
 const button = cva(
@@ -33,13 +34,7 @@ export const buttonClass = ({ variant = 'ink', size = 'md' }: { variant?: Button
   cn(button({ variant, size }), className)
 
 /** The one way to act on a row, card or page. `asChild` puts the look on the child element (a link). */
-export function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  ...props
-}: ComponentProps<'button'> & { variant?: ButtonVariant; size?: ButtonSize; asChild?: boolean }) {
+export function Button({ className, variant, size, asChild = false, ...props }: ButtonProps) {
   const classes = buttonClass({ variant, size }, className)
   if (asChild) return <Slot.Root className={classes} {...props} />
   return <button type="button" className={classes} {...props} />

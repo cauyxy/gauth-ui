@@ -1,14 +1,32 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { Popover as PopoverPrimitive } from 'radix-ui'
 import { useId, useState, type KeyboardEvent } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+import { useControllable } from '../core/useControllable'
 import { useField } from './Field'
 import { PopoverContent } from './Popover'
 
 export type ComboboxSize = 'md' | 'xl'
-export type ComboboxOption<T extends string> = { value: T; label: string; description?: string }
+export type ComboboxOption<T extends string = string> = { value: T; label: string; description?: string }
+export type ComboboxProps<T extends string = string> = Props<
+  'input',
+  {
+    options: readonly ComboboxOption<T>[]
+    value?: T | null
+    defaultValue?: T | null
+    onChange?: (value: T) => void
+    size?: ComboboxSize
+    label?: string
+    /** Sends the picked option's value with a form. */
+    name?: string
+  },
+  'type' | 'role' | 'children'
+>
 
 /* The box of an Input. The list under it is the look of a Menu. */
 const control = cva(
@@ -30,29 +48,27 @@ const chevron = cva('gx-combobox__icon pointer-events-none absolute inset-y-0 my
  * One choice from a long list, found by typing: a student, a standard, a school. Typing filters the list; the arrow
  * keys move through it, Enter picks, Escape closes. The text goes back to the picked option's label when the field
  * loses focus. Inside a `Field` it takes its label, hint and error from the Field; alone, `label` is its accessible name.
+ * `value` is the pick the product keeps, `null` for none; `defaultValue` when the field keeps its own.
+ * `className` goes to the wrapper, every other prop (`placeholder`, `disabled`) and `ref` to the `<input>`.
  */
 export function Combobox<T extends string>({
   options,
-  value,
+  value: kept,
+  defaultValue = null,
   onChange,
   size = 'md',
   label,
-  placeholder,
-  disabled,
+  name,
   className,
-}: {
-  options: readonly ComboboxOption<T>[]
-  value: T | null
-  onChange: (value: T) => void
-  size?: ComboboxSize
-  label?: string
-  placeholder?: string
-  disabled?: boolean
-  className?: string
-}) {
+  onClick,
+  onKeyDown,
+  onBlur,
+  ...props
+}: ComboboxProps<T>) {
   const { messages } = useLocale()
   const field = useField()
   const listId = useId()
+  const [value, set] = useControllable<T | null, T>(kept, defaultValue, onChange)
   const [open, setOpen] = useState(false)
   /* What the person typed; null shows the picked option's label. */
   const [query, setQuery] = useState<string | null>(null)
@@ -76,10 +92,12 @@ export function Combobox<T extends string>({
     setQuery(null)
   }
   const pick = (option: ComboboxOption<T>) => {
-    onChange(option.value)
+    set(option.value)
     close()
   }
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+  const onKey = (event: KeyboardEvent<HTMLInputElement>) => {
+    onKeyDown?.(event)
+    if (event.defaultPrevented) return
     const last = shown.length - 1
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault()
@@ -111,20 +129,26 @@ export function Combobox<T extends string>({
             aria-autocomplete="list"
             aria-activedescendant={open && shown[active] ? optionId(active) : undefined}
             autoComplete="off"
-            disabled={disabled}
-            placeholder={placeholder}
+            {...props}
             value={query ?? picked?.label ?? ''}
             onChange={(event) => {
               setQuery(event.target.value)
               setActive(0)
               setOpen(true)
             }}
-            onClick={() => (open ? undefined : show())}
-            onKeyDown={onKeyDown}
-            onBlur={close}
+            onClick={(event) => {
+              onClick?.(event)
+              if (!open && !event.defaultPrevented) show()
+            }}
+            onKeyDown={onKey}
+            onBlur={(event) => {
+              close()
+              onBlur?.(event)
+            }}
             className={control({ size })}
           />
           <Icon name="chevron-down" size={16} className={chevron({ size })} />
+          {name ? <input type="hidden" name={name} value={value ?? ''} disabled={props.disabled} /> : null}
         </span>
       </PopoverPrimitive.Anchor>
       <PopoverContent

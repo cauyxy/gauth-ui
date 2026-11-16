@@ -1,41 +1,41 @@
+'use client'
+
 import { RadioGroup as RadioGroupPrimitive } from 'radix-ui'
 import type { ReactNode } from 'react'
 import { cn } from '../core/cn'
+import type { Props } from '../core/props'
 
-export type RadioOption<T extends string> = { value: T; label: ReactNode; description?: ReactNode; disabled?: boolean }
+export type RadioOption<T extends string = string> = { value: T; label: ReactNode; description?: ReactNode; disabled?: boolean }
+export type RadioGroupProps<T extends string = string> = Props<
+  typeof RadioGroupPrimitive.Root,
+  { options: readonly RadioOption<T>[]; value?: T | null; defaultValue?: T | null; onChange?: (value: T) => void; label: string },
+  'onValueChange' | 'children' | 'asChild'
+>
 
 /**
  * One choice from a short list, each option on its own line with room for a second line. `label` is the group's
- * accessible name. It is one Tab stop: the arrow keys move the pick. `onChange` gets the new value.
+ * accessible name. It is one Tab stop: the arrow keys move the pick. `value` is the pick the product keeps, `null` for
+ * none; `defaultValue` when the group keeps its own. `onChange` gets the new value. `name` sends the value with a form.
  */
 export function RadioGroup<T extends string>({
   value,
+  defaultValue,
   options,
   onChange,
   label,
   orientation = 'vertical',
-  disabled,
-  name,
   className,
-}: {
-  value: T | null
-  options: readonly RadioOption<T>[]
-  onChange: (value: T) => void
-  label: string
-  orientation?: 'vertical' | 'horizontal'
-  disabled?: boolean
-  /** Sends the value with a form. */
-  name?: string
-  className?: string
-}) {
+  ...props
+}: RadioGroupProps<T>) {
   return (
     <RadioGroupPrimitive.Root
-      value={value ?? ''}
-      onValueChange={(next) => onChange(next as T)}
       aria-label={label}
+      {...props}
+      /* Radix keeps the pick itself when `value` is left out. For Radix no pick is the empty string. */
+      value={value === undefined ? undefined : (value ?? '')}
+      defaultValue={defaultValue ?? undefined}
+      onValueChange={onChange && ((next) => onChange(next as T))}
       orientation={orientation}
-      disabled={disabled}
-      name={name}
       className={cn(
         'gx-radio-group flex',
         orientation === 'vertical' ? 'gx-radio-group--vertical flex-col gap-3' : 'gx-radio-group--horizontal flex-wrap gap-x-5 gap-y-3',

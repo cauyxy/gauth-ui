@@ -2,34 +2,24 @@ import { Accordion as AccordionPrimitive } from 'radix-ui'
 import type { ComponentProps, ReactNode } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
+import type { Props } from '../core/props'
+
+export type AccordionProps = ComponentProps<typeof AccordionPrimitive.Root>
+export type AccordionItemProps = Props<typeof AccordionPrimitive.Item, { title: ReactNode; meta?: ReactNode; children: ReactNode }, 'asChild'>
 
 /**
  * Sections that open and close under their titles: a unit's lessons, the answers to common questions.
  * `type="single"` keeps one open (add `collapsible` to let it close); `type="multiple"` lets each open by itself.
  * The arrow keys move between titles, Home and End go to the first and the last.
  */
-export function Accordion({ className, ...props }: ComponentProps<typeof AccordionPrimitive.Root>) {
+export function Accordion({ className, ...props }: AccordionProps) {
   return <AccordionPrimitive.Root className={cn('gx-accordion flex flex-col', className)} {...props} />
 }
 
 /** One section: `title` is the line that opens it, `children` what it shows. `meta` sits at the end of the title line. */
-export function AccordionItem({
-  value,
-  title,
-  meta,
-  children,
-  disabled,
-  className,
-}: {
-  value: string
-  title: ReactNode
-  meta?: ReactNode
-  children: ReactNode
-  disabled?: boolean
-  className?: string
-}) {
+export function AccordionItem({ title, meta, children, className, ...props }: AccordionItemProps) {
   return (
-    <AccordionPrimitive.Item value={value} disabled={disabled} className={cn('gx-accordion__item group border-b border-line', className)}>
+    <AccordionPrimitive.Item {...props} className={cn('gx-accordion__item group border-b border-line', className)}>
       <AccordionPrimitive.Header className="gx-accordion__header flex">
         <AccordionPrimitive.Trigger className="gx-accordion__trigger flex min-h-(--gx-h-xl) flex-1 cursor-pointer items-center gap-3 rounded-lg py-3 text-start text-sm font-control text-ink outline-0 focus-visible:focus-ring focus-visible:outline-offset-2 disabled:cursor-default disabled:opacity-50">
           <span className="gx-accordion__title min-w-0 flex-1 text-pretty">{title}</span>

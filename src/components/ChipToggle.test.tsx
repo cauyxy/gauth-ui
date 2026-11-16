@@ -74,3 +74,13 @@ it('does not change when disabled', async () => {
   await userEvent.click(screen.getByRole('button', { name: 'Late' }))
   expect(onChange).not.toHaveBeenCalled()
 })
+
+it('keeps its own state without `pressed`', async () => {
+  const onChange = vi.fn()
+  render(<ChipToggle onChange={onChange}>Fractions</ChipToggle>)
+  const chip = screen.getByRole('button', { name: 'Fractions' })
+  expect(chip).toHaveAttribute('aria-pressed', 'false')
+  await userEvent.click(chip)
+  expect(chip).toHaveAttribute('aria-pressed', 'true')
+  expect(onChange).toHaveBeenLastCalledWith(true)
+})

@@ -1,26 +1,23 @@
+'use client'
+
 import type { ReactNode } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
+import type { Props } from '../core/props'
+
+export type CheckboxProps = Props<
+  'input',
+  { checked?: boolean; defaultChecked?: boolean; onChange?: (checked: boolean) => void; label?: string; children?: ReactNode },
+  'type'
+>
 
 /**
  * A yes or no for one item of a list. `children` are its visible text; with none, `label` is its accessible name.
- * The native checkbox stays in the page under an 18px box, so the keyboard and a form work as usual.
+ * `checked` is the answer the product keeps; `defaultChecked` when the box keeps its own. The native checkbox stays in
+ * the page under an 18px box, so the keyboard and a form work as usual: `className` goes to the root, every other prop
+ * (`name`, `value`, `required`, `disabled`) and `ref` to the `<input>`.
  */
-export function Checkbox({
-  checked,
-  onChange,
-  label,
-  children,
-  disabled,
-  className,
-}: {
-  checked: boolean
-  onChange: (checked: boolean) => void
-  label?: string
-  children?: ReactNode
-  disabled?: boolean
-  className?: string
-}) {
+export function Checkbox({ onChange, label, children, className, ...props }: CheckboxProps) {
   const Root = children ? 'label' : 'span'
   /* `items-start` and the `1lh` margins keep the box on the first line of the text, also when the text wraps. */
   return (
@@ -33,10 +30,9 @@ export function Checkbox({
       {/* The native checkbox lies over the box and takes the click, the focus and the keyboard. */}
       <input
         type="checkbox"
-        checked={checked}
-        disabled={disabled}
         aria-label={label}
-        onChange={(event) => onChange(event.target.checked)}
+        {...props}
+        onChange={onChange && ((event) => onChange(event.target.checked))}
         className="gx-checkbox__input peer absolute my-[calc((1lh-18px)/2)] size-[18px] cursor-[inherit] opacity-0"
       />
       {/* The edge is on the empty box only, so a checked box has no shadow at all and the edge fades out as before. */}

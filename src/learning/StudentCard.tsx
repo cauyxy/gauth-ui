@@ -5,6 +5,8 @@ import type { Level } from '../core/messages'
 
 /** What a card is about, when that has a color: `violet` is a goal, XP or a streak, `good` is done or right, `pink` is a celebration. */
 export type StudentCardTone = 'plain' | 'violet' | 'good' | 'pink'
+export type StudentCardProps = ComponentProps<'section'> & { tone?: StudentCardTone; level?: Level }
+export type StudentCardTitleProps = ComponentProps<'h3'>
 
 /* A plain card is white with the hairline. A card with a meaning has that meaning's soft ground and no hairline: one of the two, never both. */
 const card = cva('gx-student-card group/student-card rounded-3xl p-5 text-ink', {
@@ -35,13 +37,13 @@ const title = cn(
  * The card of a student page: 24px corners and 20px of padding. Plain, it is white with the hairline. With a `tone`,
  * or with the `level` a student reached, the whole card takes that meaning's soft ground.
  */
-export function StudentCard({ tone = 'plain', level, className, ...props }: ComponentProps<'section'> & { tone?: StudentCardTone; level?: Level }) {
+export function StudentCard({ tone = 'plain', level, className, ...props }: StudentCardProps) {
   const ground = level ?? tone
   return <section data-ground={ground} className={cn(card({ ground }), className)} {...props} />
 }
 
 /** The title of a StudentCard, in the color of its card's meaning. */
-export function StudentCardTitle({ className, children, ...props }: ComponentProps<'h3'>) {
+export function StudentCardTitle({ className, children, ...props }: StudentCardTitleProps) {
   return (
     <h3 className={cn(title, className)} {...props}>
       {children}

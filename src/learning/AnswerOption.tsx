@@ -1,13 +1,24 @@
-import { Children, createContext, isValidElement, useContext, type KeyboardEvent, type ReactNode } from 'react'
+'use client'
+
+import { Children, createContext, isValidElement, useContext, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+import { mergeRefs } from '../core/refs'
+import { useControllable } from '../core/useControllable'
 
 /** What an answered option says: `right` is "Correct", `retry` is "Not yet". There is no wrong. */
 export type AnswerState = 'right' | 'retry'
+export type AnswerGroupProps = Props<
+  'div',
+  { label: string; value?: string | null; defaultValue?: string | null; onChange?: (value: string) => void; disabled?: boolean; children: ReactNode }
+>
+export type AnswerOptionProps = Props<'button', { value: string; letter?: string; state?: AnswerState; children: ReactNode }, 'type' | 'role'>
 
 type Group = { value: string | null; tabStop: string | null; onChange: (value: string) => void; disabled: boolean }
 const GroupContext = createContext<Group>({ value: null, tabStop: null, onChange: () => {}, disabled: false })
+GroupContext.displayName = 'AnswerGroup'
 
 /*
  * The states of an option are attributes, and two can be true at once, so each class says the whole case it is for.
@@ -36,26 +47,39 @@ const word =
 /**
  * The options of one question. `label` is its accessible name (the question, or "Answers").
  * Tab moves to the picked option, or to the first when none is picked; the arrow keys, Home and End move the pick.
- * The options are its direct children. `disabled` locks the pick, for a question that is answered.
+ * `value` is the pick the product keeps, `null` for none; `defaultValue` when the group keeps its own.
+ * `disabled` locks the pick, for a question that is answered.
  */
 export function AnswerGroup({
   label,
-  value,
+  value: kept,
+  defaultValue = null,
   onChange,
   disabled = false,
   children,
   className,
-}: {
-  label: string
-  value: string | null
-  onChange: (value: string) => void
-  disabled?: boolean
-  children: ReactNode
-  className?: string
-}) {
+  onKeyDown,
+  ref,
+  ...props
+}: AnswerGroupProps) {
+  const [value, set] = useControllable<string | null, string>(kept, defaultValue, onChange)
+  const root = useRef<HTMLDivElement>(null)
+  const setRoot = useMemo(() => mergeRefs(root, ref), [ref])
+  /*
+   * With no pick, Tab stops at the first option. On the server that is the first child, when it is an option. In the
+   * browser it is the first option in the page, so an option inside a wrapper of the product's is found too.
+   */
   const [first] = Children.toArray(children)
-  const tabStop = value ?? (isValidElement<{ value?: string }>(first) ? (first.props.value ?? null) : null)
-  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+  const firstChild = isValidElement<{ value?: string }>(first) ? (first.props.value ?? null) : null
+  const [firstInPage, setFirstInPage] = useState<string | null>(null)
+  useLayoutEffect(() => {
+    setFirstInPage(root.current?.querySelector<HTMLButtonElement>('[role="radio"]')?.value ?? null)
+    // oxlint-disable-next-line react/exhaustive-effect-dependencies -- the options are the children, so it looks again when they change although it does not read them
+  }, [children])
+  const tabStop = value ?? firstInPage ?? firstChild
+  const move = (event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(event)
+    if (event.defaultPrevented) return
     const options = [...event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="radio"]')]
     const from = options.indexOf(event.target as HTMLButtonElement)
     const last = options.length - 1
@@ -76,7 +100,7 @@ export function AnswerGroup({
               : -1
     if (to < 0) return
     event.preventDefault()
-    onChange(options[to]!.value)
+    set(options[to]!.value)
     options[to]!.focus()
   }
   return (
@@ -84,10 +108,12 @@ export function AnswerGroup({
       role="radiogroup"
       aria-label={label}
       aria-disabled={disabled || undefined}
-      onKeyDown={onKeyDown}
+      {...props}
+      ref={setRoot}
+      onKeyDown={move}
       className={cn('gx-answer-group grid w-full grid-cols-[repeat(auto-fit,minmax(min(14.5rem,100%),1fr))] gap-2.5', className)}
     >
-      <GroupContext.Provider value={{ value, tabStop, onChange, disabled }}>{children}</GroupContext.Provider>
+      <GroupContext.Provider value={{ value, tabStop, onChange: set, disabled }}>{children}</GroupContext.Provider>
     </div>
   )
 }
@@ -96,19 +122,7 @@ export function AnswerGroup({
  * One option of an AnswerGroup: a letter mark, then the content (text, a formula, a figure).
  * `state` is the feedback after an answer; it adds the word "Correct" or "Not yet" at the end of the row.
  */
-export function AnswerOption({
-  value,
-  letter,
-  state,
-  children,
-  className,
-}: {
-  value: string
-  letter?: string
-  state?: AnswerState
-  children: ReactNode
-  className?: string
-}) {
+export function AnswerOption({ value, letter, state, children, className, disabled, onClick, ...props }: AnswerOptionProps) {
   const group = useContext(GroupContext)
   const { messages } = useLocale()
   return (
@@ -119,8 +133,12 @@ export function AnswerOption({
       value={value}
       data-state={state}
       tabIndex={group.tabStop === value ? 0 : -1}
-      disabled={group.disabled}
-      onClick={() => group.onChange(value)}
+      {...props}
+      disabled={group.disabled || disabled}
+      onClick={(event) => {
+        onClick?.(event)
+        if (!event.defaultPrevented) group.onChange(value)
+      }}
       className={cn(option, className)}
     >
       <span className={mark}>{state === 'right' ? <Icon name="check" size={16} /> : letter}</span>

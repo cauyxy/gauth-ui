@@ -1,31 +1,23 @@
+'use client'
+
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
 import { IconButton } from './IconButton'
+import { pagesOf } from './Pagination.pages'
 
-/** The pages to show: the first, the last, the current one and one on each side of it, with gaps (null) between. */
-export function pagesOf(page: number, count: number): (number | null)[] {
-  if (count <= 7) return Array.from({ length: count }, (_, i) => i + 1)
-  const near = [page - 1, page, page + 1].filter((n) => n > 1 && n < count)
-  /* Near an end, show four pages there, so the list keeps its length as the current page moves. */
-  const middle = page <= 3 ? [2, 3, 4] : page >= count - 2 ? [count - 3, count - 2, count - 1] : near
-  const pages: (number | null)[] = [1]
-  if (middle[0]! > 2) pages.push(null)
-  pages.push(...middle)
-  if (middle.at(-1)! < count - 1) pages.push(null)
-  pages.push(count)
-  return pages
-}
+export type PaginationProps = Props<'nav', { page: number; count: number; onChange: (page: number) => void }, 'children'>
 
 /**
  * The pages of a long list: back, the page numbers, forward. `page` counts from 1; `onChange` gets the new page.
  * It is a `nav` named "Pages"; the current page has `aria-current="page"`.
  */
-export function Pagination({ page, count, onChange, className }: { page: number; count: number; onChange: (page: number) => void; className?: string }) {
+export function Pagination({ page, count, onChange, className, ...props }: PaginationProps) {
   const { messages } = useLocale()
   if (count <= 1) return null
   return (
-    <nav aria-label={messages.pagination} className={cn('gx-pagination flex items-center gap-1', className)}>
+    <nav aria-label={messages.pagination} {...props} className={cn('gx-pagination flex items-center gap-1', className)}>
       <IconButton label={messages.previousPage} size="sm" disabled={page <= 1} onClick={() => onChange(page - 1)}>
         <Icon name="chevron-left" />
       </IconButton>

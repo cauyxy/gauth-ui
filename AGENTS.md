@@ -10,12 +10,14 @@ Read this page before you write or change a component. `design/README.md` says w
 src/styles/tokens.css    the tokens (--gx-*). The one source.
 src/styles/theme.css     the tokens as a Tailwind v4 theme. Generated.
 src/styles/base.css      page defaults, the fallback font, keyframes; in the base layer
-src/core/                cn (joins classes), the icons, the language: messages.ts (every word, en and es) and locale.tsx
-src/components/          core components: one per file, with its test
+src/core/                cn (joins classes), the icons, the language: messages.ts (every word, en and es) and locale.tsx;
+                         props.ts (the Props type), useControllable.ts (a value the product or the component keeps), refs.ts (mergeRefs)
+src/components/          core components: one per file, with its test; a helper a server component may call stands beside it (Segmented.classes.ts)
 src/learning/            learning components, same shape
 src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and math.css
 src/styles.css           what a product imports after Tailwind: the tokens, the theme, the base styles, and where Tailwind finds the classes; built to dist/styles.css
 src/rules.test.ts        the rules below, checked
+src/props.test.tsx       every component passes native props and its ref to one element
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
 src/docs.test.ts         every size, name and role design/README.md gives is the one in tokens.css; README.md lists every component
 gallery/examples/        the examples: one file for each component, each `export function` one example a product can copy
@@ -23,6 +25,7 @@ gallery/                 every example on one page, in both languages (pnpm gall
 gallery/foundations.tsx  the type scale and the movements, drawn from tokens.css: for the docs site's Tokens page and the artifact
 site/                    the docs site (ui.gauthx.app): every component live on the first page, a page for each with its examples and their code first, then the design rules and the tokens
 GLOSSARY.md              what each shared word means, in en and es
+CHANGELOG.md             what changed in each version, for a product that updates
 scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
 scripts/icons.ts         the list of icons; copies their drawings from Lucide into src/core/icons.ts
 compare/                 compares each component with the gauthx one it replaces (pnpm compare)
@@ -42,7 +45,7 @@ design/components/Button/README.md when to use it
 gallery/examples/Button.tsx        its examples
 ```
 
-A learning component has the same four files, with the first two under `src/learning/`. Then export it from `src/index.ts` and add its name to `GROUPS` in `gallery/examples.ts`. `rules.test.ts` fails when one of these is missing. `Button.tsx` is the reference for how the classes are written.
+A learning component has the same four files, with the first two under `src/learning/`. Then export it and its props type from `src/index.ts`, add its name to `GROUPS` in `gallery/examples.ts`, and add its line to `src/props.test.tsx`. `rules.test.ts` and `props.test.tsx` fail when one of these is missing. `Button.tsx` is the reference for how the classes are written.
 
 **An example is code a product can copy.** Each `export function` in the example file is one example: the gallery and the docs site draw it, and the site shows its code with the imports written from `gauth-ui`. So an example imports only from `../../src`, `../../src/math` and `react`, keeps its own state, and lays itself out with Tailwind classes as a product would. A helper it needs (a list of options, a small drawing) is a `const` or `function` in the same file that is not exported; the site shows it with the example.
 
@@ -65,10 +68,26 @@ A learning component has the same four files, with the first two under `src/lear
 - `variant` for the look, `tone` for a color meaning, `size` for a named size.
 - **Control sizes are `sm | md | lg | xl`** and take their height from `--gx-h-*` (30, 34, 40, 44px). Do not add a height that is not a token.
 - A pixel `size` number is only for marks that scale freely: `Avatar`, `IconBox`, `Dot`.
-- A control with a value takes `value` (or `checked`) and `onChange(newValue)`. `onChange` gets the new value, not the event.
-- `className` goes to the root element. Other native props spread to the root when it is a native element.
+- **Every component passes native props and `ref` on.** Its props are `Props<'div', Own>` (`src/core/props.ts`): its own, and those of the element they go to. `className` goes through `cn()`, `style` is merged over the component's own, and the rest is spread on the element: `id`, `data-*`, `aria-*`, the events, `ref`. React 19 gives `ref` as a prop, so there is no `forwardRef`. A component that needs the element itself joins the two refs with `mergeRefs`.
+- **For a control inside a wrapper, the native props go to the control.** `Input`, `Select`, `Checkbox`, `Combobox`, `NumberInput`, `FileDropzone` and `Composer` put `className` on the wrapper and everything else, with `ref`, on the `<input>`, `<select>` or `<textarea>`: that is where `name`, `required`, `disabled` and focus belong.
+- **A prop is not written twice.** What a native prop already does (`disabled`, `name`, `placeholder`, `title`) is not an own prop. An own prop replaces a native one of the same name (`title`, `onChange`, `size`).
+- **The component's props are a named, exported type**: `ButtonProps` beside `Button`, exported from `src/index.ts`.
+- **A control with a value works both ways.** `value` (or `checked`, `pressed`) with `onChange(newValue)` when the product keeps the value; `defaultValue` (`defaultChecked`, `defaultPressed`) when the control keeps its own. `useControllable` does it. `onChange` gets the new value, not the event, and is optional. A value that can be empty is `null`: `undefined` means "the control keeps it".
+- **A control goes with a form.** With `name` its value is sent: the native element sends it, or a hidden input does (`Switch`, `Segmented`, `Combobox`, `DatePicker`).
+- **The product's handler runs first.** A component that needs an event the product may also want (`onClick` on `Switch`, `onKeyDown` on `Composer`) calls the product's handler, then does its own part unless `event.defaultPrevented`.
 - A link that must look like a component uses the class helper (`buttonClass()`, `segmentedOptionClass()`). Do not copy styles.
 - No text is fixed in a component. A word the component says by itself ("Loading", "Close", "Not yet", a level name) comes from `useLocale().messages`, so it is the same in every product and it changes with the language. Every other word is a prop.
+
+## Server components
+
+A product on the Next.js App Router imports the package in a server component. So:
+
+- **A file that needs the browser starts with `'use client'`**: one that keeps state, reads a context (`useLocale`, `useField`), runs an effect or sets an event handler. The build writes one file for each source file and keeps the line.
+- **A file without the line is drawn on the server**: `Button`, `Panel`, `Prose`, `Table`. It uses no hook but `useId`, and what it imports from a client file is a component or a type, never a function: a server component cannot call a client file's function.
+- **A helper a server component may call is not in a client file.** When its component is one, the helper stands beside it: `Segmented.classes.ts`, `Pagination.pages.ts`, `math/text.ts`.
+- **Nothing reads `window` or `document` while it draws.** That is for an effect or an event handler.
+
+`rules.test.ts` checks the first three. To check a change in a real project, pack the build (`pnpm pack`) and install the file in a Next.js app.
 
 ## Language
 
@@ -114,7 +133,7 @@ pnpm typecheck
 pnpm lint        # oxlint: bugs, React, hooks, accessibility, vitest (.oxlintrc.json); a warning fails too
 pnpm format      # oxfmt writes every file; CI runs pnpm format:check
 pnpm test        # component tests, rules.test.ts and docs.test.ts
-pnpm build       # dist/: index.js, types, styles.css (what a product imports after Tailwind), tokens.css, theme.css
+pnpm build       # dist/: one .js and .d.ts for each source file (not minified), styles.css (what a product imports after Tailwind), tokens.css, theme.css
 pnpm tokens      # after a change to tokens.css
 pnpm icons       # after adding an icon's name to scripts/icons.ts
 node gallery/optical.ts          # after a change to a control's size, padding, font or icon: ink alignment, measured in Chrome
@@ -132,7 +151,7 @@ The tools are oxc's: oxlint lints and oxfmt formats (`.oxlintrc.json`, `.oxfmtrc
 
 Two things ship from `main`: the package when its version changes, the docs site after each push.
 
-**The package, to npm.** Change `version` in `package.json` and merge. `release.yml` runs when `package.json` changes on `main`: when npm does not have that version yet, it runs the checks through `prepublishOnly`, publishes, and pushes the tag `v<version>` on that commit. Nobody pushes a tag by hand, and a version npm already has is left alone. To run it again after a publish that failed, run `gh workflow run release.yml --ref main`, or Actions → Release → Run workflow on GitHub. npm trusts that workflow by name (the package's Trusted publishing setting on npmjs.com: user `cauyxy`, repository `gauth-ui`, workflow filename `release.yml`, no environment), so do not rename the file. A new setting expires when no publish goes through it within 2 days. When the workflow log says `Skipped OIDC`, npm did not accept the setting and the `NPM_TOKEN` secret published instead. When the trusted publisher does not allow `npm publish`, the version is staged: it is live only after the owner approves it on npmjs.com. Check with `npm view gauth-ui@<version>`.
+**The package, to npm.** Change `version` in `package.json`, say what changed under that version in `CHANGELOG.md`, and merge. `release.yml` runs when `package.json` changes on `main`: when npm does not have that version yet, it runs the checks through `prepublishOnly`, publishes, and pushes the tag `v<version>` on that commit. Nobody pushes a tag by hand, and a version npm already has is left alone. To run it again after a publish that failed, run `gh workflow run release.yml --ref main`, or Actions → Release → Run workflow on GitHub. npm trusts that workflow by name (the package's Trusted publishing setting on npmjs.com: user `cauyxy`, repository `gauth-ui`, workflow filename `release.yml`, no environment), so do not rename the file. A new setting expires when no publish goes through it within 2 days. When the workflow log says `Skipped OIDC`, npm did not accept the setting and the `NPM_TOKEN` secret published instead. When the trusted publisher does not allow `npm publish`, the version is staged: it is live only after the owner approves it on npmjs.com. Check with `npm view gauth-ui@<version>`.
 
 **The docs site, to ui.gauthx.app.** `ci.yml` checks and builds every pull request and push to `main`. On `main`, the deploy job publishes that run's site artifact to Cloudflare as `gauth-ui-site`; a failed check blocks deployment. To redeploy manually, run `gh workflow run ci.yml --ref main`. It needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets for the account holding `gauthx.app`. The token must allow Workers Scripts Write on the account and zone/DNS access for the custom domain in `site/wrangler.jsonc`.
 

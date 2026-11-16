@@ -37,7 +37,8 @@ export type Page = { path: string; title: string; group: string } & (
   | { kind: 'component'; name: string }
 )
 
-const start = readme.slice(readme.indexOf('\n') + 1, readme.indexOf('## Components'))
+/* The start of the README, to the list of components. Its badges are for GitHub and npm. */
+const start = readme.slice(readme.indexOf('\n') + 1, readme.indexOf('## Components')).replace(/^\[!\[.*\n+/m, '')
 
 export const PAGES: Page[] = [
   { path: '/', title: 'Components', group: '', kind: 'home' },

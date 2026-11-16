@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react'
-import { closedMath, RichText, unescapeDollars, wordsIn } from './RichText'
+import { RichText } from './RichText'
+import { closedMath, unescapeDollars, wordsIn } from './text'
 
 it('renders the TeX between dollar signs and leaves the words as text', () => {
   const { container } = render(<RichText text="The legs are 6 and 8, so $c^2 = 100$." className="mine" />)

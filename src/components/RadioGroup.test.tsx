@@ -56,3 +56,18 @@ it('does not pick a disabled option', async () => {
   await userEvent.click(screen.getByText('Save as draft'))
   expect(onChange).not.toHaveBeenCalled()
 })
+
+it('keeps its own pick without `value`, and sends it with a form', async () => {
+  const onChange = vi.fn()
+  render(
+    <form aria-label="Settings">
+      <RadioGroup label="Level" name="level" options={options} defaultValue={options[0]!.value} onChange={onChange} />
+    </form>,
+  )
+  const radios = screen.getAllByRole('radio')
+  expect(radios[0]).toBeChecked()
+  await userEvent.click(radios[1]!)
+  expect(radios[1]).toBeChecked()
+  expect(radios[0]).not.toBeChecked()
+  expect(onChange).toHaveBeenLastCalledWith(options[1]!.value)
+})

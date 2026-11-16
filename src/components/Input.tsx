@@ -1,11 +1,17 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
-import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
+import type { Props } from '../core/props'
 import { useField } from './Field'
 
 export type InputSize = 'md' | 'xl'
 export type InputVariant = 'outline' | 'search'
+export type InputProps = Props<
+  'input',
+  { size?: InputSize; variant?: InputVariant; label?: string; value?: string; defaultValue?: string; onChange?: (value: string) => void }
+>
 
 /* An error is an attempted outline on the attempted-soft ground, the look of "Not yet". The Field's error text says what is wrong. */
 const control = cva(
@@ -36,22 +42,10 @@ const icon = cva('gx-input__icon pointer-events-none absolute inset-y-0 my-auto 
 
 /**
  * One line of text. `search` has a grey ground and the search icon at its start. Inside a `Field` it takes its label,
- * hint and error from the Field; alone, `label` is its accessible name. `className` goes to the wrapper, every other prop to the `<input>`.
+ * hint and error from the Field; alone, `label` is its accessible name. `value` is the text the product keeps;
+ * `defaultValue` when the field keeps its own. `className` goes to the wrapper, every other prop and `ref` to the `<input>`.
  */
-export function Input({
-  size = 'md',
-  variant = 'outline',
-  label,
-  onChange,
-  className,
-  ...props
-}: Omit<ComponentProps<'input'>, 'size' | 'onChange' | 'value'> & {
-  size?: InputSize
-  variant?: InputVariant
-  label?: string
-  value?: string
-  onChange?: (value: string) => void
-}) {
+export function Input({ size = 'md', variant = 'outline', label, onChange, className, ...props }: InputProps) {
   const field = useField()
   return (
     <span className={cn('gx-input relative block min-w-0', `gx-input--${size}`, `gx-input--${variant}`, className)}>

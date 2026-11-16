@@ -1,12 +1,26 @@
 {
   "name": "gauth-ui",
-  "version": "0.3.3",
+  "version": "0.3.9",
   "description": "Unofficial design system in the look of gauth.com: tokens, React components and design rules.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cauyxy/gauth-ui.git"
   },
+  "homepage": "https://ui.gauthx.app",
+  "bugs": "https://github.com/cauyxy/gauth-ui/issues",
+  "keywords": [
+    "react",
+    "react-components",
+    "design-system",
+    "ui",
+    "tailwindcss",
+    "radix-ui",
+    "typescript",
+    "accessibility",
+    "server-components",
+    "education"
+  ],
   "type": "module",
   "sideEffects": [
     "**/*.css"
@@ -20,7 +34,7 @@
     },
     "./math": {
       "types": "./dist/math/index.d.ts",
-      "import": "./dist/math.js"
+      "import": "./dist/math/index.js"
     },
     "./styles.css": "./dist/styles.css",
     "./math.css": "./dist/math.css",
@@ -31,6 +45,7 @@
     "dist",
     "design",
     "GLOSSARY.md",
+    "CHANGELOG.md",
     "THIRD-PARTY-NOTICES.md"
   ],
   "scripts": {
@@ -88,7 +103,11 @@
     "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@12.18.0",
-  "engines": {
-    "node": ">=24"
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24",
+      "onFail": "warn"
+    }
   }
 }

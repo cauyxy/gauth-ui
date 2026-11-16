@@ -50,3 +50,13 @@ it('does not change when disabled', async () => {
   await userEvent.selectOptions(select, 'fri')
   expect(onChange).not.toHaveBeenCalled()
 })
+
+it('keeps its own choice without `value`', async () => {
+  const onChange = vi.fn()
+  render(<Select label="Grade" options={options} defaultValue={options[1]!.value} onChange={onChange} />)
+  const select = screen.getByRole('combobox', { name: 'Grade' })
+  expect(select).toHaveValue(options[1]!.value)
+  await userEvent.selectOptions(select, options[0]!.value)
+  expect(select).toHaveValue(options[0]!.value)
+  expect(onChange).toHaveBeenLastCalledWith(options[0]!.value)
+})

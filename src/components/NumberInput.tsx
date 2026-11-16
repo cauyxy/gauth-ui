@@ -1,11 +1,28 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
-import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+import { useControllable } from '../core/useControllable'
 import { useField } from './Field'
 
 export type NumberInputSize = 'md' | 'xl'
+export type NumberInputProps = Props<
+  'input',
+  {
+    value?: number | null
+    defaultValue?: number | null
+    onChange?: (value: number | null) => void
+    min?: number
+    max?: number
+    step?: number
+    size?: NumberInputSize
+    label?: string
+  },
+  'type'
+>
 
 /* The box of an Input, with a minus and a plus inside its ends. The browser's own arrows are hidden: the buttons replace them. */
 const box = cva(
@@ -33,12 +50,14 @@ const step = cva(
 )
 
 /**
- * A whole number typed or stepped: a count of questions, a score out of. `value` is `null` while the field is empty.
- * The arrow keys step by `step`. Inside a `Field` it takes its label, hint and error from the Field; alone, `label` is its
- * accessible name. `className` goes to the box, every other prop to the `<input>`.
+ * A whole number typed or stepped: a count of questions, a score out of. The value is `null` while the field is empty.
+ * `value` is the number the product keeps; `defaultValue` when the field keeps its own. The arrow keys step by `step`.
+ * Inside a `Field` it takes its label, hint and error from the Field; alone, `label` is its accessible name.
+ * `className` goes to the box, every other prop and `ref` to the `<input>`.
  */
 export function NumberInput({
-  value,
+  value: kept,
+  defaultValue = null,
   onChange,
   min,
   max,
@@ -47,20 +66,14 @@ export function NumberInput({
   label,
   disabled,
   className,
+  onBlur,
   ...props
-}: Omit<ComponentProps<'input'>, 'size' | 'value' | 'onChange' | 'min' | 'max' | 'step' | 'type'> & {
-  value: number | null
-  onChange: (value: number | null) => void
-  min?: number
-  max?: number
-  step?: number
-  size?: NumberInputSize
-  label?: string
-}) {
+}: NumberInputProps) {
   const { messages } = useLocale()
   const field = useField()
+  const [value, set] = useControllable(kept, defaultValue, onChange)
   const clamp = (n: number) => Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n))
-  const move = (n: number) => onChange(clamp((value ?? min ?? 0) + n))
+  const move = (n: number) => set(clamp((value ?? min ?? 0) + n))
   return (
     <span className={cn(box({ size }), className)}>
       <button
@@ -86,10 +99,10 @@ export function NumberInput({
         disabled={disabled}
         {...props}
         value={value ?? ''}
-        onChange={(event) => onChange(event.target.value === '' ? null : Number(event.target.value))}
+        onChange={(event) => set(event.target.value === '' ? null : Number(event.target.value))}
         onBlur={(event) => {
-          if (value !== null && clamp(value) !== value) onChange(clamp(value))
-          props.onBlur?.(event)
+          if (value !== null && clamp(value) !== value) set(clamp(value))
+          onBlur?.(event)
         }}
         className="gx-number-input__control w-full min-w-0 appearance-none bg-transparent text-center tabular-nums outline-0 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
       />

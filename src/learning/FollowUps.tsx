@@ -1,12 +1,17 @@
+'use client'
+
 import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+
+export type FollowUpsProps = Props<'div', { items: readonly string[]; onPick: (item: string) => void }, 'children'>
 
 /** Questions to tap under the last reply, one per row. A tap gives the question to `onPick`; the page sends it. */
-export function FollowUps({ items, onPick, className }: { items: readonly string[]; onPick: (item: string) => void; className?: string }) {
+export function FollowUps({ items, onPick, className, ...props }: FollowUpsProps) {
   const { messages } = useLocale()
   if (!items.length) return null
   return (
-    <div role="group" aria-label={messages.followUps} className={cn('gx-follow-ups flex min-w-0 flex-col items-start gap-2', className)}>
+    <div role="group" aria-label={messages.followUps} {...props} className={cn('gx-follow-ups flex min-w-0 flex-col items-start gap-2', className)}>
       {items.map((item) => (
         <button
           key={item}

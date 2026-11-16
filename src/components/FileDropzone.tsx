@@ -1,7 +1,16 @@
+'use client'
+
 import { useState, type DragEvent, type ReactNode } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
+
+export type FileDropzoneProps = Props<
+  'input',
+  { onChange: (files: File[]) => void; title?: ReactNode; hint?: ReactNode },
+  'type' | 'children' | 'value' | 'defaultValue'
+>
 
 /** Whether a file is one `accept` allows: an extension (".pdf"), a type ("image/png") or a family ("image/*"). */
 function accepts(file: File, accept?: string) {
@@ -16,27 +25,10 @@ function accepts(file: File, accept?: string) {
 /**
  * A place to drop files, or to click and choose them: a worksheet to grade, a photo of written work. `onChange` gets
  * the files that `accept` allows. `title` and `hint` are the product's words; without a title it says the shared one.
- * The native file input stays inside, so the keyboard, a screen reader and a form work as usual.
+ * The native file input stays inside, so the keyboard and a screen reader work as usual: `className` goes to the drop
+ * target, every other prop (`accept`, `multiple`, `disabled`) and `ref` to the `<input>`.
  */
-export function FileDropzone({
-  onChange,
-  accept,
-  multiple = false,
-  title,
-  hint,
-  disabled,
-  name,
-  className,
-}: {
-  onChange: (files: File[]) => void
-  accept?: string
-  multiple?: boolean
-  title?: ReactNode
-  hint?: ReactNode
-  disabled?: boolean
-  name?: string
-  className?: string
-}) {
+export function FileDropzone({ onChange, accept, multiple = false, title, hint, disabled, className, ...props }: FileDropzoneProps) {
   const { messages } = useLocale()
   const [over, setOver] = useState(false)
   const take = (files: FileList | null) => {
@@ -75,7 +67,7 @@ export function FileDropzone({
         accept={accept}
         multiple={multiple}
         disabled={disabled}
-        name={name}
+        {...props}
         onChange={(event) => {
           take(event.target.files)
           event.target.value = ''

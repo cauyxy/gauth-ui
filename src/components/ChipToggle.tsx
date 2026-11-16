@@ -1,6 +1,15 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
-import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
+import type { Props } from '../core/props'
+import { useControllable } from '../core/useControllable'
+
+export type ChipToggleProps = Props<
+  'button',
+  { pressed?: boolean; defaultPressed?: boolean; onChange?: (pressed: boolean) => void; size?: 'sm' | 'md' },
+  'type' | 'aria-pressed'
+>
 
 /*
  * On, it stays white: the ink ring is the shape signal, the ink text is the color one.
@@ -19,19 +28,21 @@ const chipToggle = cva(
 )
 
 /**
- * A chip to press: a filter, a skill to pick. On, it stays white and gets the ink ring.
- * A set of them goes in the product's own `role="group"` with a name.
+ * A chip to press: a filter, a skill to pick. On, it stays white and gets the ink ring. `pressed` is the state the
+ * product keeps; `defaultPressed` when the chip keeps its own. A set of them goes in the product's own `role="group"` with a name.
  */
-export function ChipToggle({
-  pressed,
-  onChange,
-  size = 'sm',
-  className,
-  ...props
-}: Omit<ComponentProps<'button'>, 'onChange' | 'onClick' | 'aria-pressed'> & {
-  pressed: boolean
-  onChange: (pressed: boolean) => void
-  size?: 'sm' | 'md'
-}) {
-  return <button type="button" aria-pressed={pressed} {...props} onClick={() => onChange(!pressed)} className={cn(chipToggle({ size }), className)} />
+export function ChipToggle({ pressed, defaultPressed = false, onChange, size = 'sm', className, onClick, ...props }: ChipToggleProps) {
+  const [on, set] = useControllable(pressed, defaultPressed, onChange)
+  return (
+    <button
+      type="button"
+      aria-pressed={on}
+      {...props}
+      onClick={(event) => {
+        onClick?.(event)
+        if (!event.defaultPrevented) set(!on)
+      }}
+      className={cn(chipToggle({ size }), className)}
+    />
+  )
 }

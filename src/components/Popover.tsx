@@ -2,19 +2,14 @@ import { Popover as PopoverPrimitive } from 'radix-ui'
 import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
 
+export type PopoverContentProps = ComponentProps<typeof PopoverPrimitive.Content> & { arrow?: boolean }
+
 /** A panel that floats next to what opened it, flips to stay on screen, and closes on Escape or a click outside. */
 export const Popover = PopoverPrimitive.Root
 export const PopoverTrigger = PopoverPrimitive.Trigger
 export const PopoverAnchor = PopoverPrimitive.Anchor
 
-export function PopoverContent({
-  className,
-  sideOffset = 10,
-  collisionPadding = 16,
-  arrow = true,
-  children,
-  ...props
-}: ComponentProps<typeof PopoverPrimitive.Content> & { arrow?: boolean }) {
+export function PopoverContent({ className, sideOffset = 10, collisionPadding = 16, arrow = true, children, ...props }: PopoverContentProps) {
   return (
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content

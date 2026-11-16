@@ -106,3 +106,21 @@ it('marks today, and speaks Spanish inside a Spanish provider', () => {
   expect(screen.getByRole('button', { name: 'Mes anterior' })).toBeInTheDocument()
   expect(screen.getAllByRole('columnheader')).toHaveLength(7)
 })
+
+it('keeps its own day without `value`', async () => {
+  const onChange = vi.fn()
+  render(<DatePicker label="Due" name="due" defaultValue={day(2026, 10, 23)} onChange={onChange} />)
+  const field = screen.getByRole('button', { name: /Due/ })
+  expect(field).toHaveTextContent('Fri, Oct 23')
+  await userEvent.click(field)
+  await userEvent.click(screen.getByRole('button', { name: /October 27, 2026/ }))
+  expect(field).toHaveTextContent('Tue, Oct 27')
+  expect(document.querySelector('input[name="due"]')).toHaveValue('2026-10-27')
+  expect(onChange).toHaveBeenCalledTimes(1)
+})
+
+it('a calendar on the page keeps its own day without `value`', async () => {
+  render(<Calendar defaultValue={day(2026, 10, 23)} />)
+  await userEvent.click(screen.getByRole('button', { name: /October 27, 2026/ }))
+  expect(screen.getByRole('gridcell', { selected: true })).toHaveTextContent('27')
+})

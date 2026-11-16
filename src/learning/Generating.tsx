@@ -1,15 +1,19 @@
+'use client'
+
 import { Spinner } from '../components/Spinner'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
+import type { Props } from '../core/props'
 
 export type GeneratingStep = { label: string; state: 'done' | 'current' | 'upcoming' }
+export type GeneratingProps = Props<'div', { steps: readonly GeneratingStep[]; label?: string }, 'children'>
 
 /** What Gauth AI shows while it builds something: the steps of the work, with the one it is on. `label` names the work. */
-export function Generating({ steps, label, className }: { steps: readonly GeneratingStep[]; label?: string; className?: string }) {
+export function Generating({ steps, label, className, ...props }: GeneratingProps) {
   const { messages } = useLocale()
   return (
-    <div role="status" aria-label={label ?? messages.loading} className={cn('gx-generating', className)}>
+    <div role="status" aria-label={label ?? messages.loading} {...props} className={cn('gx-generating', className)}>
       <ul className="gx-generating__list flex flex-col gap-2.5">
         {steps.map((step, i) => (
           <li

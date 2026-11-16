@@ -86,3 +86,35 @@ it('takes its label and error from a Field', () => {
   expect(input).toHaveAttribute('placeholder', 'Type a name')
   expect(input.parentElement).toHaveClass('gx-combobox--xl')
 })
+
+it('keeps its own pick without `value`, and sends it with a form', async () => {
+  const onChange = vi.fn()
+  render(
+    <form aria-label="Settings">
+      <Combobox label="Student" name="student" options={students} defaultValue={students[0]!.value} onChange={onChange} />
+    </form>,
+  )
+  const form = screen.getByRole<HTMLFormElement>('form')
+  const field = screen.getByRole('combobox', { name: 'Student' })
+  expect(field).toHaveValue(students[0]!.label)
+  expect(new FormData(form).get('student')).toBe(students[0]!.value)
+  await userEvent.click(field)
+  await userEvent.click(screen.getByRole('option', { name: new RegExp(students[1]!.label) }))
+  expect(field).toHaveValue(students[1]!.label)
+  expect(new FormData(form).get('student')).toBe(students[1]!.value)
+  expect(onChange).toHaveBeenLastCalledWith(students[1]!.value)
+})
+
+it('passes native props and the product’s handlers to the field', async () => {
+  const onBlur = vi.fn()
+  const onKeyDown = vi.fn()
+  render(<Combobox label="Student" options={students} placeholder="Find a student" required onBlur={onBlur} onKeyDown={onKeyDown} />)
+  const field = screen.getByPlaceholderText('Find a student')
+  expect(field).toBeRequired()
+  field.focus()
+  await userEvent.keyboard('{ArrowDown}')
+  expect(onKeyDown).toHaveBeenCalled()
+  expect(screen.getByRole('listbox')).toBeInTheDocument()
+  await userEvent.tab()
+  expect(onBlur).toHaveBeenCalled()
+})

@@ -114,3 +114,32 @@ it('says its words in Spanish', () => {
   expect(option(/Correcto/)).toHaveAttribute('data-state', 'right')
   expect(option(/Todavía no/)).toHaveAttribute('data-state', 'retry')
 })
+
+it('keeps its own pick without `value`', async () => {
+  const onChange = vi.fn()
+  render(
+    <AnswerGroup label="Answers" onChange={onChange}>
+      <AnswerOption value="a">One</AnswerOption>
+      <AnswerOption value="b">Two</AnswerOption>
+    </AnswerGroup>,
+  )
+  const [one, two] = screen.getAllByRole('radio')
+  expect(one).not.toBeChecked()
+  await userEvent.click(two!)
+  expect(two).toBeChecked()
+  expect(onChange).toHaveBeenLastCalledWith('b')
+})
+
+it('with no pick, Tab stops at the first option, also when the options are inside a wrapper', () => {
+  render(
+    <AnswerGroup label="Answers" value={null} onChange={() => {}}>
+      <div>
+        <AnswerOption value="a">One</AnswerOption>
+      </div>
+      <div>
+        <AnswerOption value="b">Two</AnswerOption>
+      </div>
+    </AnswerGroup>,
+  )
+  expect(screen.getAllByRole('radio').map((r) => r.tabIndex)).toEqual([0, -1])
+})

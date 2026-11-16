@@ -1,8 +1,13 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
 import { LEVELS, type Level } from '../core/messages'
+import type { Props } from '../core/props'
 import { LevelMark } from './LevelMark'
+
+export type LevelLadderProps = Props<'ol', { level: Level }, 'children'>
 
 /** The levels a student earns, lowest first. Not started is not a rung. */
 type Rung = Exclude<Level, 'not_started'>
@@ -40,11 +45,11 @@ const spot = cva(
  * The ladder with a student's place on it: the rungs up to their level are reached, and their own is the current one.
  * With `not_started` no rung is reached.
  */
-export function LevelLadder({ level, className }: { level: Level; className?: string }) {
+export function LevelLadder({ level, className, ...props }: LevelLadderProps) {
   const { messages } = useLocale()
   const at = RUNGS.indexOf(level as Rung)
   return (
-    <ol className={cn('gx-level-ladder grid w-full max-w-[21.25rem] grid-cols-4', className)}>
+    <ol {...props} className={cn('gx-level-ladder grid w-full max-w-[21.25rem] grid-cols-4', className)}>
       {RUNGS.map((rung, i) => {
         const next = RUNGS[i + 1]
         return (

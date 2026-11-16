@@ -1,6 +1,12 @@
+'use client'
+
 import { renderToString } from 'katex'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { cx } from '../core/cx'
+import type { Props } from '../core/props'
+import { mergeRefs } from '../core/refs'
+
+export type TexProps = Props<'span', { tex: string; display?: boolean }, 'children' | 'dangerouslySetInnerHTML'>
 
 const cache = new Map<string, string>()
 
@@ -20,9 +26,10 @@ export function toHtml(tex: string, display: boolean) {
  * A formula, from TeX. Inline it sits on the baseline of the words around it, at their size; `display` sets it on its
  * own line, centered. A screen reader gets the formula as MathML.
  */
-export function Tex({ tex, display = false, className }: { tex: string; display?: boolean; className?: string }) {
+export function Tex({ tex, display = false, className, ref, ...props }: TexProps) {
   const html = useMemo(() => toHtml(tex, display), [tex, display])
   const box = useRef<HTMLSpanElement>(null)
+  const setBox = useMemo(() => mergeRefs(box, ref), [ref])
   const [scrolls, setScrolls] = useState(false)
   /* A display formula wider than its place scrolls in its own box. Then the keyboard must reach the box to scroll it. */
   useEffect(() => {
@@ -37,10 +44,11 @@ export function Tex({ tex, display = false, className }: { tex: string; display?
   }, [display, html])
   return (
     <span
-      ref={box}
-      className={cx('gx-tex', display && 'gx-tex--display', className)}
       // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a box that scrolls takes focus, so the arrow keys can scroll it
       tabIndex={display && scrolls ? 0 : undefined}
+      {...props}
+      ref={setBox}
+      className={cx('gx-tex', display && 'gx-tex--display', className)}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   )

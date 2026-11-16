@@ -1,4 +1,7 @@
 import { cn } from '../core/cn'
+import type { Props } from '../core/props'
+
+export type AvatarProps = Props<'span', { name: string; size?: number; plain?: boolean }, 'children'>
 
 /** Titles don't count toward initials: "Ms. Carter" is C, "Rachel Carter" is RC. */
 const TITLES = new Set(['mr', 'mrs', 'ms', 'mx', 'dr'])
@@ -27,18 +30,19 @@ export const fillOf = (name: string) => {
 }
 
 /** Initials on a soft ground of the palette. `size` is in pixels. `plain` draws them grey on grey. */
-export function Avatar({ name, size = 30, plain, className }: { name: string; size?: number; plain?: boolean; className?: string }) {
+export function Avatar({ name, size = 30, plain, className, style, ...props }: AvatarProps) {
   return (
     <span
       role="img"
       aria-label={name}
       data-fill={plain ? undefined : fillOf(name)}
+      {...props}
       className={cn(
         'gx-avatar grid flex-none place-items-center rounded-full select-none',
         plain ? 'gx-avatar--plain bg-surface font-strong tracking-normal text-ink-soft' : ['font-title tracking-label', FILL_CLASSES[fillOf(name) - 1]],
         className,
       )}
-      style={{ width: size, height: size, fontSize: Math.round(size * 0.38) }}
+      style={{ width: size, height: size, fontSize: Math.round(size * 0.38), ...style }}
     >
       {initialsOf(name)}
     </span>

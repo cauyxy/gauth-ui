@@ -1,3 +1,5 @@
+'use client'
+
 import { cva } from 'class-variance-authority'
 import type { ComponentProps } from 'react'
 import { cn } from '../core/cn'
@@ -5,6 +7,7 @@ import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
 
 export type ChipTone = 'neutral' | 'blue' | 'violet' | 'good' | 'warn' | 'pink' | 'ink'
+export type ChipProps = ComponentProps<'span'> & { tone?: ChipTone; onRemove?: () => void; removeLabel?: string }
 
 /* An icon in a chip is 14px. Its strokes do not fill its box, so at the start it sits 2px closer to the edge and to the text. */
 const chip = cva(
@@ -34,14 +37,7 @@ const chip = cva(
  * Small rounded label: standard codes, skill names, statuses. With `onRemove` it ends with a remove button:
  * an attached file, a picked skill. `removeLabel` names that button ("Remove worksheet.pdf").
  */
-export function Chip({
-  tone = 'neutral',
-  onRemove,
-  removeLabel,
-  className,
-  children,
-  ...props
-}: ComponentProps<'span'> & { tone?: ChipTone; onRemove?: () => void; removeLabel?: string }) {
+export function Chip({ tone = 'neutral', onRemove, removeLabel, className, children, ...props }: ChipProps) {
   const { messages } = useLocale()
   return (
     <span className={cn(chip({ tone, removable: Boolean(onRemove) }), className)} {...props}>
