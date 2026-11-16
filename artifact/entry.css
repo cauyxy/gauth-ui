@@ -1,0 +1,12 @@
+/* The stylesheet of the artifact's previews: what the gallery page loads, and the formulas. */
+@import '../gallery/gallery.css';
+@import '../src/math/math.css';
+@source './entry.tsx';
+
+/* A preview is one white card; the gallery's own page is canvas. */
+body {
+  background: var(--gx-color-white);
+}
+.ds-card {
+  padding: var(--gx-space-5);
+}

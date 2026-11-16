@@ -104,3 +104,67 @@ it('names the list and the dismiss button in the language of the page', async ()
   await userEvent.click(list('Notificaciones').getByRole('button', { name: 'Descartar' }))
   expect(list('Notificaciones').queryByText('Publicado en Period 3')).not.toBeInTheDocument()
 })
+
+it('does not stack a toast that says the same as one still on screen', async () => {
+  render(<Toaster />)
+  act(() => {
+    toast('Link copied')
+    toast('Link copied')
+    toast('Link copied')
+  })
+  expect(list().getAllByRole('listitem')).toHaveLength(1)
+  /* Another tone or another second line is another toast. */
+  act(() => {
+    toast('Link copied', { tone: 'good' })
+    toast('Link copied', { description: 'Exit ticket · Geometry · Period 3' })
+  })
+  expect(list().getAllByRole('listitem')).toHaveLength(3)
+  for (const button of list().getAllByRole('button', { name: 'Dismiss' })) await userEvent.click(button)
+  expect(list().queryByRole('listitem')).not.toBeInTheDocument()
+})
+
+it('puts a repeated toast where the newest stands and starts its 4 seconds again', () => {
+  vi.useFakeTimers()
+  try {
+    render(<Toaster />)
+    act(() => toast('Link copied'))
+    act(() => toast('Draft saved'))
+    act(() => void vi.advanceTimersByTime(3000))
+    act(() => toast('Link copied'))
+    expect(
+      list()
+        .getAllByRole('listitem')
+        .map((item) => item.textContent),
+    ).toEqual(['Draft saved', 'Link copied'])
+    /* 4.1 seconds after the first press: the other toast has left, the repeated one has 2.9 seconds more. */
+    act(() => void vi.advanceTimersByTime(1100))
+    expect(
+      list()
+        .getAllByRole('listitem')
+        .map((item) => item.textContent),
+    ).toEqual(['Link copied'])
+    act(() => void vi.advanceTimersByTime(3000))
+    expect(list().queryByRole('listitem')).not.toBeInTheDocument()
+  } finally {
+    vi.useRealTimers()
+  }
+})
+
+it('keeps every toast that has an action: each one takes back its own thing', async () => {
+  const first = vi.fn()
+  const second = vi.fn()
+  render(<Toaster />)
+  act(() => toast('Removed 1 student', { action: { label: 'Undo', onClick: first } }))
+  act(() => toast('Removed 1 student', { action: { label: 'Undo', onClick: second } }))
+  /* A toast with the same words and no action does not take their place either. */
+  act(() => toast('Removed 1 student'))
+  expect(list().getAllByRole('listitem')).toHaveLength(3)
+  const [undoFirst, undoSecond] = list().getAllByRole('button', { name: 'Undo' })
+  await userEvent.click(undoFirst!)
+  expect(first).toHaveBeenCalledOnce()
+  expect(second).not.toHaveBeenCalled()
+  await userEvent.click(undoSecond!)
+  expect(second).toHaveBeenCalledOnce()
+  await userEvent.click(list().getByRole('button', { name: 'Dismiss' }))
+  expect(list().queryByRole('listitem')).not.toBeInTheDocument()
+})

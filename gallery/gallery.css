@@ -3,6 +3,8 @@
 @import '../src/styles.css';
 /* The examples are written as a product writes its pages: with Tailwind classes. */
 @source './examples';
+/* The type and motion showcases of the docs site and the artifact. */
+@source './foundations.tsx';
 
 body {
   background: var(--gx-color-canvas);

@@ -58,6 +58,10 @@ const PAIRS: [text: string, ground: string][] = [
   ['ink', 'proficient'],
   ['ink', 'correct'],
   ['white', 'mastered-ink'],
+  /* A StudentCard or an AnswerFeedback with a meaning: its other text stays ink on the soft ground. */
+  ...['violet-soft', 'good-soft', 'pink-soft', 'mastered-soft', 'proficient-soft', 'familiar-soft', 'attempted-soft'].map(
+    (ground) => ['ink', ground] as [string, string],
+  ),
 ]
 
 it.each(PAIRS)('%s on %s is at least 4.5:1', (text, ground) => {

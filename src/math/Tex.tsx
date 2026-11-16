@@ -1,5 +1,5 @@
 import { renderToString } from 'katex'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { cx } from '../core/cx'
 
 const cache = new Map<string, string>()
@@ -22,5 +22,26 @@ export function toHtml(tex: string, display: boolean) {
  */
 export function Tex({ tex, display = false, className }: { tex: string; display?: boolean; className?: string }) {
   const html = useMemo(() => toHtml(tex, display), [tex, display])
-  return <span className={cx('gx-tex', display && 'gx-tex--display', className)} dangerouslySetInnerHTML={{ __html: html }} />
+  const box = useRef<HTMLSpanElement>(null)
+  const [scrolls, setScrolls] = useState(false)
+  /* A display formula wider than its place scrolls in its own box. Then the keyboard must reach the box to scroll it. */
+  useEffect(() => {
+    const el = box.current
+    if (!display || !el) return
+    const measure = () => setScrolls(el.scrollWidth > el.clientWidth)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(el)
+    return () => observer.disconnect()
+    // oxlint-disable-next-line react/exhaustive-effect-dependencies -- another formula in the same box has another width, and the observer does not see that
+  }, [display, html])
+  return (
+    <span
+      ref={box}
+      className={cx('gx-tex', display && 'gx-tex--display', className)}
+      // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a box that scrolls takes focus, so the arrow keys can scroll it
+      tabIndex={display && scrolls ? 0 : undefined}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  )
 }

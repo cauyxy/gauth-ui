@@ -1,6 +1,6 @@
 {
   "name": "gauth-ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Gauth design system: tokens, React components and design rules.",
   "license": "UNLICENSED",
   "repository": {
@@ -46,7 +46,9 @@
     "compare": "pnpm build && node compare/run.ts",
     "gallery": "vite gallery",
     "site": "vite --config site/vite.config.ts",
-    "site:build": "vite build --config site/vite.config.ts"
+    "site:build": "vite build --config site/vite.config.ts",
+    "artifact": "pnpm build && node artifact/build.ts",
+    "artifact:check": "node artifact/check.ts"
   },
   "publishConfig": {
     "access": "public"

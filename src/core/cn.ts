@@ -13,11 +13,13 @@ const merge = extendTailwindMerge({
     theme: {
       shadow: ['card', 'edge', 'edge-strong', 'pop', 'raise', 'outline', 'box', 'invalid'],
       text: ['3xs', '2xs'],
+      font: ['reading'],
       'font-weight': ['body', 'control', 'title', 'strong'],
       leading: ['figure', 'title', 'heading', 'body'],
       tracking: ['display', 'title', 'label'],
       ease: ['standard', 'enter'],
-      animate: ['fade-in', 'fade-out', 'pop-in', 'pop-out', 'tip-in', 'rise-in', 'slide-in', 'mark-right', 'mark-retry', 'pulse', 'spin', 'sweep'],
+      container: ['read', 'doc', 'page'],
+      animate: ['fade-in', 'fade-out', 'pop-in', 'pop-out', 'tip-in', 'rise-in', 'slide-in', 'slide-in-end', 'mark-right', 'mark-retry', 'pulse', 'spin', 'sweep'], // oxfmt-ignore
     },
   },
 })

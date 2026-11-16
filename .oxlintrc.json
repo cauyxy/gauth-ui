@@ -3,7 +3,7 @@
   "plugins": ["typescript", "react", "jsx-a11y", "import", "vitest", "unicorn", "oxc"],
   "categories": { "correctness": "error", "suspicious": "warn" },
   "env": { "browser": true, "node": true, "es2024": true },
-  "ignorePatterns": ["dist", "site/dist", "src/core/icons.ts"],
+  "ignorePatterns": ["dist", "site/dist", "artifact/out", "src/core/icons.ts"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "jsx-a11y/prefer-tag-over-role": "off",

@@ -1,7 +1,7 @@
 /*
  * src/styles/tokens.css is the one source of the tokens. This script writes the two files made from it:
  *   src/styles/theme.css   the same tokens as a Tailwind v4 theme (bg-ink, text-sm, rounded-2xl, shadow-edge)
- *   design/tokens.json     the tokens in the Design System artifact's shape (each family a list of {name, value, usage})
+ *   design/tokens.json     the tokens as data (each family a list of {name, value, usage}): the docs site's Tokens page reads it
  * Never edit those two by hand.
  *   node scripts/tokens.ts           rewrite both
  *   node scripts/tokens.ts --check   fail when either is out of date (also in `pnpm test`)
@@ -16,7 +16,7 @@ export const JSON_FILE = `${ROOT}design/tokens.json`
 
 export type Token = { name: string; value: string; usage: string }
 
-/** The families Tailwind has a theme namespace for. Control heights, durations and avatar fills stay `--gx-*` only. */
+/** The families Tailwind has a theme namespace for. Control heights and durations stay `--gx-*` only. */
 const TAILWIND = ['font', 'leading', 'tracking', 'container', 'color', 'radius', 'text', 'shadow', 'ease', 'animate'] as const
 const CLEARED = ['--color-*', '--text-*', '--shadow-*', '--inset-shadow-*', '--drop-shadow-*']
 

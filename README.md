@@ -10,10 +10,10 @@ The design rules ship with the package: [`design/README.md`](design/README.md) s
 pnpm add gauth-ui
 ```
 
-React 19 and Tailwind 4 are peer dependencies: the components are written in Tailwind classes, the same way as shadcn/ui, and your Tailwind build makes their CSS. Load Google Sans in the page's `<head>`:
+React 19 and Tailwind 4 are peer dependencies: the components are written in Tailwind classes, the same way as shadcn/ui, and your Tailwind build makes their CSS. Load the fonts in the page's `<head>`: Google Sans for everything, and Literata when a page sets a reading passage with `<Prose font="reading">`:
 
 ```html
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..700&display=swap" />
 ```
 
 ## Use

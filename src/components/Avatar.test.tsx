@@ -10,7 +10,7 @@ it('leaves titles out of the initials', () => {
 it('gives a name the same fill every time', () => {
   expect(fillOf('Rachel Carter')).toBe(fillOf('Rachel Carter'))
   expect(fillOf('Rachel Carter')).toBeGreaterThanOrEqual(1)
-  expect(fillOf('Rachel Carter')).toBeLessThanOrEqual(6)
+  expect(fillOf('Rachel Carter')).toBeLessThanOrEqual(5)
 })
 
 it('is an image named by the person, sized in pixels', () => {
@@ -26,4 +26,19 @@ it('has no fill when plain', () => {
   const avatar = screen.getByRole('img')
   expect(avatar).toHaveClass('gx-avatar--plain')
   expect(avatar).not.toHaveAttribute('data-fill')
+})
+
+it('takes a soft ground of the palette with its own text color, never a gradient or white initials', () => {
+  const fills = new Set<string>()
+  for (const name of ['Maya Chen', 'Diego Ramirez', 'Aisha Khan', 'Rachel Carter', 'Sam Lee', 'Noor Ali', 'Ivy Park', 'Omar Diaz', 'Lena Wu', 'Theo Brandt']) {
+    const { unmount } = render(<Avatar name={name} />)
+    const avatar = screen.getByRole('img', { name })
+    const ground = [...avatar.classList].find((c) => /^bg-(blue|violet|good|warn|pink)-soft$/.test(c))
+    expect(ground, name).toBeDefined()
+    expect(avatar).toHaveClass(`text-${ground!.slice('bg-'.length, -'-soft'.length)}`)
+    expect(avatar).not.toHaveClass('text-white')
+    fills.add(ground!)
+    unmount()
+  }
+  expect(fills.size).toBeGreaterThan(2)
 })
