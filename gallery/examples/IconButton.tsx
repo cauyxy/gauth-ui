@@ -3,6 +3,7 @@ import { Icon, IconButton, type IconName } from '../../src'
 
 /* Every icon of the package, by its name. */
 const ICONS: IconName[] = [
+  'minus',
   'check',
   'check-circle',
   'chevron-down',

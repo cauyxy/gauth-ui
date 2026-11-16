@@ -23,6 +23,7 @@ export const NAMES: Record<string, string> = {
   'arrow-right': 'arrow-right',
   close: 'x',
   plus: 'plus',
+  minus: 'minus',
   more: 'ellipsis',
   search: 'search',
   copy: 'copy',

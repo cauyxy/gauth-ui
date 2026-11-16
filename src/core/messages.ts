@@ -58,6 +58,20 @@ export type Messages = {
   /** The two arrows of a calendar. */
   previousMonth: string
   nextMonth: string
+  /** What a DateRangePicker says before two days are picked. */
+  pickDates: string
+  /** The two buttons of a NumberInput. */
+  decrease: string
+  increase: string
+  /** What a FileDropzone says when the product gives no title. */
+  dropFiles: string
+  /** What a Combobox says when nothing matches the text. */
+  noResults: string
+  /** The accessible name of a Pagination, and its buttons. */
+  pagination: string
+  previousPage: string
+  nextPage: string
+  page: (n: number) => string
 }
 
 export const en: Messages = {
@@ -93,6 +107,15 @@ export const en: Messages = {
   pickDate: 'Pick a date',
   previousMonth: 'Previous month',
   nextMonth: 'Next month',
+  pickDates: 'Pick dates',
+  decrease: 'Decrease',
+  increase: 'Increase',
+  dropFiles: 'Drop files here, or click to choose',
+  noResults: 'No matches',
+  pagination: 'Pages',
+  previousPage: 'Previous page',
+  nextPage: 'Next page',
+  page: (n) => `Page ${n}`,
 }
 
 export const es: Messages = {
@@ -128,6 +151,15 @@ export const es: Messages = {
   pickDate: 'Elige una fecha',
   previousMonth: 'Mes anterior',
   nextMonth: 'Mes siguiente',
+  pickDates: 'Elige las fechas',
+  decrease: 'Disminuir',
+  increase: 'Aumentar',
+  dropFiles: 'Suelta los archivos aquí o haz clic para elegirlos',
+  noResults: 'Sin resultados',
+  pagination: 'Páginas',
+  previousPage: 'Página anterior',
+  nextPage: 'Página siguiente',
+  page: (n) => `Página ${n}`,
 }
 
 export const MESSAGES: Record<Locale, Messages> = { en, es }

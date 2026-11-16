@@ -102,6 +102,7 @@
   --animate-tip-in: gx-fade-in var(--gx-dur-fast) var(--ease-enter) both;
   --animate-rise-in: gx-rise-in var(--gx-dur-enter) var(--ease-enter) both;
   --animate-slide-in: gx-slide-in var(--gx-dur-enter) var(--ease-enter) both;
+  --animate-slide-in-end: gx-slide-in-end var(--gx-dur-enter) var(--ease-enter) both;
   --animate-mark-right: gx-mark-right var(--gx-dur-mark) var(--ease-enter);
   --animate-mark-retry: gx-mark-retry var(--gx-dur-mark) ease-in-out;
   --animate-pulse: gx-pulse calc(2s * var(--gx-ms)) cubic-bezier(0.4, 0, 0.6, 1) infinite;

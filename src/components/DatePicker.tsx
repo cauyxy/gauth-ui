@@ -39,10 +39,11 @@ const WEEK = Array.from({ length: 7 }, (_, i) => new Date(2023, 0, 1 + i))
 
 /*
  * The picked day is ink with white text, the way a picked item is ink everywhere; today has the control outline, so
- * it has a shape and not only a color. The picked day's hover is written for that state, so it wins over the plain hover.
+ * it has a shape and not only a color. In a range, its two ends are picked days and the days between are on `surface`.
+ * The hover of each state is written for it, so it wins over the plain hover.
  */
 const day =
-  'gx-calendar__day grid size-(--gx-h-md) cursor-pointer place-items-center rounded-lg text-sm text-ink tabular-nums outline-0 transition-colors duration-(--gx-dur-fast) ease-standard enabled:hover:bg-surface focus-visible:focus-ring focus-visible:outline-offset-1 disabled:cursor-default disabled:opacity-50 aria-[current=date]:shadow-edge-strong group-aria-selected:bg-ink group-aria-selected:font-control group-aria-selected:text-white group-aria-selected:enabled:hover:bg-black'
+  'gx-calendar__day grid size-(--gx-h-md) cursor-pointer place-items-center rounded-lg text-sm text-ink tabular-nums outline-0 transition-colors duration-(--gx-dur-fast) ease-standard enabled:hover:bg-surface focus-visible:focus-ring focus-visible:outline-offset-1 disabled:cursor-default disabled:opacity-50 aria-[current=date]:shadow-edge-strong group-data-[edge]:bg-ink group-data-[edge]:font-control group-data-[edge]:text-white group-data-[edge]:enabled:hover:bg-black group-data-[between]:bg-surface group-data-[between]:enabled:hover:bg-track'
 
 /**
  * A month of days to pick one from. `DatePicker` shows it in a popover; alone, it sits on the page.
@@ -54,11 +55,14 @@ export function Calendar({
   onChange,
   min,
   max,
+  range,
   focusOnMount = false,
   className,
 }: {
   value: Date | null
   onChange: (value: Date) => void
+  /** Marks the days from `from` to `to` as picked, for `DateRangePicker`. `value` is then the day the calendar opens on. */
+  range?: { from: Date | null; to: Date | null }
   min?: Date
   max?: Date
   /** Puts focus on the picked day when the calendar appears. */
@@ -76,6 +80,8 @@ export function Calendar({
     button.focus()
   }
 
+  const edge = (date: Date) => (range ? sameDay(date, range.from) || sameDay(date, range.to) : sameDay(date, value))
+  const between = (date: Date) => !!range?.from && !!range.to && date > range.from && date < range.to
   const outside = (date: Date) => (min ? date < dayOf(min) : false) || (max ? date > dayOf(max) : false)
   const go = (date: Date, focus: boolean) => {
     moved.current = focus
@@ -145,8 +151,15 @@ export function Calendar({
             <tr key={w}>
               {week.map((date, i) =>
                 date ? (
-                  // oxlint-disable-next-line jsx-a11y/no-redundant-roles -- browsers give a td in a grid this role; testing tools and some readers do not
-                  <td key={i} role="gridcell" aria-selected={sameDay(date, value)} className="group p-0.5">
+                  <td
+                    key={i}
+                    // oxlint-disable-next-line jsx-a11y/no-redundant-roles -- browsers give a td in a grid this role; testing tools and some readers do not
+                    role="gridcell"
+                    aria-selected={edge(date) || between(date)}
+                    data-edge={edge(date) || undefined}
+                    data-between={between(date) || undefined}
+                    className="group p-0.5"
+                  >
                     <button
                       type="button"
                       ref={sameDay(date, active) ? takeFocus : undefined}
@@ -177,7 +190,7 @@ export function Calendar({
 }
 
 /* The same box as Select: an error is an attempted outline on the attempted-soft ground, the look of "Not yet". */
-const trigger = cva(
+export const datePickerTrigger = cva(
   'gx-date-picker__trigger flex w-full min-w-0 cursor-pointer items-center justify-between gap-2 bg-white text-start font-control text-ink shadow-edge-strong outline-0 transition-[background-color,box-shadow] duration-(--gx-dur-fast) ease-standard focus-visible:focus-ring focus-visible:outline-offset-1 disabled:cursor-default disabled:opacity-50 aria-invalid:bg-attempted-soft aria-invalid:shadow-invalid',
   {
     variants: {
@@ -238,7 +251,7 @@ export function DatePicker({
         aria-labelledby={field ? `${field.labelId} ${valueId}` : label ? `${id} ${valueId}` : undefined}
         aria-describedby={field?.describedBy}
         aria-invalid={field?.invalid || undefined}
-        className={cn('gx-date-picker', `gx-date-picker--${size}`, trigger({ size }), className)}
+        className={cn('gx-date-picker', `gx-date-picker--${size}`, datePickerTrigger({ size }), className)}
       >
         <span id={valueId} className={cn('gx-date-picker__value truncate', !value && 'text-muted')}>
           {value ? formatDay(value) : (placeholder ?? messages.pickDate)}
