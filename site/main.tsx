@@ -148,6 +148,8 @@ function Site() {
 
   return (
     <LocaleProvider locale={locale}>
+      {/* Catches clicks on the links inside it, which the keyboard reaches as links. */}
+      {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div className="s-shell" onClick={onLinkClick}>
         <header className="s-top">
           <a href="/" className="s-brand">

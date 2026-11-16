@@ -43,11 +43,13 @@ export function Composer({
   const input = useRef<HTMLTextAreaElement>(null)
   const empty = value.trim() === ''
 
+  /* The height follows the text, so the effect runs again on each new value although it does not read it. */
   useLayoutEffect(() => {
     const el = input.current
     if (!el) return
     el.style.height = 'auto'
     el.style.height = el.scrollHeight + 'px'
+    // oxlint-disable-next-line react/exhaustive-effect-dependencies
   }, [value])
 
   const send = () => {

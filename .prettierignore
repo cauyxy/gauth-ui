@@ -1,0 +1,10 @@
+dist
+site/dist
+node_modules
+pnpm-lock.yaml
+# generated
+src/core/icons.ts
+src/styles/theme.css
+design/tokens.json
+# prose is written by hand; Prettier would rewrap it
+*.md

@@ -8,7 +8,6 @@ import { parse, stale } from '../scripts/tokens.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
-const kebab = (name: string) => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
 /** Every component of both groups: [name, folder under src]. */
 const components = (['components', 'learning'] as const).flatMap((dir) =>
@@ -36,7 +35,7 @@ const KINDS: [what: string, kind: RegExp, allowed: (value: string) => boolean][]
   ['a layer that is not a token', /^z-(.+)$/, (v) => /^(?:0|1|auto|\(--gx-z-(?:overlay|pop|toast)\))$/.test(v)],
   ['a duration that is not a token', /^(?:duration|delay)-(.+)$/, (v) => /^\(--gx-(?:dur|delay)-[\w-]+\)$/.test(v)],
   ['an outline that is not the shared ring', /^-?outline-(.+)$/, (v) => /^(?:0|none|white|offset-(?:\d+|\[-?\d+px\]))$/.test(v)],
-  ['a shadow written in the component', /^(?:shadow|inset-shadow|drop-shadow|ring|inset-ring)-(.+)$/, (v) => !/^[\[\d]/.test(v) && (!v.startsWith('(') || v.startsWith('(--gx-'))],
+  ['a shadow written in the component', /^(?:shadow|inset-shadow|drop-shadow|ring|inset-ring)-(.+)$/, (v) => !/^[[\d]/.test(v) && (!v.startsWith('(') || v.startsWith('(--gx-'))],
   ['a type size off the scale', /^text-(\[.+)$/, () => false],
 ]
 
