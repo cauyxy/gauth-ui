@@ -1,7 +1,7 @@
 {
   "name": "gauth-ui",
-  "version": "0.3.2",
-  "description": "Gauth design system: tokens, React components and design rules.",
+  "version": "0.3.3",
+  "description": "Unofficial design system in the look of gauth.com: tokens, React components and design rules.",
   "license": "MIT",
   "repository": {
     "type": "git",
