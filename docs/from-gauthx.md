@@ -15,6 +15,8 @@ The Tailwind theme clears every color that is not a token, so a class with an ol
 | `bg-surface-2`, `--color-surface-2`    | `surface`           | Secondary buttons and icon squares take the same grey as soft cards | `#f1f1f3` → `#f5f5f7`              |
 | `--color-edge-2`, `--color-edge-3`     | `edge-strong`       | No uses                                                             | none                               |
 | `--color-brand-soft`, `--color-blue-tint` | none             | No uses                                                             | none                               |
+| `violet-mid`, `--color-violet-mid`     | `violet`            | No component and no rule used it (the owner's decision, Nov 16, 2026) | `#918ddf` → `#6556c8`              |
+| `violet-tint`, `--color-violet-tint`   | `violet-soft`       | The same: a second soft violet with no use of its own               | `#e3e3fa` → `#f3f1ff`              |
 
 ## Colors that changed
 

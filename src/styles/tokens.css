@@ -102,9 +102,7 @@
   /* Violet: XP and Gauth AI accents. Never a level, never a button. */
   --gx-color-violet: #6556c8;
   --gx-color-violet-deep: #443493;
-  --gx-color-violet-mid: #918ddf;
   --gx-color-violet-soft: #f3f1ff;
-  --gx-color-violet-tint: #e3e3fa;
 
   /* Radii: Tailwind's own values. Nested corners step down so they stay concentric. */
   --gx-radius-xs: 0.125rem; /* 2px */

@@ -29,7 +29,7 @@ Ink on white carries the page. Color appears only where it means something. A to
 | Edges        | `edge`, `edge-strong`, `ring`, `rule`, `track`                      | Card outlines are an inset 1px shadow (`shadow-edge`); `rule` for firmer lines and off toggles; `track` is the empty part of any bar and the ground of a Segmented control. |
 | Brand        | `brand`                                                             | The Gauth mark only. Never text, buttons or states.                                               |
 | Skill levels | `attempted`, `familiar`, `proficient`, `mastered`, `not-started`    | Level marks and level bars. See Skill levels.                                                     |
-| XP and AI    | `violet`, `violet-deep`, `violet-mid`, `violet-soft`, `violet-tint` | XP and Gauth AI accents. Never a level, never a button.                                           |
+| XP and AI    | `violet`, `violet-deep`, `violet-soft`                              | XP and Gauth AI accents. Never a level, never a button.                                           |
 | Standards    | `blue`, `blue-soft`                                                 | Standard-code chips and links. The focus ring.                                                    |
 | Done, right  | `good`, `good-soft`, `good-mid`, `correct`                          | Checked, the right answer, a positive delta.                                                      |
 | Look here    | `warn`, `warn-soft`                                                 | Something that needs a person's eyes.                                                             |
