@@ -1,0 +1,3 @@
+# A commit that only reformats: git blame skips it (git config blame.ignoreRevsFile .git-blame-ignore-revs)
+# style: format every file with Prettier
+b3b3d6e69ae89a062d39c6903354cd80e6051f29
