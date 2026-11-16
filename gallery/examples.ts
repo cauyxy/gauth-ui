@@ -59,7 +59,7 @@ export const GROUPS: { slug: string; title: string; names: string[] }[] = [
   {
     slug: 'learning',
     title: 'Learning',
-    names: ['LevelMark', 'LevelChip', 'LevelLadder', 'LevelBar', 'AnswerOption', 'Reveal', 'WorkedSteps', 'StepProgress'],
+    names: ['LevelMark', 'LevelChip', 'LevelLadder', 'LevelBar', 'AnswerOption', 'AnswerFeedback', 'Reveal', 'WorkedSteps', 'StepProgress', 'StudentCard'],
   },
   { slug: 'math', title: 'Math', names: ['Tex', 'RichText'] },
 ]

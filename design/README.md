@@ -117,7 +117,7 @@ Align what the eye sees, the ink, not the box. `node gallery/optical.ts` measure
 - **Keep it light.** A grey fill, an outline and a bold weight each add weight, so an element gets one of them at most. A plain chip has an outline and no fill. A table's column heads have no fill. A picked option stays white and only its mark turns ink.
 - The hairline has two strengths: `edge` (10%) around cards, `edge-strong` (14%) around a control.
 
-- Staff cards are `Panel`: 16px radius, white, a 1px inset hairline, no drop shadow. Student cards run larger (24px).
+- Staff cards are `Panel`: 16px radius, white, a 1px inset hairline, no drop shadow. Student cards are `StudentCard`: 24px radius, and a soft ground in place of the hairline when the card has one of the meanings below (see Learning).
 - Nested radii are concentric: a card holds tiles a step smaller. Radii: `xs` 2 · `sm` 4 · `md` 6 · `lg` 8 · `xl` 12 · `2xl` 16 · `3xl` 24 · `4xl` 32 px.
 - Shadows are only `card`, `edge`, `edge-strong`, `pop`, `raise`, `outline`, `box` (an empty checkbox) and `invalid` (a field with an error). `shadow-pop` is for popovers, menus and floating docks.
 - Lines between rows are borders in `line`, not shadows. A picked item is `shadow-outline` (1.5px ink).
@@ -186,10 +186,24 @@ What every education page shares: the icons for the work, the marks of progress,
 **Progress and reward.**
 
 - A level is always the level ladder (`LevelMark`, `LevelChip`, `LevelBar`): Attempted, Familiar, Proficient, Mastered. A percent or a grade never stands in for a level.
-- XP, a streak and a badge are `violet` (`Chip tone="violet"`, an icon in `violet` on `violet-soft`). They count effort, so they never use a level's color and never go down.
+- XP, a streak and a badge are `violet` (`Chip tone="violet"`, `IconBox tone="violet"`). They count effort, so they never use a level's color and never go down.
 - A celebration (a finished unit, a badge earned) is `pink`, once, at the moment it happens.
-- A wrong answer is "Not yet" in `attempted` orange, with the next try. Never red, never a lost point or a broken streak shown in red.
+- After an answer comes an `AnswerFeedback`: "Correct" on `good-soft` with the reason, or "Not yet" in `attempted` orange with the next try. Never red, never a lost point or a broken streak shown in red.
 - A goal reads as what is left: "2 more questions today", with a `Meter` or a `StepProgress`.
+
+**Where color has room.** On a student page four meanings may fill a whole `StudentCard` with their soft ground, so the page is not all white and grey:
+
+| Meaning                   | Ground               | How                                           |
+| ------------------------- | -------------------- | --------------------------------------------- |
+| A goal, XP, a streak      | `violet-soft`        | `<StudentCard tone="violet">`                 |
+| Done, a right answer      | `good-soft`          | `<StudentCard tone="good">`, `AnswerFeedback` |
+| A level a student reached | that level's `-soft` | `<StudentCard level="proficient">`            |
+| A celebration             | `pink-soft`          | `<StudentCard tone="pink">`                   |
+
+- Nothing else takes a ground. A subject, a lesson, a setting or a plain fact stays on a white card, and its icon stays neutral.
+- Two soft cards at most on a screen where a student works; four at most on a summary. When every card has a color, none of them says anything.
+- The colors are the ones above. No new color for a subject, a course or a product.
+- A staff page stays ink on white: color there is a chip, a level or a mark.
 
 **Where the work lives.**
 
@@ -217,7 +231,8 @@ Learning: what an education product shows.
 | Group        | Components |
 | ------------ | ---------- |
 | Skill levels | [LevelMark](components/LevelMark/README.md), [LevelChip](components/LevelChip/README.md), [LevelLadder](components/LevelLadder/README.md), [LevelBar](components/LevelBar/README.md) |
-| Questions    | [AnswerOption](components/AnswerOption/README.md), [Reveal](components/Reveal/README.md), [WorkedSteps](components/WorkedSteps/README.md), [StepProgress](components/StepProgress/README.md) |
+| Pages        | [StudentCard](components/StudentCard/README.md) |
+| Questions    | [AnswerOption](components/AnswerOption/README.md), [AnswerFeedback](components/AnswerFeedback/README.md), [Reveal](components/Reveal/README.md), [WorkedSteps](components/WorkedSteps/README.md), [StepProgress](components/StepProgress/README.md) |
 | Gauth AI     | [Composer](components/Composer/README.md), [Message](components/Message/README.md), [AiStatus](components/AiStatus/README.md), [ReplyActions](components/ReplyActions/README.md), [FollowUps](components/FollowUps/README.md), [Quote](components/Quote/README.md), [Generating](components/Generating/README.md) |
 
 Math: formulas, from `gauth-ui/math`.
