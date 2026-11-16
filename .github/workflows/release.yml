@@ -1,16 +1,49 @@
-# Publishes the package to npm when a version tag (v0.1.0) is pushed.
-# npm trusts this workflow by name (npmjs.com → gauth-ui → Settings → Trusted publisher: cauyxy/gauth-ui, release.yml),
+# Publishes the package to npm when main has a version npm does not have yet: change `version` in package.json and merge.
+# Then it pushes the tag v<version> on that commit, so nobody pushes a tag by hand.
+# To run it again after a publish that failed: Actions → Release → Run workflow, on main. A version npm already has is left alone.
+# npm trusts this workflow by name (npmjs.com → gauth-ui → Settings → Trusted publishing: cauyxy, gauth-ui, release.yml, no environment),
 # so it signs in with a short-lived identity from GitHub. The NPM_TOKEN secret is only the fallback.
 name: Release
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+    paths: [package.json]
+  workflow_dispatch:
+
+# One release at a time: a second run waits, and then finds the version on npm.
+concurrency: release
 
 jobs:
-  publish:
+  version:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    outputs:
+      version: ${{ steps.read.outputs.version }}
+      publish: ${{ steps.read.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read the version, and ask npm whether it has it
+        id: read
+        run: |
+          version=$(jq -r .version package.json)
+          packument=$(curl -fsS --retry 3 https://registry.npmjs.org/gauth-ui)
+          if jq -e --arg v "$version" '.versions | has($v)' <<<"$packument" >/dev/null; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "gauth-ui@$version is on npm already: nothing to publish." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "gauth-ui@$version is not on npm yet: publishing it." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: version
+    if: needs.version.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # pushes the tag
       id-token: write # the identity npm checks against the trusted publisher
     steps:
       - uses: actions/checkout@v4
@@ -21,3 +54,13 @@ jobs:
       - run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Tag the commit that was published
+        env:
+          TAG: v${{ needs.version.outputs.version }}
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
+            echo "$TAG exists already: left where it is."
+          else
+            git tag "$TAG"
+            git push origin "$TAG"
+          fi
