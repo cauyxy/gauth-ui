@@ -1,5 +1,5 @@
 // @vitest-environment node
-/* What the docs say about the tokens is what tokens.css has. A number or a name that is changed in one place only fails here. */
+/* What the docs say about the tokens is what tokens.css has. A number or a name that is changed in one place only fails here. So does a component that README.md does not list. */
 import { readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { parse } from '../scripts/tokens.ts'
@@ -108,6 +108,21 @@ describe('design/README.md', () => {
     expect(sorted([...motion.matchAll(/`ease-(\w+)`/g)].map((m) => m[1]!))).toEqual(sorted(of('ease')))
     expect(sorted(named(sentence(/Named movements[^:]*: (.+?)\.\n/, 'the named movements')))).toEqual(sorted(of('animate')))
   })
+})
+
+it('README.md lists every component, and nothing that is not one', () => {
+  const list = (title: string) => {
+    const line = read('README.md').match(new RegExp(`^\\*\\*${title}[^*]*\\*\\*(.*)$`, 'm'))?.[1]
+    if (!line) throw new Error(`README.md has no "**${title}" line under Components`)
+    return line.match(/\b[A-Z]\w+/g) ?? []
+  }
+  const files = (dir: string) =>
+    readdirSync(`${ROOT}src/${dir}`)
+      .filter((f) => /^[A-Z]\w*\.tsx$/.test(f) && !f.endsWith('.test.tsx'))
+      .map((f) => f.replace('.tsx', ''))
+  expect(list('Core')).toEqual(sorted([...files('components'), 'Icon']))
+  expect(list('Math')).toEqual(sorted(files('math')))
+  expect(list('Learning')).toEqual(sorted(files('learning')))
 })
 
 it('every --gx-* token a page names exists', () => {

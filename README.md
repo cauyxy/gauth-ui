@@ -73,17 +73,19 @@ import { LocaleProvider } from 'gauth-ui'
 
 ## Components
 
-**Core.** Accordion · Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · ChipToggle · Combobox · CoverCard · DatePicker · DateRangePicker · Dialog · Dot · EmptyState · Field · FileDropzone · Icon · IconBox · IconButton · Input · Kbd · Menu · Meter · NumberInput · PageTitle · Pagination · Panel · Popover · Progress · RadioGroup · Segmented · Select · Separator · Sheet · Skeleton · Slider · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
+**Core.** Accordion · Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · ChipToggle · Combobox · CoverCard · DatePicker · DateRangePicker · Dialog · Dot · EmptyState · Field · FileDropzone · Icon · IconBox · IconButton · Input · Kbd · Menu · Meter · NumberInput · PageTitle · Pagination · Panel · Popover · Progress · Prose · RadioGroup · Segmented · Select · Separator · Sheet · Skeleton · Slider · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
 
 **Math** (`gauth-ui/math`). RichText · Tex
 
-**Learning.** AiStatus · AnswerOption · Composer · FollowUps · Generating · LevelBar · LevelChip · LevelLadder · LevelMark · Message · Quote · ReplyActions · Reveal · StepProgress · WorkedSteps
+**Learning.** AiStatus · AnswerFeedback · AnswerOption · Composer · FollowUps · Generating · LevelBar · LevelChip · LevelLadder · LevelMark · Message · Quote · ReplyActions · Reveal · StepProgress · StudentCard · WorkedSteps
 
-Each has a guideline in [`design/components/`](design/components) and examples with their code at [ui.gauthx.app](https://ui.gauthx.app). `pnpm gallery` shows them all on one page, in both languages.
+Each has a guideline in [`design/components/`](design/components) and examples with their code at [ui.gauthx.app](https://ui.gauthx.app); `Icon`'s rules are in [`design/README.md`](design/README.md), and its names are on IconButton's page. `pnpm gallery` shows them all on one page, in both languages.
 
 ## License
 
-All rights reserved. See `LICENSE`. The package is on npm so that Gauth products can install it; that gives no right to use it elsewhere.
+[MIT](LICENSE): the code, the tokens and the design rules in `design/`. Third-party material stays under its own license (`THIRD-PARTY-NOTICES.md`).
+
+The license does not cover the Gauth name or the Gauth mark. A product that is not Gauth's may use the components; it may not present itself as Gauth.
 
 ## Credits
 
