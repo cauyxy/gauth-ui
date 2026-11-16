@@ -46,8 +46,8 @@ const PAIRS: [text: string, ground: string][] = [
   ['warn', 'warn-soft'],
   ['pink', 'pink-soft'],
   ['white', 'ink'],
-  ['mastered-ink', 'mastered-soft'],
-  ['proficient-ink', 'proficient-soft'],
+  /* Mastered and Proficient share one text color and the ground of done and right. */
+  ['mastered-ink', 'good-soft'],
   ['familiar-ink', 'familiar-soft'],
   ['attempted-ink', 'attempted-soft'],
   ['attempted-ink', 'white'],
@@ -59,9 +59,7 @@ const PAIRS: [text: string, ground: string][] = [
   ['ink', 'correct'],
   ['white', 'mastered-ink'],
   /* A StudentCard or an AnswerFeedback with a meaning: its other text stays ink on the soft ground. */
-  ...['violet-soft', 'good-soft', 'pink-soft', 'mastered-soft', 'proficient-soft', 'familiar-soft', 'attempted-soft'].map(
-    (ground) => ['ink', ground] as [string, string],
-  ),
+  ...['violet-soft', 'good-soft', 'pink-soft', 'familiar-soft', 'attempted-soft'].map((ground) => ['ink', ground] as [string, string]),
 ]
 
 it.each(PAIRS)('%s on %s is at least 4.5:1', (text, ground) => {

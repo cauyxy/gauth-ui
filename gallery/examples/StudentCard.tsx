@@ -38,7 +38,7 @@ export function LevelReached() {
         </span>
         <div className="min-w-0 flex-1">
           <StudentCardTitle>You reached Proficient</StudentCardTitle>
-          <p className="text-sm text-proficient-ink">Pythagorean theorem</p>
+          <p className="text-sm text-mastered-ink">Pythagorean theorem</p>
         </div>
       </div>
       <div className="grid place-items-center rounded-2xl bg-white px-3 py-4">

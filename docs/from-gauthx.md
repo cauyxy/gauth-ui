@@ -10,13 +10,16 @@ The Tailwind theme clears every color that is not a token, so a class with an ol
 | -------------------------------------- | ------------------- | ------------------------------------------------------------------- | ---------------------------------- |
 | `text-subtle`, `--color-subtle`        | `muted`             | `subtle` is 4.2:1 on white, below the 4.5:1 that text needs         | `#757c88` → `#646a77`              |
 | `bg-surface-3`, `--color-surface-3`    | `surface`           | Two greys two steps apart for one role: a soft ground under content | `#f7f7f8` → `#f5f5f7`              |
-| `bg-line-2`, `--color-line-2`          | `track`             | It was never a line: every use is a bar's empty part or a ground    | `#eeeff3` → `#f0f1f4`              |
-| `bg-track`, `--color-track`            | `track`             | Lighter, with the lighter treatment                                 | `#e9eaee` → `#f0f1f4`              |
+| `bg-line-2`, `--color-line-2`          | `track`             | It was never a line: every use is a bar's empty part or a ground    | `#eeeff3` → `#edeef1`              |
+| `bg-track`, `--color-track`            | `track`             | Lighter, with the lighter treatment                                 | `#e9eaee` → `#edeef1`              |
 | `bg-surface-2`, `--color-surface-2`    | `surface`           | Secondary buttons and icon squares take the same grey as soft cards | `#f1f1f3` → `#f5f5f7`              |
 | `--color-edge-2`, `--color-edge-3`     | `edge-strong`       | No uses                                                             | none                               |
 | `--color-brand-soft`, `--color-blue-tint` | none             | No uses                                                             | none                               |
 | `violet-mid`, `--color-violet-mid`     | `violet`            | No component and no rule used it (the owner's decision, Nov 16, 2026) | `#918ddf` → `#6556c8`              |
 | `violet-tint`, `--color-violet-tint`   | `violet-soft`       | The same: a second soft violet with no use of its own               | `#e3e3fa` → `#f3f1ff`              |
+| `bg-not-started`, `--color-not-started` | `track`            | A level bar's not-started part is the empty part of the bar (the owner's decision, Nov 16, 2026) | `#e6e8eb` → `#edeef1` |
+| `bg-mastered-soft`, `bg-proficient-soft` | `good-soft`       | Three soft greens nobody could tell apart are one (the same decision) | `#e7f4ef`, `#edf8f4` → `#e8f9f2`   |
+| `text-proficient-ink`, `--color-proficient-ink` | `mastered-ink` | Two inks nobody could tell apart are one (the same decision)      | `#2d7063` → `#276e60`              |
 
 ## Colors that changed
 

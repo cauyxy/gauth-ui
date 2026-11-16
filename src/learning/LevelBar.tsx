@@ -13,7 +13,7 @@ const part = cva('gx-level-bar__part min-w-0 basis-0', {
       proficient: 'gx-level-bar__part--proficient bg-proficient',
       familiar: 'gx-level-bar__part--familiar bg-familiar',
       attempted: 'gx-level-bar__part--attempted bg-attempted',
-      not_started: 'gx-level-bar__part--not-started bg-not-started',
+      not_started: 'gx-level-bar__part--not-started bg-track',
     },
   },
 })

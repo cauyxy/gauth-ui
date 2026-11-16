@@ -32,7 +32,7 @@
   --color-canvas: #fafafb;
   --color-surface: #f5f5f7;
   --color-line: #edeef1;
-  --color-track: #f0f1f4;
+  --color-track: #edeef1;
   --color-ring: #c5c8cf;
   --color-rule: #dadce1;
   --color-edge: rgb(80 88 101 / 0.1);
@@ -51,13 +51,9 @@
   --color-proficient: #8acfc0;
   --color-familiar: #edcd83;
   --color-attempted: #f59e62;
-  --color-not-started: #e6e8eb;
   --color-mastered-ink: #276e60;
-  --color-mastered-soft: #e7f4ef;
-  --color-proficient-ink: #2d7063;
   --color-familiar-ink: #7d6229;
   --color-attempted-ink: #974a12;
-  --color-proficient-soft: #edf8f4;
   --color-familiar-soft: #fbf4e4;
   --color-attempted-soft: #fef1e6;
   --color-correct: #3fb5a5;

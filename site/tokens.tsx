@@ -5,7 +5,7 @@ type Token = { name: string; value: string; usage?: string }
 
 /* The colors by what they are for, as the Color page of the design rules lists them. A color goes to the first family that names it. */
 const FAMILIES: [title: string, names: RegExp][] = [
-  ['Skill levels and answers', /^(mastered|proficient|familiar|attempted|not-started|correct)/],
+  ['Skill levels and answers', /^(mastered|proficient|familiar|attempted|correct)/],
   ['Text', /^(ink|muted|faint)/],
   ['Surfaces and edges', /^(white|black|canvas|surface|line|track|ring|rule|edge)/],
   ['Gauth AI and XP', /^violet/],

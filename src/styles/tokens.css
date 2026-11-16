@@ -65,7 +65,7 @@
   --gx-color-canvas: #fafafb;
   --gx-color-surface: #f5f5f7;
   --gx-color-line: #edeef1;
-  --gx-color-track: #f0f1f4; /* The empty part of a bar, the ground of a Segmented control, a round icon ground */
+  --gx-color-track: #edeef1; /* The empty part of a bar or a level mark, a level bar's not-started part, the ground of a Segmented control. The value of line */
   --gx-color-ring: #c5c8cf;
   --gx-color-rule: #dadce1; /* A firmer hairline than line: print-sheet rules and boxes, off toggles, step connectors, chart grids */
   --gx-color-edge: rgb(80 88 101 / 0.1); /* The card hairline */
@@ -88,13 +88,9 @@
   --gx-color-proficient: #8acfc0;
   --gx-color-familiar: #edcd83;
   --gx-color-attempted: #f59e62; /* Also a wrong answer and a field error: "Not yet", never red */
-  --gx-color-not-started: #e6e8eb;
-  --gx-color-mastered-ink: #276e60;
-  --gx-color-mastered-soft: #e7f4ef;
-  --gx-color-proficient-ink: #2d7063;
+  --gx-color-mastered-ink: #276e60; /* The text of Mastered and of Proficient, on good-soft */
   --gx-color-familiar-ink: #7d6229;
   --gx-color-attempted-ink: #974a12;
-  --gx-color-proficient-soft: #edf8f4;
   --gx-color-familiar-soft: #fbf4e4;
   --gx-color-attempted-soft: #fef1e6;
   --gx-color-correct: #3fb5a5; /* Right answers */
