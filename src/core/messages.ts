@@ -53,6 +53,11 @@ export type Messages = {
   badReply: string
   /** The accessible name of the questions to tap under a reply. */
   followUps: string
+  /** What a DatePicker says before a day is picked. */
+  pickDate: string
+  /** The two arrows of a calendar. */
+  previousMonth: string
+  nextMonth: string
 }
 
 export const en: Messages = {
@@ -85,6 +90,9 @@ export const en: Messages = {
   goodReply: 'Good reply',
   badReply: 'Bad reply',
   followUps: 'Follow-up questions',
+  pickDate: 'Pick a date',
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
 }
 
 export const es: Messages = {
@@ -117,6 +125,9 @@ export const es: Messages = {
   goodReply: 'Buena respuesta',
   badReply: 'Mala respuesta',
   followUps: 'Preguntas de seguimiento',
+  pickDate: 'Elige una fecha',
+  previousMonth: 'Mes anterior',
+  nextMonth: 'Mes siguiente',
 }
 
 export const MESSAGES: Record<Locale, Messages> = { en, es }

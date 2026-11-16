@@ -31,7 +31,7 @@ export const GROUPS: { slug: string; title: string; names: string[] }[] = [
       'Skeleton',
     ],
   },
-  { slug: 'forms', title: 'Forms', names: ['Field', 'Input', 'Textarea', 'Select', 'Checkbox'] },
+  { slug: 'forms', title: 'Forms', names: ['Field', 'Input', 'Textarea', 'Select', 'DatePicker', 'Checkbox'] },
   { slug: 'overlays', title: 'Overlays and feedback', names: ['Dialog', 'Menu', 'Toast', 'EmptyState', 'Callout'] },
   { slug: 'structure', title: 'Structure and Gauth AI', names: ['Breadcrumbs', 'PageTitle', 'Tabs', 'Table', 'Stepper', 'Composer', 'Generating'] },
   { slug: 'conversation', title: 'Conversation', names: ['Message', 'AiStatus', 'ReplyActions', 'FollowUps', 'Quote'] },

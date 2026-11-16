@@ -73,7 +73,7 @@ import { LocaleProvider } from 'gauth-ui'
 
 ## Components
 
-**Core.** Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · ChipToggle · CoverCard · Dialog · Dot · EmptyState · Field · Icon · IconBox · IconButton · Input · Menu · Meter · PageTitle · Panel · Popover · Progress · Segmented · Select · Skeleton · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
+**Core.** Avatar · Breadcrumbs · Button · Callout · Checkbox · Chip · ChipToggle · CoverCard · DatePicker · Dialog · Dot · EmptyState · Field · Icon · IconBox · IconButton · Input · Menu · Meter · PageTitle · Panel · Popover · Progress · Segmented · Select · Skeleton · Spinner · Stat · Stepper · Switch · Table · Tabs · Textarea · Toast · Tooltip
 
 **Math** (`gauth-ui/math`). RichText · Tex
 
