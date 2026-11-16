@@ -2,6 +2,8 @@
 
 The Gauth design system: tokens, React components and the design rules they follow. White ground, ink text, hairline-edged cards instead of drop shadows, and the red Gauth mark as the only red on the page.
 
+The look is recreated from the public website [gauth.com](https://gauth.com): its colors, type and surfaces were read from the site, rebuilt as tokens and components, and refined.
+
 The design rules ship with the package: [`design/README.md`](design/README.md) says what each color, type size and component means.
 
 ## Install
