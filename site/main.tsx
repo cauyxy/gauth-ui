@@ -1,6 +1,7 @@
 /* The docs site: every component live, then the design rules and the tokens, read from this repository. Built to site/dist. */
-import { StrictMode, useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
+import { Fragment, StrictMode, useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { createRoot } from 'react-dom/client'
+import type { ThemedToken } from 'shiki/core'
 import '../src/math/math.css'
 import '../gallery/gallery.css'
 import './site.css'
@@ -71,10 +72,14 @@ function Home() {
   ))
 }
 
-/** The code of one example, closed until it is asked for, with a button that copies it. */
+/** The code of one example, closed until it is asked for, with a button that copies it. It shows as plain text until its colors are ready. */
 function Code({ code }: { code: string }) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [lines, setLines] = useState<ThemedToken[][] | null>(null)
+  useEffect(() => {
+    if (open && !lines) void import('./highlight').then(({ tokensOf }) => setLines(tokensOf(code)))
+  }, [open, lines, code])
   useEffect(() => {
     if (!copied) return
     const timer = setTimeout(() => setCopied(false), 1500)
@@ -82,27 +87,40 @@ function Code({ code }: { code: string }) {
   }, [copied])
   return (
     <>
+      {/* The copy button stands beside the toggle, not over the code, so it covers no line at any width. */}
       <div className="s-example__bar">
+        {open ? (
+          <IconButton
+            size="sm"
+            label={copied ? 'Copied' : 'Copy the code'}
+            onClick={() => void navigator.clipboard?.writeText(code).then(() => setCopied(true))}
+          >
+            <Icon name={copied ? 'check' : 'copy'} />
+          </IconButton>
+        ) : null}
         <Button variant="ghost" size="sm" aria-expanded={open} onClick={() => setOpen(!open)}>
           Code
           <Icon name="chevron-down" size={16} />
         </Button>
       </div>
       {open ? (
-        <div className="s-code" lang="en">
-          <pre>
-            <code>{code}</code>
-          </pre>
-          <IconButton
-            size="sm"
-            variant="outline"
-            label={copied ? 'Copied' : 'Copy the code'}
-            className="s-code__copy"
-            onClick={() => void navigator.clipboard?.writeText(code).then(() => setCopied(true))}
-          >
-            <Icon name={copied ? 'check' : 'copy'} />
-          </IconButton>
-        </div>
+        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the code scrolls in its own box, and only a box that takes focus scrolls with the arrow keys
+        <pre className="s-code" lang="en" tabIndex={0}>
+          <code>
+            {lines
+              ? lines.map((line, i) => (
+                  <Fragment key={i}>
+                    {i > 0 ? '\n' : null}
+                    {line.map((token) => (
+                      <span key={token.offset} style={{ color: token.color }}>
+                        {token.content}
+                      </span>
+                    ))}
+                  </Fragment>
+                ))
+              : code}
+          </code>
+        </pre>
       ) : null}
     </>
   )
