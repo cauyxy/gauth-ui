@@ -4,13 +4,14 @@
  */
 import { render } from '@testing-library/react'
 import { createRef, type ReactElement, type RefObject } from 'react'
+import { NAMES } from '../scripts/inventory'
 import * as ui from './index'
 import { RichText, Tex } from './math'
 
 type Probe = { id: string; 'data-probe': string; ref: RefObject<never> }
 
-/* Parts that draw no element of their own: a provider, a root that only keeps state, the toaster. */
-const NO_ELEMENT = ['LocaleProvider', 'Toaster', 'Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip']
+/* Parts that draw no element of their own: a provider, a root that only keeps state, the toaster (Toast is its file: `Toaster` and `toast()`). */
+const NO_ELEMENT = ['LocaleProvider', 'Toast', 'Toaster', 'Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip']
 
 const OPTIONS = [
   { value: 'a', label: 'A' },
@@ -239,8 +240,9 @@ const CASES: Record<string, (p: Probe) => ReactElement> = {
   RichText: (p) => <RichText text="Solve $x$" {...p} />,
 }
 
-it('has a case for every component of the package', () => {
-  const components = Object.keys(ui).filter((name) => /^[A-Z][a-z]/.test(name) && !NO_ELEMENT.includes(name))
+it('has a case for every component of the package and every part it exports', () => {
+  const exported = Object.keys(ui).filter((name) => /^[A-Z][a-z]/.test(name))
+  const components = [...new Set([...NAMES, ...exported])].filter((name) => !NO_ELEMENT.includes(name))
   expect(components.filter((name) => !(name in CASES))).toEqual([])
 })
 

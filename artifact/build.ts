@@ -28,6 +28,7 @@ import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
 import { familyTokens, parse, type Token } from '../scripts/token-model.ts'
+import { readmeGroups } from '../scripts/inventory.ts'
 import { ICONS } from '../src/core/icons.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -121,17 +122,6 @@ export const leftOut = () => tokens.filter((t) => ['ms', 'dur', 'delay', 'ease',
 /** The tokens nobody picks a value from: the layers and the focus ring. A component sets them, and the rules say what they are. */
 export const inside = () => tokens.filter((t) => ['z', 'focus'].includes(t.family)).map((t) => t.name)
 
-/* ---------- the components, in the groups of design/README.md ---------- */
-
-export function componentGroups() {
-  const found: { group: string; name: string }[] = []
-  for (const line of read('design/README.md').split('\n')) {
-    const row = line.match(/^\| ([\w ]+?)\s*\| (\[.+)\|\s*$/)
-    if (row) for (const m of row[2]!.matchAll(/\[(\w+)\]\(components\//g)) found.push({ group: row[1]!, name: m[1]! })
-  }
-  return found
-}
-
 /** The icons in the groups of scripts/icons.ts: a comment in its list starts a group. */
 export function iconGroups() {
   const list = read('scripts/icons.ts').match(/export const NAMES[^{]*\{([\s\S]*?)\n\}/)![1]!
@@ -159,6 +149,9 @@ const iconSvg = (name: keyof typeof ICONS) =>
     .join('')}</svg>\n`
 
 /* ---------- previews ---------- */
+
+/** The cards that are not a component of the inventory: Icon (src/core/Icon.tsx) and the Type and Motion foundations. */
+export const EXTRA_CARDS = ['Icon', 'Type', 'Motion']
 
 /** What opens above the page needs room in its card: the height a card of that component gets at least. */
 const ROOM: Record<string, number> = {
@@ -240,7 +233,7 @@ async function bundle() {
       lib: { entry: `${ROOT}artifact/entry.tsx`, formats: ['iife'], name: NAMESPACE, fileName: () => 'bundle.js', cssFileName: 'bundle' },
     },
   })
-  const names = [...componentGroups().map((c) => c.name), 'Icon', 'Type', 'Motion']
+  const names = [...readmeGroups().map((c) => c.name), ...EXTRA_CARDS]
   const header = `/* @ds-bundle: ${JSON.stringify({ format: 4, namespace: NAMESPACE, components: names.map((name) => ({ name })) })} */`
   /* The page may write the script into its own HTML, where these two would end it. In a string they mean the same with the backslash. */
   const js = readFileSync(`${dir}/bundle.js`, 'utf8')
@@ -337,7 +330,7 @@ if (import.meta.main) {
   )
   write('project/glossary.md', read('GLOSSARY.md'))
 
-  const components = componentGroups()
+  const components = readmeGroups()
   const icons = iconGroups()
   const cards: Record<string, (height: number) => string> = {}
   for (const { group, name } of components) {

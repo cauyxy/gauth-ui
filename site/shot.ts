@@ -6,10 +6,11 @@
  * Without an address it serves the site from this folder. It prints what a page must never have: an error in the console,
  * content wider than the window, a component's page with no example or an example with no code, or components without their styles.
  */
-import { mkdirSync, readdirSync } from 'node:fs'
+import { mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright-core'
 import { createServer } from 'vite'
+import { NAMES } from '../scripts/inventory.ts'
 
 const [OUT, address] = process.argv.slice(2)
 if (!OUT) throw new Error('Give a folder for the screenshots.')
@@ -22,7 +23,6 @@ await server?.listen()
 const base = address ?? 'http://localhost:5187'
 const browser = await chromium.launch({ channel: 'chrome' })
 const problems: string[] = []
-const names = readdirSync(fileURLToPath(new URL('../design/components', import.meta.url)))
 const SHOWN = ['/', '/components/button', '/components/table', '/components/message', '/components/answeroption', '/components/tex', '/install', '/tokens']
 
 for (const [size, width] of [
@@ -47,10 +47,10 @@ for (const [size, width] of [
   }
   await open('/')
   const cards = await page.locator('.s-card').count()
-  if (cards < names.length) problems.push(`${size} /: ${cards} cards for ${names.length} components`)
+  if (cards < NAMES.length) problems.push(`${size} /: ${cards} cards for ${NAMES.length} components`)
   await page.screenshot({ path: `${OUT}/${size}-home-full.png`, fullPage: true })
 
-  for (const name of names) {
+  for (const name of NAMES) {
     await open(`/components/${name.toLowerCase()}`)
     const title = await page.locator('.s-title').textContent()
     if (title !== name) problems.push(`${size} ${at}: the page shows "${title}"`)

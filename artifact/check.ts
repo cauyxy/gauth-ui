@@ -14,13 +14,16 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { fileURLToPath } from 'node:url'
 import type { Page } from 'playwright-core'
 import { createServer } from 'vite'
-import { chrome, serveCards } from './build.ts'
+import { NAMES } from '../scripts/inventory.ts'
+import { chrome, EXTRA_CARDS, serveCards } from './build.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const PROJECT = `${ROOT}artifact/out/project/`
 if (!existsSync(`${PROJECT}components/bundle.js`)) throw new Error('Nothing is built: run `node artifact/build.ts` first.')
 const { components } = JSON.parse(readFileSync(`${ROOT}artifact/out/build.json`, 'utf8')) as { components: string[] }
 const problems: string[] = []
+const unbuilt = [...NAMES, ...EXTRA_CARDS].filter((name) => !components.includes(name))
+if (unbuilt.length) problems.push(`no card for ${unbuilt.join(', ')}: run node artifact/build.ts`)
 
 /* ---------- the published files ---------- */
 
@@ -80,8 +83,8 @@ const theirs = await browser.newPage({ viewport: { width: 1120, height: 2000 } }
 await theirs.goto('http://localhost:5184/')
 await theirs.waitForSelector('.g-section')
 let examples = 0
-/* Icon, Type and Motion are cards of the artifact alone: the gallery has no block to compare them with. */
-for (const name of components.filter((name) => !['Icon', 'Type', 'Motion'].includes(name))) {
+/* The extra cards are the artifact's alone: the gallery has no block to compare them with. */
+for (const name of NAMES.filter((name) => components.includes(name))) {
   const ours = await browser.newPage({ viewport: { width: 960, height: 2000 } })
   await ours.goto(`http://localhost:5185/card/${name}`)
   await ours.waitForSelector('.g-example')
@@ -107,4 +110,4 @@ if (problems.length) {
   console.error(problems.join('\n'))
   process.exit(1)
 }
-console.log(`previews: ${examples} examples of ${components.length - 3} components are the gallery's pictures, pixel for pixel`)
+console.log(`previews: ${examples} examples of ${NAMES.length} components are the gallery's pictures, pixel for pixel`)

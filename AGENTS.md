@@ -28,6 +28,7 @@ GLOSSARY.md              what each shared word means, in en and es
 CHANGELOG.md             what changed in each version, for a product that updates
 scripts/token-model.ts   reads tokens.css: each token's name, family, value and notes. Every tool that needs a token reads it here
 scripts/tokens.ts        writes theme.css, src/core/theme-names.ts and design/tokens.json from tokens.css
+scripts/inventory.ts     the components, from the files in src/: the tests, site/shot.ts and the artifact read the list here
 scripts/icons.ts         the list of icons; copies their drawings from Lucide into src/core/icons.ts
 compare/                 compares each component with the gauthx one it replaces (pnpm compare)
 docs/from-gauthx.md      what changes for gauthx when it switches to this package
@@ -46,7 +47,7 @@ design/components/Button/README.md when to use it
 gallery/examples/Button.tsx        its examples
 ```
 
-A learning component has the same four files, with the first two under `src/learning/`. Then export it and its props type from `src/index.ts`, add its name to `GROUPS` in `gallery/examples.ts`, and add its line to `src/props.test.tsx`. `rules.test.ts` and `props.test.tsx` fail when one of these is missing. `Button.tsx` is the reference for how the classes are written.
+A learning component has the same four files, with the first two under `src/learning/`. Then export it and its props type from `src/index.ts`, add its name to `GROUPS` in `gallery/groups.ts`, to the Components table of `design/README.md` and to the Components lines of `README.md`, and add its line to `src/props.test.tsx`. `scripts/inventory.ts` lists the components from the files in `src/`, and the tests fail when one of these places does not list each of them once. `Button.tsx` is the reference for how the classes are written.
 
 **An example is code a product can copy.** Each `export function` in the example file is one example: the gallery and the docs site draw it, and the site shows its code with the imports written from `gauth-ui`. So an example imports only from `../../src`, `../../src/math` and `react`, keeps its own state, and lays itself out with Tailwind classes as a product would. A helper it needs (a list of options, a small drawing) is a `const` or `function` in the same file that is not exported; the site shows it with the example.
 
@@ -156,4 +157,4 @@ Two things ship from `main`: the package when its version changes, the docs site
 
 **The docs site, to ui.gauthx.app.** `ci.yml` checks and builds every pull request and push to `main`. On `main`, the deploy job publishes that run's site artifact to Cloudflare as `gauth-ui-site`; a failed check blocks deployment. To redeploy manually, run `gh workflow run ci.yml --ref main`. It needs the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets for the account holding `gauthx.app`. The token must allow Workers Scripts Write on the account and zone/DNS access for the custom domain in `site/wrangler.jsonc`.
 
-The site has no content of its own. It reads `README.md`, `design/README.md`, `design/components/*/README.md`, `GLOSSARY.md`, `design/tokens.json` and the gallery, so a change to a rule or a component is on the site at the next deploy. The site is for looking at the components: the first page shows them all, and a component's page shows each example, with its code one click away, before its rules. A new component gets `gallery/examples/<Name>.tsx` and its name in `GROUPS` in `gallery/examples.ts`; `rules.test.ts` fails when either is missing. `pnpm site` serves it locally.
+The site has no content of its own. It reads `README.md`, `design/README.md`, `design/components/*/README.md`, `GLOSSARY.md`, `design/tokens.json` and the gallery, so a change to a rule or a component is on the site at the next deploy. The site is for looking at the components: the first page shows them all, and a component's page shows each example, with its code one click away, before its rules. A new component gets `gallery/examples/<Name>.tsx` and its name in `GROUPS` in `gallery/groups.ts`; `rules.test.ts` fails when either is missing. `pnpm site` serves it locally.

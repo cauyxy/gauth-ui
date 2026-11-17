@@ -2,20 +2,18 @@
 /* The rules in AGENTS.md that a machine can check. A component that breaks one fails here, not in review. */
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { GROUPS } from '../gallery/groups.ts'
 import { snippetsOf } from '../gallery/snippet.ts'
 import { staleIcons } from '../scripts/icons.ts'
+import { COMPONENTS, differences, NAMES, namesOf } from '../scripts/inventory.ts'
 import { keysOf, parse } from '../scripts/token-model.ts'
 import { stale } from '../scripts/tokens.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
 
-/** Every component of both groups: [name, folder under src]. */
-const components = (['components', 'learning'] as const).flatMap((dir) =>
-  readdirSync(`${ROOT}src/${dir}`)
-    .filter((f) => /^[A-Z]\w*\.tsx$/.test(f) && !f.endsWith('.test.tsx'))
-    .map((f) => [f.slice(0, -'.tsx'.length), dir] as const),
-)
+/** Every component of core and learning: [name, folder under src]. Math has rules of its own. */
+const components = COMPONENTS.filter((c) => c.group !== 'math').map((c) => [c.name, c.dir] as const)
 const model = parse(read('src/styles/tokens.css'))
 const tokens = new Set(model.map((t) => `--gx-${t.name}`))
 
@@ -65,11 +63,15 @@ it('core does not import learning', () => {
 })
 
 describe('examples', () => {
-  const names = readdirSync(`${ROOT}design/components`)
-  const groups = read('gallery/examples.ts')
+  it('each component has one guideline, and each guideline is of a component', () => {
+    expect(differences(readdirSync(`${ROOT}design/components`))).toEqual([])
+  })
 
-  it.each(names)('%s has examples that a product can copy', (name) => {
-    expect(groups, `${name} is in no group of gallery/examples.ts, so the gallery and the docs site do not show it`).toContain(`'${name}'`)
+  it('GROUPS shows each component once, so the gallery and the docs site show it', () => {
+    expect(differences(GROUPS.flatMap((group) => group.names))).toEqual([])
+  })
+
+  it.each(NAMES)('%s has examples that a product can copy', (name) => {
     expect(existsSync(`${ROOT}gallery/examples/${name}.tsx`), `gallery/examples/${name}.tsx`).toBe(true)
     const snippets = snippetsOf(read(`gallery/examples/${name}.tsx`))
     expect(snippets.length, 'at least one `export function`').toBeGreaterThan(0)
@@ -92,7 +94,7 @@ describe('examples', () => {
       readdirSync(`${ROOT}gallery/examples`)
         .map((f) => f.replace(/\.tsx$/, ''))
         .sort(),
-    ).toEqual([...names].sort())
+    ).toEqual([...NAMES].sort())
   })
 
   it('the icon example shows every icon', async () => {
@@ -114,7 +116,7 @@ describe('math', () => {
       for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/katex|\.\.\/math\//)
   })
 
-  it.each(['Tex', 'RichText'])('%s has its test, guideline and export', (name) => {
+  it.each(namesOf('math'))('%s has its test, guideline and export', (name) => {
     expect(existsSync(`${ROOT}src/math/${name}.test.tsx`)).toBe(true)
     expect(existsSync(`${ROOT}design/components/${name}/README.md`)).toBe(true)
     expect(read('src/math/index.ts')).toContain(`'./${name}'`)

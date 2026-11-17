@@ -2,6 +2,7 @@
 /* What the docs say about the tokens is what tokens.css has. A number or a name that is changed in one place only fails here. So does a component that README.md does not list. */
 import { readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { namesOf, readmeGroups } from '../scripts/inventory.ts'
 import { keysOf, parse } from '../scripts/token-model.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -116,13 +117,14 @@ it('README.md lists every component, and nothing that is not one', () => {
     if (!line) throw new Error(`README.md has no "**${title}" line under Components`)
     return line.match(/\b[A-Z]\w+/g) ?? []
   }
-  const files = (dir: string) =>
-    readdirSync(`${ROOT}src/${dir}`)
-      .filter((f) => /^[A-Z]\w*\.tsx$/.test(f) && !f.endsWith('.test.tsx'))
-      .map((f) => f.replace('.tsx', ''))
-  expect(list('Core')).toEqual(sorted([...files('components'), 'Icon']))
-  expect(list('Math')).toEqual(sorted(files('math')))
-  expect(list('Learning')).toEqual(sorted(files('learning')))
+  /* Icon is in src/core/, with the parts the components share. README.md lists it with core. */
+  expect(list('Core')).toEqual(sorted([...namesOf('core'), 'Icon']))
+  expect(list('Math')).toEqual(sorted(namesOf('math')))
+  expect(list('Learning')).toEqual(sorted(namesOf('learning')))
+})
+
+it('the Components table of design/README.md lists every component once: the artifact takes its groups from it', () => {
+  expect(readmeGroups().length).toBeGreaterThan(0)
 })
 
 it('every --gx-* token a page names exists', () => {
