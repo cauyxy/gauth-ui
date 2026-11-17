@@ -32,8 +32,6 @@ scripts/token-model.ts   reads tokens.css: each token's name, family, value and 
 scripts/tokens.ts        writes theme.css, src/core/theme-names.ts and design/tokens.json from tokens.css
 scripts/inventory.ts     the components, from the files in src/: the tests, site/shot.ts and the artifact read the list here
 scripts/icons.ts         the list of icons; copies their drawings from Lucide into src/core/icons.ts
-compare/                 compares each component with the gauthx one it replaces (pnpm compare)
-docs/from-gauthx.md      what changes for gauthx when it switches to this package
 design/README.md         the design rules: content, color, type, surfaces
 design/components/       one guideline per component
 design/tokens.json       the tokens as data, for the docs site's Tokens page. Generated.
@@ -114,7 +112,7 @@ A product on the Next.js App Router imports the package in a server component. S
 
 ## The look does not change here by accident
 
-A change to how a component looks is a design decision: get the owner's OK, then change the component, its guideline and the token together. The components started as copies of the gauthx ones; `docs/from-gauthx.md` lists every difference since. A change that only rewrites classes proves it with `gallery/pixels.ts`: the pictures before and after are the same, pixel for pixel.
+A change to how a component looks is a design decision: get the owner's OK, then change the component, its guideline and the token together, and say what changed in `CHANGELOG.md`. A change that only rewrites classes proves it with `gallery/pixels.ts`: the pictures before and after are the same, pixel for pixel.
 
 ## Two groups
 

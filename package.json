@@ -58,7 +58,6 @@
     "test": "vitest run",
     "build": "vite build && tsc -p tsconfig.build.json && node scripts/build-css.ts",
     "prepublishOnly": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test && pnpm build",
-    "compare": "pnpm build && node compare/run.ts",
     "gallery": "vite gallery",
     "site": "vite --config site/vite.config.ts",
     "site:build": "vite build --config site/vite.config.ts",
