@@ -72,8 +72,9 @@ for (const [size, width] of [
     })
   if (ink !== 'rgb(33, 37, 46) 34px 500 8px') problems.push(`${size} ${at}: the ink button is drawn as "${ink}"`)
 
-  /* An example's code opens, and it is what a product writes: imports from the package. */
+  /* An example's code opens in color, and it is what a product writes: imports from the package. */
   await page.locator('.s-example__bar button').first().click()
+  await page.locator('.s-code code span').first().waitFor()
   const code = (await page.locator('.s-code code').first().textContent()) ?? ''
   if (!code.includes("import { Button } from 'gauth-ui'") || !code.includes('<Button variant="soft">Review</Button>'))
     problems.push(`${size} ${at}: the code of the first example is "${code.slice(0, 80)}"`)
