@@ -87,40 +87,40 @@ function Code({ code }: { code: string }) {
   }, [copied])
   return (
     <>
+      {/* The copy button stands beside the toggle, not over the code, so it covers no line at any width. */}
       <div className="s-example__bar">
+        {open ? (
+          <IconButton
+            size="sm"
+            label={copied ? 'Copied' : 'Copy the code'}
+            onClick={() => void navigator.clipboard?.writeText(code).then(() => setCopied(true))}
+          >
+            <Icon name={copied ? 'check' : 'copy'} />
+          </IconButton>
+        ) : null}
         <Button variant="ghost" size="sm" aria-expanded={open} onClick={() => setOpen(!open)}>
           Code
           <Icon name="chevron-down" size={16} />
         </Button>
       </div>
       {open ? (
-        <div className="s-code" lang="en">
-          <pre>
-            <code>
-              {lines
-                ? lines.map((line, i) => (
-                    <Fragment key={i}>
-                      {i > 0 ? '\n' : null}
-                      {line.map((token) => (
-                        <span key={token.offset} style={{ color: token.color }}>
-                          {token.content}
-                        </span>
-                      ))}
-                    </Fragment>
-                  ))
-                : code}
-            </code>
-          </pre>
-          <IconButton
-            size="sm"
-            variant="outline"
-            label={copied ? 'Copied' : 'Copy the code'}
-            className="s-code__copy"
-            onClick={() => void navigator.clipboard?.writeText(code).then(() => setCopied(true))}
-          >
-            <Icon name={copied ? 'check' : 'copy'} />
-          </IconButton>
-        </div>
+        // oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- the code scrolls in its own box, and only a box that takes focus scrolls with the arrow keys
+        <pre className="s-code" lang="en" tabIndex={0}>
+          <code>
+            {lines
+              ? lines.map((line, i) => (
+                  <Fragment key={i}>
+                    {i > 0 ? '\n' : null}
+                    {line.map((token) => (
+                      <span key={token.offset} style={{ color: token.color }}>
+                        {token.content}
+                      </span>
+                    ))}
+                  </Fragment>
+                ))
+              : code}
+          </code>
+        </pre>
       ) : null}
     </>
   )

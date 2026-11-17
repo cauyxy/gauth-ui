@@ -306,6 +306,7 @@ html {
 .s-example__bar {
   display: flex;
   justify-content: flex-end;
+  gap: var(--gx-space-1);
   padding: var(--gx-space-1-5) var(--gx-space-2);
   border-top: 1px solid var(--gx-color-line);
 }
@@ -316,14 +317,11 @@ html {
   rotate: 180deg;
 }
 .s-code {
-  position: relative;
-  border-top: 1px solid var(--gx-color-line);
-}
-.s-code > pre {
   max-height: 30rem;
   margin: 0;
   padding: var(--gx-space-4) var(--gx-space-5);
   overflow: auto;
+  border-top: 1px solid var(--gx-color-line);
   border-radius: 0 0 var(--gx-radius-2xl) var(--gx-radius-2xl);
   background: var(--gx-color-surface);
   font-family: var(--gx-font-mono);
@@ -331,10 +329,10 @@ html {
   line-height: var(--gx-leading-body);
   tab-size: 2;
 }
-.s-code__copy {
-  position: absolute;
-  top: var(--gx-space-2);
-  right: var(--gx-space-2);
+/* The ring is drawn inside the box: the card's round corners would cut it outside. */
+.s-code:focus-visible {
+  outline: var(--gx-focus-ring);
+  outline-offset: -2px;
 }
 .s-rules {
   margin-top: var(--gx-space-8);
