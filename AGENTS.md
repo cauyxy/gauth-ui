@@ -12,7 +12,8 @@ src/styles/theme.css     the tokens as a Tailwind v4 theme. Generated.
 src/styles/base.css      page defaults, the fallback font, keyframes; in the base layer
 src/core/                cn (joins classes; it reads theme-names.ts, generated), the icons, the language: messages.ts (every word, en and es) and locale.tsx;
                          props.ts (the Props type), useControllable.ts (a value the product or the component keeps), refs.ts (mergeRefs)
-src/components/          core components: one per file, with its test; a helper a server component may call stands beside it (Segmented.classes.ts)
+src/components/          core components: one per file, with its test. A helper stands beside its component: one a server component may call
+                         (Segmented.classes.ts, Field.classes.ts), or the parts two components share (DatePicker.parts.tsx)
 src/learning/            learning components, same shape
 src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and math.css
 src/styles.css           what a product imports after Tailwind: the tokens, the theme, the base styles, and where Tailwind finds the classes; built to dist/styles.css
@@ -76,7 +77,7 @@ A learning component has the same four files, with the first two under `src/lear
 - **A prop is not written twice.** What a native prop already does (`disabled`, `name`, `placeholder`, `title`) is not an own prop. An own prop replaces a native one of the same name (`title`, `onChange`, `size`).
 - **The component's props are a named, exported type**: `ButtonProps` beside `Button`, exported from `src/index.ts`.
 - **A control with a value works both ways.** `value` (or `checked`, `pressed`) with `onChange(newValue)` when the product keeps the value; `defaultValue` (`defaultChecked`, `defaultPressed`) when the control keeps its own. `useControllable` does it. `onChange` gets the new value, not the event, and is optional. A value that can be empty is `null`: `undefined` means "the control keeps it".
-- **A control goes with a form.** With `name` its value is sent: the native element sends it, or a hidden input does (`Switch`, `Segmented`, `Combobox`, `DatePicker`).
+- **A control goes with a form.** With `name` its value is sent: the native element sends it, or a hidden input does (`Switch`, `Segmented`, `Combobox`, `DatePicker`, `DateRangePicker`).
 - **The product's handler runs first.** A component that needs an event the product may also want (`onClick` on `Switch`, `onKeyDown` on `Composer`) calls the product's handler, then does its own part unless `event.defaultPrevented`.
 - A link that must look like a component uses the class helper (`buttonClass()`, `segmentedOptionClass()`). Do not copy styles.
 - No text is fixed in a component. A word the component says by itself ("Loading", "Close", "Not yet", a level name) comes from `useLocale().messages`, so it is the same in every product and it changes with the language. Every other word is a prop.
