@@ -40,15 +40,16 @@ export type Page = { path: string; title: string; group: string } & (
 /* The start of the README, to the list of components. Its badges are for GitHub and npm. */
 const start = readme.slice(readme.indexOf('\n') + 1, readme.indexOf('## Components')).replace(/^\[!\[.*\n+/m, '')
 
+/* The design pages come before the long list of components, so they are in reach without scrolling the list. */
 export const PAGES: Page[] = [
   { path: '/', title: 'Components', group: '', kind: 'home' },
   { path: '/install', title: 'Install', group: '', kind: 'markdown', body: start },
-  ...GROUPS.flatMap((g) => g.names.map((name): Page => ({ path: pathOf(name), title: name, group: g.title, kind: 'component', name }))),
   ...sections(design)
     .filter((s) => s.title !== 'Components')
     .map((s): Page => ({ path: `/design/${slug(s.title)}`, title: s.title, group: 'Design', kind: 'markdown', body: s.body })),
   { path: '/tokens', title: 'Tokens', group: 'Design', kind: 'tokens' },
   { path: '/glossary', title: 'Glossary', group: 'Design', kind: 'markdown', body: glossary.slice(glossary.indexOf('\n') + 1) },
+  ...GROUPS.flatMap((g) => g.names.map((name): Page => ({ path: pathOf(name), title: name, group: g.title, kind: 'component', name }))),
 ]
 
 /** Where a link written in the Markdown goes on the site. A link to a file the site does not show stays as text. */
