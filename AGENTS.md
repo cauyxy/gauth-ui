@@ -13,7 +13,7 @@ src/styles/base.css      page defaults, the fallback font, keyframes; in the bas
 src/core/                cn (joins classes; it reads theme-names.ts, generated), the icons, the language: messages.ts (every word, en and es) and locale.tsx;
                          props.ts (the Props type), useControllable.ts (a value the product or the component keeps), refs.ts (mergeRefs)
 src/components/          core components: one per file, with its test. A helper stands beside its component: one a server component may call
-                         (Segmented.classes.ts, Field.classes.ts), or the parts two components share (DatePicker.parts.tsx)
+                         (Segmented.classes.ts, Field.classes.ts), or the parts two components share (DatePicker.parts.tsx, Dialog.parts.tsx)
 src/learning/            learning components, same shape
 src/math/                Tex and RichText (KaTeX), the entry gauth-ui/math, and math.css
 src/styles.css           what a product imports after Tailwind: the tokens, the theme, the base styles, and where Tailwind finds the classes; built to dist/styles.css
