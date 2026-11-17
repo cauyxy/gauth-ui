@@ -4,7 +4,8 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { snippetsOf } from '../gallery/snippet.ts'
 import { staleIcons } from '../scripts/icons.ts'
-import { parse, stale } from '../scripts/tokens.ts'
+import { keysOf, parse } from '../scripts/token-model.ts'
+import { stale } from '../scripts/tokens.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
@@ -15,7 +16,8 @@ const components = (['components', 'learning'] as const).flatMap((dir) =>
     .filter((f) => /^[A-Z]\w*\.tsx$/.test(f) && !f.endsWith('.test.tsx'))
     .map((f) => [f.slice(0, -'.tsx'.length), dir] as const),
 )
-const tokens = new Set(parse(read('src/styles/tokens.css')).map((t) => `--gx-${t.name}`))
+const model = parse(read('src/styles/tokens.css'))
+const tokens = new Set(model.map((t) => `--gx-${t.name}`))
 
 /** Every class name written in a file: each word of each string, without comments. */
 function classesOf(source: string) {
@@ -25,18 +27,20 @@ function classesOf(source: string) {
 /** A class without its variants: `hover:bg-black` is `bg-black`, `[&>svg]:-ms-0.5` is `-ms-0.5`. */
 const utilityOf = (word: string) => word.split(/:(?![^[(]*[\])])/).at(-1)!
 
-const SPACE = new Set(['0', 'px', 'auto', '0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '5', '6', '8', '10'])
+/** A test that a value is one of these: the keys of token families, and a few words of Tailwind's own. */
+const oneOf = (...values: string[]) => {
+  const set = new Set(values)
+  return (value: string) => set.has(value)
+}
+/* `p-0.5` is `--gx-space-0-5`. */
+const SPACE = oneOf('0', 'px', 'auto', ...keysOf(model, 'space').map((key) => key.replace('-', '.')))
 /** What each kind of utility may end in. A class of that kind with another ending is off the tokens. */
 const KINDS: [what: string, kind: RegExp, allowed: (value: string) => boolean][] = [
-  [
-    'spacing that is not on the space scale',
-    /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/,
-    (v) => SPACE.has(v) || /^\[calc\(.+\)\]$/.test(v),
-  ],
-  ['a font weight that is not a token', /^font-(.+)$/, (v) => /^(?:sans|reading|mono|body|control|title|strong)$/.test(v)],
-  ['a line height that is not a token', /^leading-(.+)$/, (v) => /^(?:figure|title|heading|body|normal)$/.test(v)],
-  ['letter spacing that is not a token', /^tracking-(.+)$/, (v) => /^(?:display|title|label|normal)$/.test(v)],
-  ['a layer that is not a token', /^z-(.+)$/, (v) => /^(?:0|1|auto|\(--gx-z-(?:overlay|pop|toast)\))$/.test(v)],
+  ['spacing that is not on the space scale', /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/, (v) => SPACE(v) || /^\[calc\(.+\)\]$/.test(v)],
+  ['a font weight that is not a token', /^font-(.+)$/, oneOf(...keysOf(model, 'font'), ...keysOf(model, 'font-weight'))],
+  ['a line height that is not a token', /^leading-(.+)$/, oneOf(...keysOf(model, 'leading'), 'normal')],
+  ['letter spacing that is not a token', /^tracking-(.+)$/, oneOf(...keysOf(model, 'tracking'), 'normal')],
+  ['a layer that is not a token', /^z-(.+)$/, oneOf('0', '1', 'auto', ...keysOf(model, 'z').map((key) => `(--gx-z-${key})`))],
   ['a duration that is not a token', /^(?:duration|delay)-(.+)$/, (v) => /^\(--gx-(?:dur|delay)-[\w-]+\)$/.test(v)],
   ['an outline that is not the shared ring', /^-?outline-(.+)$/, (v) => /^(?:0|none|white|offset-(?:\d+|\[-?\d+px\]))$/.test(v)],
   [
@@ -47,7 +51,7 @@ const KINDS: [what: string, kind: RegExp, allowed: (value: string) => boolean][]
   ['a type size off the scale', /^text-(\[.+)$/, () => false],
 ]
 
-it('theme.css and tokens.json match tokens.css', () => {
+it('theme.css, theme-names.ts and tokens.json match tokens.css', () => {
   expect(stale()).toEqual([])
 })
 

@@ -27,7 +27,7 @@ import { createServer } from 'node:http'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
-import { parse, type Token } from '../scripts/tokens.ts'
+import { familyTokens, parse, type Token } from '../scripts/token-model.ts'
 import { ICONS } from '../src/core/icons.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -59,9 +59,7 @@ const plain = (value: string): string =>
  */
 function colorNotes() {
   const rules = read('design/README.md')
-  const own = new Map(
-    [...read('src/styles/tokens.css').matchAll(/^[ \t]*--gx-color-([\w-]+):[^;\n]+;[ \t]*\/\*[ \t]*(.*?)[ \t]*\*\/$/gm)].map((m) => [m[1]!, m[2]!]),
-  )
+  const own = new Map(familyTokens(tokens, 'color').map((t) => [t.key, t.note]))
   const notes = new Map<string, string>()
   for (const row of rules.matchAll(/^\| ([\w ,]+?) *\| (`[^|\n]+?) *\| ([^|\n]+?) *\|$/gm))
     for (const name of row[2]!.matchAll(/`([\w-]+)`/g)) notes.set(name[1]!, `${row[1]}. ${row[3]!.replace(/`/g, '')}`)
@@ -75,7 +73,7 @@ function colorNotes() {
 }
 
 export function tokensJson(commit: string) {
-  const of = (...families: string[]) => tokens.filter((t) => families.includes(t.name.split('-')[0]!))
+  const of = (family: string) => familyTokens(tokens, family)
   const list = (found: Token[], rename = (name: string) => name, note = (_name: string, usage: string) => usage) => ({
     tokens: found.map((t) => ({
       name: rename(t.name),
@@ -83,8 +81,8 @@ export function tokensJson(commit: string) {
       usage: note(rename(t.name), t.usage),
     })),
   })
-  const weights = of('font').filter((t) => t.name.startsWith('font-weight-'))
-  const stacks = of('font').filter((t) => !t.name.startsWith('font-weight-'))
+  const weights = of('font-weight')
+  const stacks = of('font')
   const body = valueOf.get('text-sm')!
   /* A type style is `gx-<token>`, not `text-sm`: the page writes a class for each style, and that class must not be a Tailwind utility. */
   const style = (t: Token, more: Record<string, string | number>) => ({ name: `gx-${t.name}`, usage: t.usage, ...more })
@@ -101,7 +99,7 @@ export function tokensJson(commit: string) {
     color: { themes: [{ id: 'light', name: 'Light' }], ...list(of('color'), (name) => name.slice('color-'.length), colorNotes()) },
     type: {
       fonts: [],
-      families: Object.fromEntries(stacks.map((t) => [t.name.slice('font-'.length), t.value])),
+      families: Object.fromEntries(stacks.map((t) => [t.key, t.value])),
       groups: [
         { name: 'Scale', family: 'sans', styles: of('text').toReversed().map((t) => style(t, { fontSize: t.value, fontWeight: 400 })) }, // oxfmt-ignore
         { name: 'Weights', family: 'sans', styles: weights.map((t) => style(t, { fontSize: body, fontWeight: Number(t.value) })) },
@@ -119,9 +117,9 @@ export function tokensJson(commit: string) {
   }
 }
 /** The tokens no family above holds: motion, which the page has no section for. The README's Motion section names them. */
-export const leftOut = () => tokens.filter((t) => ['ms', 'dur', 'delay', 'ease', 'animate'].includes(t.name.split('-')[0]!)).map((t) => t.name)
+export const leftOut = () => tokens.filter((t) => ['ms', 'dur', 'delay', 'ease', 'animate'].includes(t.family)).map((t) => t.name)
 /** The tokens nobody picks a value from: the layers and the focus ring. A component sets them, and the rules say what they are. */
-export const inside = () => tokens.filter((t) => ['z', 'focus'].includes(t.name.split('-')[0]!)).map((t) => t.name)
+export const inside = () => tokens.filter((t) => ['z', 'focus'].includes(t.family)).map((t) => t.name)
 
 /* ---------- the components, in the groups of design/README.md ---------- */
 

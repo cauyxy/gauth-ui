@@ -2,7 +2,7 @@
 /* What the docs say about the tokens is what tokens.css has. A number or a name that is changed in one place only fails here. So does a component that README.md does not list. */
 import { readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parse } from '../scripts/tokens.ts'
+import { keysOf, parse } from '../scripts/token-model.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
@@ -11,7 +11,7 @@ const tokens = parse(read('src/styles/tokens.css'))
 const value = new Map(tokens.map((t) => [t.name, t.value]))
 const usage = new Map(tokens.map((t) => [t.name, t.usage]))
 /** The names of one family without its prefix: `of('radius')` is xs, sm, md … */
-const of = (family: string) => tokens.filter((t) => t.name.startsWith(`${family}-`)).map((t) => t.name.slice(family.length + 1))
+const of = (family: string) => keysOf(tokens, family)
 const px = (name: string) => {
   const v = value.get(name) ?? ''
   return v.endsWith('rem') ? Number.parseFloat(v) * 16 : Number.parseFloat(v)
@@ -142,26 +142,4 @@ it('every --gx-* token a page names exists', () => {
       .map((name) => `${page}: --gx-${name}`),
   )
   expect(missing).toEqual([])
-})
-
-describe('cn()', () => {
-  /* The names Tailwind's own scale has, so tailwind-merge knows them without being told. */
-  const TAILWINDS: Record<string, string[]> = {
-    text: ['xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'],
-    animate: ['spin', 'ping', 'pulse', 'bounce'],
-    font: ['sans', 'serif', 'mono'],
-  }
-  const theme = read('src/core/cn.ts').match(/theme: \{([\s\S]*?)\n {4}\},/)?.[1] ?? ''
-  const lists = [...theme.matchAll(/^\s*'?([\w-]+)'?: \[([^\]]*)\]/gm)].map((m) => [m[1]!, named(m[2]!.replaceAll("'", '`'))] as const)
-
-  it('knows the families of the theme', () => {
-    expect(lists.map(([family]) => family)).toEqual(['shadow', 'text', 'font', 'font-weight', 'leading', 'tracking', 'ease', 'container', 'animate'])
-  })
-
-  it.each(lists)('knows every %s token, so a later class replaces an earlier one', (family, names) => {
-    /* `font-weight-*` starts with `font-` too: the weights have their own list. */
-    const all = of(family).filter((name) => family !== 'font' || !name.startsWith('weight-'))
-    expect(names.filter((name) => !all.includes(name))).toEqual([])
-    expect(all.filter((name) => !names.includes(name) && !TAILWINDS[family]?.includes(name))).toEqual([])
-  })
 })

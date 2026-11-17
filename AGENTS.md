@@ -10,7 +10,7 @@ Read this page before you write or change a component. `design/README.md` says w
 src/styles/tokens.css    the tokens (--gx-*). The one source.
 src/styles/theme.css     the tokens as a Tailwind v4 theme. Generated.
 src/styles/base.css      page defaults, the fallback font, keyframes; in the base layer
-src/core/                cn (joins classes), the icons, the language: messages.ts (every word, en and es) and locale.tsx;
+src/core/                cn (joins classes; it reads theme-names.ts, generated), the icons, the language: messages.ts (every word, en and es) and locale.tsx;
                          props.ts (the Props type), useControllable.ts (a value the product or the component keeps), refs.ts (mergeRefs)
 src/components/          core components: one per file, with its test; a helper a server component may call stands beside it (Segmented.classes.ts)
 src/learning/            learning components, same shape
@@ -26,7 +26,8 @@ gallery/foundations.tsx  the type scale and the movements, drawn from tokens.css
 site/                    the docs site (ui.gauthx.app): every component live on the first page, a page for each with its examples and their code first, then the design rules and the tokens
 GLOSSARY.md              what each shared word means, in en and es
 CHANGELOG.md             what changed in each version, for a product that updates
-scripts/tokens.ts        writes theme.css and design/tokens.json from tokens.css
+scripts/token-model.ts   reads tokens.css: each token's name, family, value and notes. Every tool that needs a token reads it here
+scripts/tokens.ts        writes theme.css, src/core/theme-names.ts and design/tokens.json from tokens.css
 scripts/icons.ts         the list of icons; copies their drawings from Lucide into src/core/icons.ts
 compare/                 compares each component with the gauthx one it replaces (pnpm compare)
 docs/from-gauthx.md      what changes for gauthx when it switches to this package
