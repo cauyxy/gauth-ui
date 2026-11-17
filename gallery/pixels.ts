@@ -11,12 +11,9 @@
  * with keyboard focus, and each floating component open. Movement is stopped for the pictures; `motion.json` holds what
  * moves and how fast, read before it is stopped.
  */
-import tailwind from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import { chromium, type Page } from 'playwright-core'
-import { createServer } from 'vite'
+import type { Page } from 'playwright-core'
+import { chrome, openGallery, OVERLAYS, serveGallery } from './harness.ts'
 
 const flag = (name: string) => {
   const at = process.argv.indexOf(`--${name}`)
@@ -26,8 +23,7 @@ const ONLY = flag('only')?.split(',')
 const PORT = Number(flag('port') ?? 5182)
 const [command, A, B] = process.argv.slice(2)
 const fileOf = (title: string) => title.replace(/[^A-Za-z]+/g, '-').toLowerCase()
-/* Drawn without the graphics card: the same page then gives the same pixels each time. */
-const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-gpu', '--force-color-profile=srgb'] })
+const browser = await chrome()
 
 if (command === 'take' && A) await take(A)
 else if (command === 'compare' && A && B) await compare(A, B)
@@ -36,27 +32,8 @@ await browser.close()
 
 async function take(out: string) {
   mkdirSync(out, { recursive: true })
-  const server = await createServer({
-    configFile: false,
-    root: fileURLToPath(new URL('.', import.meta.url)),
-    logLevel: 'error',
-    plugins: [react(), tailwind()],
-    server: { port: PORT, strictPort: true },
-  })
-  await server.listen()
-
-  const open = async (width: number, locale: string, still = true): Promise<Page> => {
-    const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 2 })
-    await page.goto(`http://localhost:${PORT}/`)
-    await page.waitForSelector('.g-section')
-    if (locale === 'es') await page.getByRole('radio', { name: 'Español' }).click()
-    await page.evaluate(() => document.fonts.ready)
-    if (still)
-      await page.addStyleTag({
-        content: '*, *::before, *::after { animation: none !important; transition: none !important; caret-color: transparent !important; }',
-      })
-    return page
-  }
+  const server = await serveGallery(PORT)
+  const open = (width: number, locale: 'en' | 'es', still = true): Promise<Page> => openGallery(browser, PORT, { width, locale, still })
 
   /* What moves, before movement is stopped. */
   const moving = await open(1120, 'en', false)
@@ -129,22 +106,15 @@ async function take(out: string) {
   await page.close()
 
   /* Each floating component, open. */
-  const opened = async (title: string, name: string, act: (page: Page) => Promise<void>, shown: string) => {
-    if (!wanted(title)) return
+  for (const overlay of OVERLAYS) {
+    if (!wanted(overlay.component)) continue
     const page = await open(1120, 'en')
-    await act(page)
-    await page.waitForSelector(shown)
+    await overlay.open(page)
+    await page.waitForSelector(overlay.shown)
     await page.waitForTimeout(200)
-    await page.screenshot({ path: `${out}/open-${fileOf(title)}-${name}.png` })
+    await page.screenshot({ path: `${out}/open-${fileOf(overlay.component)}-${fileOf(overlay.name)}.png` })
     await page.close()
   }
-  await opened('Dialog', 'callout', (p) => p.getByRole('button', { name: 'Publish practice' }).click(), '.gx-dialog')
-  await opened('Dialog', 'plain', (p) => p.getByRole('button', { name: 'Remove from class' }).click(), '.gx-dialog')
-  await opened('Menu', 'open', (p) => p.getByRole('button', { name: 'Devon Carter' }).click(), '.gx-menu')
-  await opened('Popover', 'open', (p) => p.getByRole('button', { name: 'Open', exact: true }).click(), '.gx-popover')
-  await opened('Tooltip', 'open', (p) => p.getByRole('button', { name: 'Hover me' }).hover(), '.gx-tooltip')
-  for (const name of ['Copy link', 'Publish', 'Save offline', 'Assign', 'Remove student'])
-    await opened('Toast', fileOf(name), (p) => p.locator('.g-section#Toast').getByRole('button', { name, exact: true }).click(), '.gx-toast')
 
   await server.close()
   console.log(`${readdirSync(out).length} files in ${out}`)

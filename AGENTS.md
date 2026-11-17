@@ -21,7 +21,8 @@ src/props.test.tsx       every component passes native props and its ref to one 
 src/contrast.test.ts     every allowed text and ground pair reaches 4.5:1
 src/docs.test.ts         every size, name and role design/README.md gives is the one in tokens.css; README.md lists every component
 gallery/examples/        the examples: one file for each component, each `export function` one example a product can copy
-gallery/                 every example on one page, in both languages (pnpm gallery); shot.ts, optical.ts and pixels.ts check it in Chrome
+gallery/                 every example on one page, in both languages (pnpm gallery); shot.ts, optical.ts and pixels.ts check it in Chrome;
+                         harness.ts is what they share: the server, Chrome, a ready page, the floating components opened
 gallery/foundations.tsx  the type scale and the movements, drawn from tokens.css: for the docs site's Tokens page and the artifact
 site/                    the docs site (ui.gauthx.app): every component live on the first page, a page for each with its examples and their code first, then the design rules and the tokens
 GLOSSARY.md              what each shared word means, in en and es

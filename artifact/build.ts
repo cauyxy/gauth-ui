@@ -17,7 +17,7 @@
  *   out/assets/<Group>/<icon>.svg              src/core/icons.ts, each icon as the `Icon` component draws it
  *   out/build.json                             the commit, the components and each preview's height
  *
- * Chrome is `CHROME=/path/to/chrome`, or the installed Google Chrome.
+ * Chrome is `CHROME=/path/to/chrome`, or the installed Google Chrome (gallery/harness.ts).
  */
 import tailwind from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -28,6 +28,7 @@ import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
 import { familyTokens, parse, type Token } from '../scripts/token-model.ts'
+import { chrome } from '../gallery/harness.ts'
 import { readmeGroups } from '../scripts/inventory.ts'
 import { ICONS } from '../src/core/icons.ts'
 
@@ -282,13 +283,6 @@ export async function serveCards(port: number) {
   await new Promise<void>((done) => server.listen(port, done))
   return server
 }
-/** Chrome: `CHROME=/path/to/chrome`, or the installed Google Chrome. Drawn without the graphics card, so a page gives the same pixels each time. */
-export async function chrome() {
-  const { chromium } = await import('playwright-core')
-  const args = ['--disable-gpu', '--force-color-profile=srgb']
-  return chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME, args } : { channel: 'chrome', args })
-}
-
 /** Draws every preview as the artifact's page does, fails on one that is empty or throws, and returns each one's height. */
 async function render(names: string[]) {
   const server = await serveCards(5183)

@@ -8,14 +8,12 @@
  * means the bundle or its stylesheet has lost something. The second finds an artifact that has fallen behind the code:
  * <folder> holds the artifact's `project/` files as its page serves them (an agent reads them with its Artifact tool).
  */
-import tailwind from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { Page } from 'playwright-core'
-import { createServer } from 'vite'
 import { NAMES } from '../scripts/inventory.ts'
-import { chrome, EXTRA_CARDS, serveCards } from './build.ts'
+import { chrome, openGallery, serveGallery, STILL } from '../gallery/harness.ts'
+import { EXTRA_CARDS, serveCards } from './build.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const PROJECT = `${ROOT}artifact/out/project/`
@@ -45,15 +43,7 @@ if (at > 0) {
 
 /* ---------- previews against the gallery ---------- */
 
-const STILL = '*, *::before, *::after { animation: none !important; transition: none !important; caret-color: transparent !important; }'
-const gallery = await createServer({
-  configFile: false,
-  root: `${ROOT}gallery`,
-  logLevel: 'error',
-  plugins: [react(), tailwind()],
-  server: { port: 5184, strictPort: true },
-})
-await gallery.listen()
+const gallery = await serveGallery(5184)
 const cards = await serveCards(5185)
 const browser = await chrome()
 
@@ -79,9 +69,7 @@ async function shots(page: Page, examples: string) {
   return pictures
 }
 
-const theirs = await browser.newPage({ viewport: { width: 1120, height: 2000 } })
-await theirs.goto('http://localhost:5184/')
-await theirs.waitForSelector('.g-section')
+const theirs = await openGallery(browser, 5184, { width: 1120, height: 2000, scale: 1 })
 let examples = 0
 /* The extra cards are the artifact's alone: the gallery has no block to compare them with. */
 for (const name of NAMES.filter((name) => components.includes(name))) {

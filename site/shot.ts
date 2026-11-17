@@ -8,8 +8,8 @@
  */
 import { mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { chromium } from 'playwright-core'
 import { createServer } from 'vite'
+import { chrome, openOverlay } from '../gallery/harness.ts'
 import { NAMES } from '../scripts/inventory.ts'
 
 const [OUT, address] = process.argv.slice(2)
@@ -21,7 +21,7 @@ const server = address
   : await createServer({ configFile: fileURLToPath(new URL('vite.config.ts', import.meta.url)), logLevel: 'error', server: { port: 5187, strictPort: true } })
 await server?.listen()
 const base = address ?? 'http://localhost:5187'
-const browser = await chromium.launch({ channel: 'chrome' })
+const browser = await chrome()
 const problems: string[] = []
 const SHOWN = ['/', '/components/button', '/components/table', '/components/message', '/components/answeroption', '/components/tex', '/install', '/tokens']
 
@@ -82,21 +82,18 @@ for (const [size, width] of [
   if (size === 'desktop') {
     /* The floating components open on their own pages, and a toast shows once. */
     await open('/components/dialog')
-    await page.getByRole('button', { name: 'Publish practice' }).click()
-    await page.waitForSelector('.gx-dialog')
+    await openOverlay(page, 'Dialog', 'callout')
     await page.waitForTimeout(400)
     await page.screenshot({ path: `${OUT}/${size}-open-dialog.png` })
     await page.getByRole('button', { name: 'Publish', exact: true }).click()
     await page.waitForSelector('.gx-toast')
     await open('/components/menu')
-    await page.getByRole('button', { name: 'Devon Carter' }).click()
-    await page.waitForSelector('.gx-menu')
+    await openOverlay(page, 'Menu', 'open')
     await page.waitForTimeout(300)
     await page.screenshot({ path: `${OUT}/${size}-open-menu.png` })
     await page.keyboard.press('Escape')
     await open('/components/toast')
-    await page.getByRole('button', { name: 'Copy link' }).click()
-    await page.waitForSelector('.gx-toast')
+    await openOverlay(page, 'Toast', 'Copy link')
     await page.waitForTimeout(400)
     const toasts = await page.locator('.gx-toast').count()
     if (toasts !== 1) problems.push(`${size} ${at}: one toast was asked for, ${toasts} show`)
