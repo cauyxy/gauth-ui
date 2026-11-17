@@ -3,6 +3,5 @@ dist
 *.tsbuildinfo
 .DS_Store
 *.tgz
-compare/.tmp
 gallery/.shots
 artifact/out

@@ -139,7 +139,6 @@ it('every --gx-* token a page names exists', () => {
     'AGENTS.md',
     'README.md',
     'GLOSSARY.md',
-    'docs/from-gauthx.md',
     'design/README.md',
     ...readdirSync(`${ROOT}design/components`).map((name) => `design/components/${name}/README.md`),
   ]

@@ -1,5 +1,5 @@
 /*
- * The icons are Lucide's (ISC), the set gauthx and its products already draw with. This script copies the drawings
+ * The icons are Lucide's (ISC). This script copies the drawings
  * of the icons named below from the lucide-react package into src/core/icons.ts, so the package ships only those and
  * has no dependency on Lucide. To add an icon: add its name here, then run `pnpm icons`.
  *   node scripts/icons.ts           rewrite src/core/icons.ts
