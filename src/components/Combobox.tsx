@@ -8,6 +8,7 @@ import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
 import type { Props } from '../core/props'
 import { useControllable } from '../core/useControllable'
+import { fieldBox } from './Field.classes'
 import { useField } from './Field'
 import { PopoverContent } from './Popover'
 
@@ -28,18 +29,15 @@ export type ComboboxProps<T extends string = string> = Props<
   'type' | 'role' | 'children'
 >
 
-/* The box of an Input. The list under it is the look of a Menu. */
-const control = cva(
-  'gx-combobox__control block w-full appearance-none bg-white text-ink shadow-edge-strong outline-0 transition-[background-color,box-shadow] duration-(--gx-dur-fast) ease-standard placeholder:text-muted focus-visible:focus-ring focus-visible:outline-offset-1 disabled:opacity-50 aria-invalid:bg-attempted-soft aria-invalid:shadow-invalid',
-  {
-    variants: {
-      size: {
-        md: 'h-(--gx-h-md) rounded-lg ps-3 pe-8 text-sm',
-        xl: 'h-(--gx-h-xl) rounded-2xl ps-4 pe-10 text-base',
-      },
+/* The box of a field. The list under it is the look of a Menu. */
+const control = cva(['gx-combobox__control block appearance-none bg-white shadow-edge-strong placeholder:text-muted', fieldBox], {
+  variants: {
+    size: {
+      md: 'h-(--gx-h-md) rounded-lg ps-3 pe-8 text-sm',
+      xl: 'h-(--gx-h-xl) rounded-2xl ps-4 pe-10 text-base',
     },
   },
-)
+})
 const chevron = cva('gx-combobox__icon pointer-events-none absolute inset-y-0 my-auto text-muted', {
   variants: { size: { md: 'end-[calc(var(--gx-space-2-5)-1px)]', xl: 'end-[calc(var(--gx-space-3-5)-1px)]' } },
 })
@@ -66,7 +64,7 @@ export function Combobox<T extends string>({
   ...props
 }: ComboboxProps<T>) {
   const { messages } = useLocale()
-  const field = useField()
+  const field = useField(label, props.id)
   const listId = useId()
   const [value, set] = useControllable<T | null, T>(kept, defaultValue, onChange)
   const [open, setOpen] = useState(false)
@@ -120,10 +118,7 @@ export function Combobox<T extends string>({
           <input
             type="text"
             role="combobox"
-            id={field?.id}
-            aria-describedby={field?.describedBy}
-            aria-invalid={field?.invalid || undefined}
-            aria-label={label}
+            {...field.props}
             aria-expanded={open}
             aria-controls={open ? listId : undefined}
             aria-autocomplete="list"

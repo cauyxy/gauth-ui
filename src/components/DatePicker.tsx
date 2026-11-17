@@ -2,12 +2,13 @@
 
 import { cva } from 'class-variance-authority'
 import { Popover as PopoverPrimitive } from 'radix-ui'
-import { useId, useRef, useState, type KeyboardEvent } from 'react'
+import { useRef, useState, type KeyboardEvent } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
 import type { Props } from '../core/props'
 import { useControllable } from '../core/useControllable'
+import { fieldBox } from './Field.classes'
 import { useField } from './Field'
 import { IconButton } from './IconButton'
 import { PopoverContent } from './Popover'
@@ -208,9 +209,12 @@ export function Calendar({ value: kept, defaultValue = null, onChange, min, max,
   )
 }
 
-/* The same box as Select: an error is an attempted outline on the attempted-soft ground, the look of "Not yet". */
+/* The box of a field, as Select draws it. */
 export const datePickerTrigger = cva(
-  'gx-date-picker__trigger flex w-full min-w-0 cursor-pointer items-center justify-between gap-2 bg-white text-start font-control text-ink shadow-edge-strong outline-0 transition-[background-color,box-shadow] duration-(--gx-dur-fast) ease-standard focus-visible:focus-ring focus-visible:outline-offset-1 disabled:cursor-default disabled:opacity-50 aria-invalid:bg-attempted-soft aria-invalid:shadow-invalid',
+  [
+    'gx-date-picker__trigger flex min-w-0 cursor-pointer items-center justify-between gap-2 bg-white text-start font-control shadow-edge-strong disabled:cursor-default',
+    fieldBox,
+  ],
   {
     variants: {
       /* The icon's strokes end where the text starts at the other side, as Select's chevron does. */
@@ -243,24 +247,19 @@ export function DatePicker({
   ...props
 }: DatePickerProps) {
   const { messages, formatDay } = useLocale()
-  const field = useField()
+  const { props: control, labelId } = useField(label, props.id)
   const [value, set] = useControllable<Date | null, Date>(kept, defaultValue, onChange)
   const [open, setOpen] = useState(false)
-  const ownId = useId()
-  const id = props.id ?? field?.id ?? ownId
-  const valueId = `${id}-value`
+  const valueId = `${control.id}-value`
   const iso = value ? `${value.getFullYear()}-${String(value.getMonth() + 1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}` : ''
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
       <PopoverPrimitive.Trigger
-        aria-label={field ? undefined : label}
+        {...control}
         /* The name is the label and then the day, so a screen reader says both. */
-        aria-labelledby={field ? `${field.labelId} ${valueId}` : label ? `${id} ${valueId}` : undefined}
-        aria-describedby={field?.describedBy}
-        aria-invalid={field?.invalid || undefined}
+        aria-labelledby={labelId && `${labelId} ${valueId}`}
         {...props}
-        id={id}
         className={cn('gx-date-picker', `gx-date-picker--${size}`, datePickerTrigger({ size }), className)}
       >
         <span id={valueId} className={cn('gx-date-picker__value truncate', !value && 'text-muted')}>

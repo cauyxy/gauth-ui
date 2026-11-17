@@ -1,7 +1,7 @@
 'use client'
 
 import { Popover as PopoverPrimitive } from 'radix-ui'
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
@@ -47,14 +47,12 @@ export function DateRangePicker({
   ...props
 }: DateRangePickerProps) {
   const { messages, formatDay } = useLocale()
-  const field = useField()
+  const { props: control, labelId } = useField(label, props.id)
   const [value, set] = useControllable<DateRange | null, DateRange>(kept, defaultValue, onChange)
   const [open, setOpen] = useState(false)
   /* The start picked so far, while the end is still to come. */
   const [start, setStart] = useState<Date | null>(null)
-  const ownId = useId()
-  const id = props.id ?? field?.id ?? ownId
-  const valueId = `${id}-value`
+  const valueId = `${control.id}-value`
   const shown = start ? { from: start, to: null } : (value ?? { from: null, to: null })
 
   return (
@@ -66,13 +64,10 @@ export function DateRangePicker({
       }}
     >
       <PopoverPrimitive.Trigger
-        aria-label={field ? undefined : label}
+        {...control}
         /* The name is the label and then the days, so a screen reader says both. */
-        aria-labelledby={field ? `${field.labelId} ${valueId}` : label ? `${id} ${valueId}` : undefined}
-        aria-describedby={field?.describedBy}
-        aria-invalid={field?.invalid || undefined}
+        aria-labelledby={labelId && `${labelId} ${valueId}`}
         {...props}
-        id={id}
         className={cn('gx-date-range-picker', `gx-date-range-picker--${size}`, datePickerTrigger({ size }), className)}
       >
         <span id={valueId} className={cn('gx-date-range-picker__value truncate', !value && 'text-muted')}>

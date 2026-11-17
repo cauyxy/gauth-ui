@@ -233,9 +233,11 @@ describe('server components', () => {
 })
 
 describe.each(components)('%s', (name, dir) => {
-  /* The component, with the helpers that stand beside it (`Segmented.classes.ts`). */
-  const beside = readdirSync(`${ROOT}src/${dir}`).filter((f) => f.startsWith(`${name}.`) && f.endsWith('.ts') && !f.includes('.test.'))
-  const source = [`${name}.tsx`, ...beside].map((f) => read(`src/${dir}/${f}`)).join('\n')
+  /* The component, with the helpers that stand beside it (`Segmented.classes.ts`) and the classes it takes from another's (`Field.classes.ts`). */
+  const beside = readdirSync(`${ROOT}src/${dir}`).filter((f) => f.startsWith(`${name}.`) && /\.tsx?$/.test(f) && f !== `${name}.tsx` && !f.includes('.test.'))
+  const own = [`${name}.tsx`, ...beside].map((f) => read(`src/${dir}/${f}`)).join('\n')
+  const shared = [...new Set([...own.matchAll(/from '\.\/(\w+\.classes)'/g)].map((m) => `${m[1]}.ts`))].filter((f) => !beside.includes(f))
+  const source = [own, ...shared.map((f) => read(`src/${dir}/${f}`))].join('\n')
   const classes = classesOf(source)
 
   it('has its test, guideline and export, and a gx- name on its root', () => {
