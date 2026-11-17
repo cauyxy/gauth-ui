@@ -3,7 +3,7 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { namesOf, readmeGroups } from '../scripts/inventory.ts'
-import { keysOf, parse } from '../scripts/token-model.ts'
+import { keysOf, levelsOf, parse } from '../scripts/token-model.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
@@ -68,6 +68,13 @@ describe('design/README.md', () => {
     /* White and black are the ground and the pressed ink button: they have no meaning to explain. */
     expect(colors.filter((c) => c !== 'white' && c !== 'black' && !rows.includes(c))).toEqual([])
     expect(rows.filter((name) => !colors.includes(name))).toEqual([])
+  })
+
+  it('Skill levels: each row is the colors tokens.css gives that level for `data-level`', () => {
+    const rows = [...section('Skill levels').matchAll(/^\| ([A-Z][a-z]+(?: [a-z]+)?)\s*\| `([\w-]+)`\s*\| `([\w-]+)`\s*\| `([\w-]+)`\s*\|$/gm)]
+    expect(rows.map(([, level, fill, ink, soft]) => ({ level: level!.toLowerCase().replace(' ', '_'), fill, ink, soft }))).toEqual(
+      levelsOf(read('src/styles/tokens.css')),
+    )
   })
 
   it('Surfaces and layout: radii, shadows, control heights, spacing, widths and layers', () => {

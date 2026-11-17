@@ -43,6 +43,13 @@ it('tints a shadow with a color utility', async () => {
   expect(css).toMatch(/\.shadow-correct\s*\{[^}]*--tw-shadow-color/)
 })
 
+it("gives a level's colors as utilities that read the element's own data-level", async () => {
+  const css = await build(['bg-level', 'text-level-ink', 'bg-level-soft', 'group-aria-[current]/rung:bg-level-soft'])
+  expect(css).toMatch(/\.bg-level\s*\{[^}]*background-color:\s*var\(--gx-level\)/)
+  expect(css).toMatch(/\.text-level-ink\s*\{[^}]*color:\s*var\(--gx-level-ink\)/)
+  expect(css).toMatch(/rung\\:bg-level-soft:is\([^{]*\{[^}]*background-color:\s*var\(--gx-level-soft\)/)
+})
+
 it('names the movements and their easings', async () => {
   const css = await build(['animate-fade-in', 'animate-spin', 'ease-enter'])
   expect(css).toMatch(/\.animate-fade-in\s*\{[^}]*animation:\s*var\(--animate-fade-in\)/)

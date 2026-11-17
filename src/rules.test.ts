@@ -6,7 +6,7 @@ import { GROUPS } from '../gallery/groups.ts'
 import { snippetsOf } from '../gallery/snippet.ts'
 import { staleIcons } from '../scripts/icons.ts'
 import { COMPONENTS, differences, NAMES, namesOf } from '../scripts/inventory.ts'
-import { keysOf, parse } from '../scripts/token-model.ts'
+import { keysOf, LEVEL_VARS, parse } from '../scripts/token-model.ts'
 import { stale } from '../scripts/tokens.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -15,7 +15,8 @@ const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
 /** Every component of core and learning: [name, folder under src]. Math has rules of its own. */
 const components = COMPONENTS.filter((c) => c.group !== 'math').map((c) => [c.name, c.dir] as const)
 const model = parse(read('src/styles/tokens.css'))
-const tokens = new Set(model.map((t) => `--gx-${t.name}`))
+/* The tokens, and the colors a `[data-level]` block sets. */
+const tokens = new Set([...model.map((t) => `--gx-${t.name}`), ...Object.values(LEVEL_VARS).map((name) => `--gx-${name}`)])
 
 /** Every class name written in a file: each word of each string, without comments. */
 function classesOf(source: string) {

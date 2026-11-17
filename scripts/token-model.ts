@@ -46,6 +46,23 @@ export function parse(css: string): Token[] {
   return tokens
 }
 
+/** A skill level's colors, as names of color tokens: `fill`, the text on its soft ground (`ink`), the soft ground (`soft`). */
+export type LevelColors = { level: string; fill: string; ink: string; soft: string }
+/** The variables a `[data-level]` block sets, as `--gx-<name>`, and the names theme.css gives them. */
+export const LEVEL_VARS = { fill: 'level', ink: 'level-ink', soft: 'level-soft' } as const
+
+/** Each `[data-level='…']` block of tokens.css: the color tokens of that level. Throws on a block that does not set all three. */
+export function levelsOf(css: string): LevelColors[] {
+  return [...css.matchAll(/^\[data-level='(\w+)'\]\s*\{([^}]*)\}/gm)].map(([, level, body]) => {
+    const colorOf = (name: string) => {
+      const color = body!.match(new RegExp(`--gx-${name}:\\s*var\\(--gx-color-([\\w-]+)\\);`))?.[1]
+      if (!color) throw new Error(`tokens.css: [data-level='${level}'] has no --gx-${name} that is a color token`)
+      return color
+    }
+    return { level: level!, fill: colorOf(LEVEL_VARS.fill), ink: colorOf(LEVEL_VARS.ink), soft: colorOf(LEVEL_VARS.soft) }
+  })
+}
+
 /** The tokens of one family, in the order of the file. */
 export const familyTokens = (tokens: Token[], family: string) => tokens.filter((t) => t.family === family)
 

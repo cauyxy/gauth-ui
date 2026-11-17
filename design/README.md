@@ -50,6 +50,7 @@ One ladder in every product: **Attempted, Familiar, Proficient, Mastered**, plus
 | Attempted   | `attempted`   | `attempted-ink`  | `attempted-soft`  |
 | Not started | `track`       | `muted`          | `surface`         |
 
+- A component that shows a level sets `data-level` and takes these colors as `bg-level`, `text-level-ink` and `bg-level-soft`. tokens.css holds this table as one block for each level, and a test keeps the two the same.
 - The ramp runs from warm to cool: orange, gold, mint, teal.
 - `attempted` is also the color of a wrong answer and of a field error. There is no separate error color, and nothing is red.
 - Each level also has its own shape, so no level relies on color alone.

@@ -9,7 +9,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { familyTokens, keysOf, parse, type Token } from './token-model.ts'
+import { familyTokens, keysOf, LEVEL_VARS, parse, type Token } from './token-model.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 export const SOURCE = `${ROOT}src/styles/tokens.css`
@@ -32,6 +32,10 @@ export function themeCss(tokens: Token[]) {
     '@theme {',
     ...CLEARED.map((name) => `  ${name}: initial;`),
     ...mapped.map((t) => `  --${t.name}: ${t.value.replace(inner, 'var(--$1-')};`),
+    '}',
+    "/* A skill level's colors: inline, so each element reads the ones its `data-level` sets (tokens.css). */",
+    '@theme inline {',
+    ...Object.values(LEVEL_VARS).map((name) => `  --color-${name}: var(--gx-${name});`),
     '}',
     '',
   ].join('\n')
