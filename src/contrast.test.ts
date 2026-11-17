@@ -2,14 +2,11 @@
 /* Text must reach 4.5:1 on its ground. These are the pairs the design rules allow; a token change that breaks one fails here. */
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { parse } from '../scripts/tokens.ts'
+import { familyTokens, levelsOf, parse } from '../scripts/token-model.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
-const colors = Object.fromEntries(
-  parse(readFileSync(`${ROOT}src/styles/tokens.css`, 'utf8'))
-    .filter((t) => t.name.startsWith('color-'))
-    .map((t) => [t.name.slice('color-'.length), t.value]),
-)
+const css = readFileSync(`${ROOT}src/styles/tokens.css`, 'utf8')
+const colors = Object.fromEntries(familyTokens(parse(css), 'color').map((t) => [t.key, t.value]))
 
 /** A token as [r, g, b], painted over white when it has an alpha. */
 function rgb(name: string): [number, number, number] {
@@ -46,12 +43,9 @@ const PAIRS: [text: string, ground: string][] = [
   ['warn', 'warn-soft'],
   ['pink', 'pink-soft'],
   ['white', 'ink'],
-  /* Mastered and Proficient share one text color and the ground of done and right. */
-  ['mastered-ink', 'good-soft'],
-  ['familiar-ink', 'familiar-soft'],
-  ['attempted-ink', 'attempted-soft'],
+  /* Each level's text on its soft ground, as tokens.css pairs them for `data-level`. Mastered and Proficient share one. */
+  ...levelsOf(css).map((level) => [level.ink, level.soft] as [string, string]),
   ['attempted-ink', 'white'],
-  ['muted', 'surface'],
   /* A level's fill carries ink text (a letter, a mark), never white: white on these fills is near 2:1. */
   ['ink', 'attempted'],
   ['ink', 'familiar'],

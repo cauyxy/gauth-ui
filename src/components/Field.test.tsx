@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { Field, useField } from './Field'
+import { Field, useField, type FieldControl } from './Field'
 import { Input } from './Input'
 import { Select } from './Select'
 import { Textarea } from './Textarea'
@@ -56,25 +56,36 @@ it('wires a Textarea and a Select the same way', () => {
   expect(screen.getByRole('combobox', { name: 'Due' })).toHaveAccessibleDescription('Students see the day.')
 })
 
-it('gives each field its own id, and nothing outside a Field', () => {
-  const seen: (string | undefined)[] = []
-  const Probe = () => {
-    seen.push(useField()?.id)
+it('names a control by the Field, not by its own label', () => {
+  render(
+    <Field label="Class name">
+      <Input label="Name" />
+    </Field>,
+  )
+  expect(screen.getByRole('textbox', { name: 'Class name' })).not.toHaveAttribute('aria-label')
+})
+
+it('gives each field its own id; outside a Field the label names the control', () => {
+  const seen: FieldControl[] = []
+  const Probe = ({ label }: { label?: string }) => {
+    seen.push(useField(label))
     return null
   }
   render(
     <>
-      <Probe />
+      <Probe label="Search" />
       <Field label="First name">
-        <Probe />
+        <Probe label="Not used" />
       </Field>
       <Field label="Last name">
         <Probe />
       </Field>
     </>,
   )
-  expect(seen[0]).toBeUndefined()
-  expect(seen[1]).toBeTruthy()
-  expect(seen[2]).toBeTruthy()
-  expect(seen[1]).not.toBe(seen[2])
+  const [alone, first, last] = seen as [FieldControl, FieldControl, FieldControl]
+  expect(alone.props['aria-label']).toBe('Search')
+  expect(alone.labelId).toBe(alone.props.id)
+  expect(first.props['aria-label']).toBeUndefined()
+  expect(first.labelId).not.toBe(first.props.id)
+  expect(first.props.id).not.toBe(last.props.id)
 })

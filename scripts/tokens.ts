@@ -1,48 +1,30 @@
 /*
- * src/styles/tokens.css is the one source of the tokens. This script writes the two files made from it:
- *   src/styles/theme.css   the same tokens as a Tailwind v4 theme (bg-ink, text-sm, rounded-2xl, shadow-edge)
- *   design/tokens.json     the tokens as data (each family a list of {name, value, usage}): the docs site's Tokens page reads it
- * Never edit those two by hand.
- *   node scripts/tokens.ts           rewrite both
- *   node scripts/tokens.ts --check   fail when either is out of date (also in `pnpm test`)
+ * src/styles/tokens.css is the one source of the tokens. This script writes the files made from it:
+ *   src/styles/theme.css       the same tokens as a Tailwind v4 theme (bg-ink, text-sm, rounded-2xl, shadow-edge)
+ *   src/core/theme-names.ts    the names of that theme for each family, so cn() knows which classes replace each other
+ *   design/tokens.json         the tokens as data (each family a list of {name, value, usage}): the docs site's Tokens page reads it
+ * Never edit those by hand. scripts/token-model.ts reads tokens.css.
+ *   node scripts/tokens.ts           rewrite them
+ *   node scripts/tokens.ts --check   fail when one is out of date (also in `pnpm test`)
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { familyTokens, keysOf, LEVEL_VARS, parse, type Token } from './token-model.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 export const SOURCE = `${ROOT}src/styles/tokens.css`
 export const THEME = `${ROOT}src/styles/theme.css`
+export const NAMES = `${ROOT}src/core/theme-names.ts`
 export const JSON_FILE = `${ROOT}design/tokens.json`
 
-export type Token = { name: string; value: string; usage: string }
-
 /** The families Tailwind has a theme namespace for. Control heights and durations stay `--gx-*` only. */
-const TAILWIND = ['font', 'leading', 'tracking', 'container', 'color', 'radius', 'text', 'shadow', 'ease', 'animate'] as const
+const TAILWIND = ['font', 'font-weight', 'leading', 'tracking', 'container', 'color', 'radius', 'text', 'shadow', 'ease', 'animate']
 const CLEARED = ['--color-*', '--text-*', '--shadow-*', '--inset-shadow-*', '--drop-shadow-*']
-
-/** Every `--gx-name: value;` under `:root`, with the comment above its group (or at the end of its line) as its usage. */
-export function parse(css: string): Token[] {
-  const block = css.match(/:root\s*\{([\s\S]*?)\n\s*\}/)?.[1]
-  if (!block) throw new Error('no :root block in tokens.css')
-  const tokens: Token[] = []
-  let group = ''
-  for (const raw of block.split('\n')) {
-    const line = raw.trim()
-    const comment = line.match(/^\/\*\s*(.*?)\s*\*\/$/)
-    if (comment) {
-      group = comment[1]!
-      continue
-    }
-    const decl = line.match(/^--gx-([\w-]+):\s*(.+?);\s*(?:\/\*\s*(.*?)\s*\*\/)?$/)
-    if (decl) tokens.push({ name: decl[1]!, value: decl[2]!, usage: decl[3] ?? group })
-  }
-  return tokens
-}
-
-const familyOf = (name: string) => name.split('-')[0]!
+/** The theme scales of tailwind-merge that take a name of theme.css. Colors, radii and the rest are known to it by their shape. */
+const MERGED = ['shadow', 'text', 'font', 'font-weight', 'leading', 'tracking', 'ease', 'container', 'animate']
 
 export function themeCss(tokens: Token[]) {
-  const mapped = tokens.filter((t) => (TAILWIND as readonly string[]).includes(familyOf(t.name)))
+  const mapped = tokens.filter((t) => TAILWIND.includes(t.family))
   const inner = new RegExp(`var\\(--gx-(${TAILWIND.join('|')})-`, 'g')
   return [
     '/* Generated from tokens.css by scripts/tokens.ts. Do not edit. */',
@@ -51,12 +33,36 @@ export function themeCss(tokens: Token[]) {
     ...CLEARED.map((name) => `  ${name}: initial;`),
     ...mapped.map((t) => `  --${t.name}: ${t.value.replace(inner, 'var(--$1-')};`),
     '}',
+    "/* A skill level's colors: inline, so each element reads the ones its `data-level` sets (tokens.css). */",
+    '@theme inline {',
+    ...Object.values(LEVEL_VARS).map((name) => `  --color-${name}: var(--gx-${name});`),
+    '}',
+    '',
+  ].join('\n')
+}
+
+/** The names of theme.css for each scale of tailwind-merge. With them, `shadow-pop` after `shadow-edge` replaces it. */
+export function themeNames(tokens: Token[]) {
+  const key = (family: string) => (/^\w+$/.test(family) ? family : `'${family}'`)
+  const lists = MERGED.map(
+    (family) =>
+      `  ${key(family)}: [${keysOf(tokens, family)
+        .map((name) => `'${name}'`)
+        .join(', ')}],`,
+  )
+  return [
+    '/* Generated from tokens.css by scripts/tokens.ts. Do not edit. */',
+    '/** The names of theme.css for each theme scale of tailwind-merge. cn() reads them. */',
+    'export const THEME_NAMES = {',
+    ...lists,
+    '}',
     '',
   ].join('\n')
 }
 
 export function tokensJson(tokens: Token[]) {
-  const of = (family: string) => tokens.filter((t) => familyOf(t.name) === family)
+  /* Each token as the file has always listed it. */
+  const of = (family: string) => familyTokens(tokens, family).map(({ name, value, usage }) => ({ name, value, usage }))
   const hex = (value: string) => (value.startsWith('#') ? value.toLowerCase() : value)
   return {
     name: 'Gauth',
@@ -68,12 +74,8 @@ export function tokensJson(tokens: Token[]) {
     },
     type: {
       fonts: [],
-      families: Object.fromEntries(
-        of('font')
-          .filter((t) => !t.name.startsWith('font-weight-'))
-          .map((t) => [t.name.slice('font-'.length), t.value]),
-      ),
-      weights: of('font').filter((t) => t.name.startsWith('font-weight-')),
+      families: Object.fromEntries(familyTokens(tokens, 'font').map((t) => [t.key, t.value])),
+      weights: of('font-weight'),
       groups: [],
       scale: of('text'),
     },
@@ -88,6 +90,7 @@ export function outputs() {
   const tokens = parse(readFileSync(SOURCE, 'utf8'))
   return [
     { file: THEME, text: themeCss(tokens) },
+    { file: NAMES, text: themeNames(tokens) },
     { file: JSON_FILE, text: `${JSON.stringify(tokensJson(tokens), null, 2)}\n` },
   ]
 }

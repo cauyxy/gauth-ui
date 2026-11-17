@@ -171,7 +171,7 @@ import type { ButtonProps, ComboboxOption, IconName, Level, SelectProps } from '
 const students: ComboboxOption<StudentId>[] = roster.map((s) => ({ value: s.id, label: s.name }))
 ```
 
-A control you write yourself joins a `Field` with `useField()`: it gives the `id`, `aria-describedby` and `aria-invalid` that the package's own controls take.
+A control you write yourself joins a `Field` with `useField(label)`: spread its `props` on the element that takes focus. Inside a Field they are the `id`, `aria-describedby` and `aria-invalid` the package's own controls take; outside one, `label` is the accessible name.
 
 ## Components
 

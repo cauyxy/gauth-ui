@@ -22,9 +22,17 @@ it('takes the soft ground of its tone, and then no hairline', () => {
 it('takes the soft ground of a level, which wins over a tone', () => {
   render(<StudentCard level="proficient" tone="pink" aria-label="Level" />)
   const card = screen.getByRole('region', { name: 'Level' })
-  expect(card).toHaveClass('gx-student-card--proficient', 'bg-good-soft')
+  expect(card).toHaveClass('gx-student-card--proficient', 'bg-level-soft')
   expect(card).not.toHaveClass('bg-pink-soft')
   expect(card).toHaveAttribute('data-ground', 'proficient')
+  expect(card).toHaveAttribute('data-level', 'proficient')
+})
+
+it('is on surface with an ink title when no level is reached yet', () => {
+  render(<StudentCard level="not_started" aria-label="Level" />)
+  const card = screen.getByRole('region', { name: 'Level' })
+  expect(card).toHaveClass('gx-student-card--not-started', 'bg-surface')
+  expect(card).not.toHaveAttribute('data-level')
 })
 
 it('has a title that a product can restyle', () => {

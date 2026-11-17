@@ -6,10 +6,11 @@
  * Without an address it serves the site from this folder. It prints what a page must never have: an error in the console,
  * content wider than the window, a component's page with no example or an example with no code, or components without their styles.
  */
-import { mkdirSync, readdirSync } from 'node:fs'
+import { mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { chromium } from 'playwright-core'
 import { createServer } from 'vite'
+import { chrome, openOverlay } from '../gallery/harness.ts'
+import { NAMES } from '../scripts/inventory.ts'
 
 const [OUT, address] = process.argv.slice(2)
 if (!OUT) throw new Error('Give a folder for the screenshots.')
@@ -20,9 +21,8 @@ const server = address
   : await createServer({ configFile: fileURLToPath(new URL('vite.config.ts', import.meta.url)), logLevel: 'error', server: { port: 5187, strictPort: true } })
 await server?.listen()
 const base = address ?? 'http://localhost:5187'
-const browser = await chromium.launch({ channel: 'chrome' })
+const browser = await chrome()
 const problems: string[] = []
-const names = readdirSync(fileURLToPath(new URL('../design/components', import.meta.url)))
 const SHOWN = ['/', '/components/button', '/components/table', '/components/message', '/components/answeroption', '/components/tex', '/install', '/tokens']
 
 for (const [size, width] of [
@@ -47,10 +47,10 @@ for (const [size, width] of [
   }
   await open('/')
   const cards = await page.locator('.s-card').count()
-  if (cards < names.length) problems.push(`${size} /: ${cards} cards for ${names.length} components`)
+  if (cards < NAMES.length) problems.push(`${size} /: ${cards} cards for ${NAMES.length} components`)
   await page.screenshot({ path: `${OUT}/${size}-home-full.png`, fullPage: true })
 
-  for (const name of names) {
+  for (const name of NAMES) {
     await open(`/components/${name.toLowerCase()}`)
     const title = await page.locator('.s-title').textContent()
     if (title !== name) problems.push(`${size} ${at}: the page shows "${title}"`)
@@ -82,21 +82,18 @@ for (const [size, width] of [
   if (size === 'desktop') {
     /* The floating components open on their own pages, and a toast shows once. */
     await open('/components/dialog')
-    await page.getByRole('button', { name: 'Publish practice' }).click()
-    await page.waitForSelector('.gx-dialog')
+    await openOverlay(page, 'Dialog', 'callout')
     await page.waitForTimeout(400)
     await page.screenshot({ path: `${OUT}/${size}-open-dialog.png` })
     await page.getByRole('button', { name: 'Publish', exact: true }).click()
     await page.waitForSelector('.gx-toast')
     await open('/components/menu')
-    await page.getByRole('button', { name: 'Devon Carter' }).click()
-    await page.waitForSelector('.gx-menu')
+    await openOverlay(page, 'Menu', 'open')
     await page.waitForTimeout(300)
     await page.screenshot({ path: `${OUT}/${size}-open-menu.png` })
     await page.keyboard.press('Escape')
     await open('/components/toast')
-    await page.getByRole('button', { name: 'Copy link' }).click()
-    await page.waitForSelector('.gx-toast')
+    await openOverlay(page, 'Toast', 'Copy link')
     await page.waitForTimeout(400)
     const toasts = await page.locator('.gx-toast').count()
     if (toasts !== 1) problems.push(`${size} ${at}: one toast was asked for, ${toasts} show`)

@@ -2,20 +2,21 @@
 /* The rules in AGENTS.md that a machine can check. A component that breaks one fails here, not in review. */
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { GROUPS } from '../gallery/groups.ts'
 import { snippetsOf } from '../gallery/snippet.ts'
 import { staleIcons } from '../scripts/icons.ts'
-import { parse, stale } from '../scripts/tokens.ts'
+import { COMPONENTS, differences, NAMES, namesOf } from '../scripts/inventory.ts'
+import { keysOf, LEVEL_VARS, parse } from '../scripts/token-model.ts'
+import { stale } from '../scripts/tokens.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
 const read = (path: string) => readFileSync(`${ROOT}${path}`, 'utf8')
 
-/** Every component of both groups: [name, folder under src]. */
-const components = (['components', 'learning'] as const).flatMap((dir) =>
-  readdirSync(`${ROOT}src/${dir}`)
-    .filter((f) => /^[A-Z]\w*\.tsx$/.test(f) && !f.endsWith('.test.tsx'))
-    .map((f) => [f.slice(0, -'.tsx'.length), dir] as const),
-)
-const tokens = new Set(parse(read('src/styles/tokens.css')).map((t) => `--gx-${t.name}`))
+/** Every component of core and learning: [name, folder under src]. Math has rules of its own. */
+const components = COMPONENTS.filter((c) => c.group !== 'math').map((c) => [c.name, c.dir] as const)
+const model = parse(read('src/styles/tokens.css'))
+/* The tokens, and the colors a `[data-level]` block sets. */
+const tokens = new Set([...model.map((t) => `--gx-${t.name}`), ...Object.values(LEVEL_VARS).map((name) => `--gx-${name}`)])
 
 /** Every class name written in a file: each word of each string, without comments. */
 function classesOf(source: string) {
@@ -25,18 +26,20 @@ function classesOf(source: string) {
 /** A class without its variants: `hover:bg-black` is `bg-black`, `[&>svg]:-ms-0.5` is `-ms-0.5`. */
 const utilityOf = (word: string) => word.split(/:(?![^[(]*[\])])/).at(-1)!
 
-const SPACE = new Set(['0', 'px', 'auto', '0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4', '5', '6', '8', '10'])
+/** A test that a value is one of these: the keys of token families, and a few words of Tailwind's own. */
+const oneOf = (...values: string[]) => {
+  const set = new Set(values)
+  return (value: string) => set.has(value)
+}
+/* `p-0.5` is `--gx-space-0-5`. */
+const SPACE = oneOf('0', 'px', 'auto', ...keysOf(model, 'space').map((key) => key.replace('-', '.')))
 /** What each kind of utility may end in. A class of that kind with another ending is off the tokens. */
 const KINDS: [what: string, kind: RegExp, allowed: (value: string) => boolean][] = [
-  [
-    'spacing that is not on the space scale',
-    /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/,
-    (v) => SPACE.has(v) || /^\[calc\(.+\)\]$/.test(v),
-  ],
-  ['a font weight that is not a token', /^font-(.+)$/, (v) => /^(?:sans|reading|mono|body|control|title|strong)$/.test(v)],
-  ['a line height that is not a token', /^leading-(.+)$/, (v) => /^(?:figure|title|heading|body|normal)$/.test(v)],
-  ['letter spacing that is not a token', /^tracking-(.+)$/, (v) => /^(?:display|title|label|normal)$/.test(v)],
-  ['a layer that is not a token', /^z-(.+)$/, (v) => /^(?:0|1|auto|\(--gx-z-(?:overlay|pop|toast)\))$/.test(v)],
+  ['spacing that is not on the space scale', /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/, (v) => SPACE(v) || /^\[calc\(.+\)\]$/.test(v)],
+  ['a font weight that is not a token', /^font-(.+)$/, oneOf(...keysOf(model, 'font'), ...keysOf(model, 'font-weight'))],
+  ['a line height that is not a token', /^leading-(.+)$/, oneOf(...keysOf(model, 'leading'), 'normal')],
+  ['letter spacing that is not a token', /^tracking-(.+)$/, oneOf(...keysOf(model, 'tracking'), 'normal')],
+  ['a layer that is not a token', /^z-(.+)$/, oneOf('0', '1', 'auto', ...keysOf(model, 'z').map((key) => `(--gx-z-${key})`))],
   ['a duration that is not a token', /^(?:duration|delay)-(.+)$/, (v) => /^\(--gx-(?:dur|delay)-[\w-]+\)$/.test(v)],
   ['an outline that is not the shared ring', /^-?outline-(.+)$/, (v) => /^(?:0|none|white|offset-(?:\d+|\[-?\d+px\]))$/.test(v)],
   [
@@ -47,7 +50,7 @@ const KINDS: [what: string, kind: RegExp, allowed: (value: string) => boolean][]
   ['a type size off the scale', /^text-(\[.+)$/, () => false],
 ]
 
-it('theme.css and tokens.json match tokens.css', () => {
+it('theme.css, theme-names.ts and tokens.json match tokens.css', () => {
   expect(stale()).toEqual([])
 })
 
@@ -61,11 +64,15 @@ it('core does not import learning', () => {
 })
 
 describe('examples', () => {
-  const names = readdirSync(`${ROOT}design/components`)
-  const groups = read('gallery/examples.ts')
+  it('each component has one guideline, and each guideline is of a component', () => {
+    expect(differences(readdirSync(`${ROOT}design/components`))).toEqual([])
+  })
 
-  it.each(names)('%s has examples that a product can copy', (name) => {
-    expect(groups, `${name} is in no group of gallery/examples.ts, so the gallery and the docs site do not show it`).toContain(`'${name}'`)
+  it('GROUPS shows each component once, so the gallery and the docs site show it', () => {
+    expect(differences(GROUPS.flatMap((group) => group.names))).toEqual([])
+  })
+
+  it.each(NAMES)('%s has examples that a product can copy', (name) => {
     expect(existsSync(`${ROOT}gallery/examples/${name}.tsx`), `gallery/examples/${name}.tsx`).toBe(true)
     const snippets = snippetsOf(read(`gallery/examples/${name}.tsx`))
     expect(snippets.length, 'at least one `export function`').toBeGreaterThan(0)
@@ -88,7 +95,7 @@ describe('examples', () => {
       readdirSync(`${ROOT}gallery/examples`)
         .map((f) => f.replace(/\.tsx$/, ''))
         .sort(),
-    ).toEqual([...names].sort())
+    ).toEqual([...NAMES].sort())
   })
 
   it('the icon example shows every icon', async () => {
@@ -110,7 +117,7 @@ describe('math', () => {
       for (const file of readdirSync(`${ROOT}src/${dir}`)) expect(read(`src/${dir}/${file}`), `${dir}/${file}`).not.toMatch(/katex|\.\.\/math\//)
   })
 
-  it.each(['Tex', 'RichText'])('%s has its test, guideline and export', (name) => {
+  it.each(namesOf('math'))('%s has its test, guideline and export', (name) => {
     expect(existsSync(`${ROOT}src/math/${name}.test.tsx`)).toBe(true)
     expect(existsSync(`${ROOT}design/components/${name}/README.md`)).toBe(true)
     expect(read('src/math/index.ts')).toContain(`'./${name}'`)
@@ -227,9 +234,11 @@ describe('server components', () => {
 })
 
 describe.each(components)('%s', (name, dir) => {
-  /* The component, with the helpers that stand beside it (`Segmented.classes.ts`). */
-  const beside = readdirSync(`${ROOT}src/${dir}`).filter((f) => f.startsWith(`${name}.`) && f.endsWith('.ts') && !f.includes('.test.'))
-  const source = [`${name}.tsx`, ...beside].map((f) => read(`src/${dir}/${f}`)).join('\n')
+  /* The component, with the helpers that stand beside it (`Segmented.classes.ts`) and the classes it takes from another's (`Field.classes.ts`). */
+  const beside = readdirSync(`${ROOT}src/${dir}`).filter((f) => f.startsWith(`${name}.`) && /\.tsx?$/.test(f) && f !== `${name}.tsx` && !f.includes('.test.'))
+  const own = [`${name}.tsx`, ...beside].map((f) => read(`src/${dir}/${f}`)).join('\n')
+  const shared = [...new Set([...own.matchAll(/from '\.\/(\w+\.classes)'/g)].map((m) => `${m[1]}.ts`))].filter((f) => !beside.includes(f))
+  const source = [own, ...shared.map((f) => read(`src/${dir}/${f}`))].join('\n')
   const classes = classesOf(source)
 
   it('has its test, guideline and export, and a gx- name on its root', () => {

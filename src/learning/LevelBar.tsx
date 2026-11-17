@@ -1,6 +1,5 @@
 'use client'
 
-import { cva } from 'class-variance-authority'
 import { cn } from '../core/cn'
 import { useLocale } from '../core/locale'
 import { LEVELS, type Level } from '../core/messages'
@@ -10,18 +9,6 @@ export type LevelBarProps = Props<'span', { counts: Partial<Record<Level, number
 
 /** The order of the parts: Mastered first, Not started last. */
 const ORDER = [...LEVELS].reverse()
-
-const part = cva('gx-level-bar__part min-w-0 basis-0', {
-  variants: {
-    level: {
-      mastered: 'gx-level-bar__part--mastered bg-mastered',
-      proficient: 'gx-level-bar__part--proficient bg-proficient',
-      familiar: 'gx-level-bar__part--familiar bg-familiar',
-      attempted: 'gx-level-bar__part--attempted bg-attempted',
-      not_started: 'gx-level-bar__part--not-started bg-track',
-    },
-  },
-})
 
 /**
  * How many are at each level, as one bar: a part for each level, as wide as its share. A level with none has no part.
@@ -39,7 +26,12 @@ export function LevelBar({ counts, label, className, ...props }: LevelBarProps) 
       className={cn('gx-level-bar flex h-[8px] gap-0.5 overflow-hidden rounded-sm empty:bg-track', className)}
     >
       {parts.map((p) => (
-        <span key={p.level} className={part({ level: p.level })} style={{ flexGrow: p.count }} />
+        <span
+          key={p.level}
+          data-level={p.level}
+          className={`gx-level-bar__part gx-level-bar__part--${p.level.replace('_', '-')} min-w-0 basis-0 bg-level`}
+          style={{ flexGrow: p.count }}
+        />
       ))}
     </span>
   )

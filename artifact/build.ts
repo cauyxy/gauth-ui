@@ -17,7 +17,7 @@
  *   out/assets/<Group>/<icon>.svg              src/core/icons.ts, each icon as the `Icon` component draws it
  *   out/build.json                             the commit, the components and each preview's height
  *
- * Chrome is `CHROME=/path/to/chrome`, or the installed Google Chrome.
+ * Chrome is `CHROME=/path/to/chrome`, or the installed Google Chrome (gallery/harness.ts).
  */
 import tailwind from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
@@ -27,7 +27,9 @@ import { createServer } from 'node:http'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
-import { parse, type Token } from '../scripts/tokens.ts'
+import { familyTokens, parse, type Token } from '../scripts/token-model.ts'
+import { chrome } from '../gallery/harness.ts'
+import { readmeGroups } from '../scripts/inventory.ts'
 import { ICONS } from '../src/core/icons.ts'
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url))
@@ -59,9 +61,7 @@ const plain = (value: string): string =>
  */
 function colorNotes() {
   const rules = read('design/README.md')
-  const own = new Map(
-    [...read('src/styles/tokens.css').matchAll(/^[ \t]*--gx-color-([\w-]+):[^;\n]+;[ \t]*\/\*[ \t]*(.*?)[ \t]*\*\/$/gm)].map((m) => [m[1]!, m[2]!]),
-  )
+  const own = new Map(familyTokens(tokens, 'color').map((t) => [t.key, t.note]))
   const notes = new Map<string, string>()
   for (const row of rules.matchAll(/^\| ([\w ,]+?) *\| (`[^|\n]+?) *\| ([^|\n]+?) *\|$/gm))
     for (const name of row[2]!.matchAll(/`([\w-]+)`/g)) notes.set(name[1]!, `${row[1]}. ${row[3]!.replace(/`/g, '')}`)
@@ -75,7 +75,7 @@ function colorNotes() {
 }
 
 export function tokensJson(commit: string) {
-  const of = (...families: string[]) => tokens.filter((t) => families.includes(t.name.split('-')[0]!))
+  const of = (family: string) => familyTokens(tokens, family)
   const list = (found: Token[], rename = (name: string) => name, note = (_name: string, usage: string) => usage) => ({
     tokens: found.map((t) => ({
       name: rename(t.name),
@@ -83,8 +83,8 @@ export function tokensJson(commit: string) {
       usage: note(rename(t.name), t.usage),
     })),
   })
-  const weights = of('font').filter((t) => t.name.startsWith('font-weight-'))
-  const stacks = of('font').filter((t) => !t.name.startsWith('font-weight-'))
+  const weights = of('font-weight')
+  const stacks = of('font')
   const body = valueOf.get('text-sm')!
   /* A type style is `gx-<token>`, not `text-sm`: the page writes a class for each style, and that class must not be a Tailwind utility. */
   const style = (t: Token, more: Record<string, string | number>) => ({ name: `gx-${t.name}`, usage: t.usage, ...more })
@@ -101,7 +101,7 @@ export function tokensJson(commit: string) {
     color: { themes: [{ id: 'light', name: 'Light' }], ...list(of('color'), (name) => name.slice('color-'.length), colorNotes()) },
     type: {
       fonts: [],
-      families: Object.fromEntries(stacks.map((t) => [t.name.slice('font-'.length), t.value])),
+      families: Object.fromEntries(stacks.map((t) => [t.key, t.value])),
       groups: [
         { name: 'Scale', family: 'sans', styles: of('text').toReversed().map((t) => style(t, { fontSize: t.value, fontWeight: 400 })) }, // oxfmt-ignore
         { name: 'Weights', family: 'sans', styles: weights.map((t) => style(t, { fontSize: body, fontWeight: Number(t.value) })) },
@@ -119,20 +119,9 @@ export function tokensJson(commit: string) {
   }
 }
 /** The tokens no family above holds: motion, which the page has no section for. The README's Motion section names them. */
-export const leftOut = () => tokens.filter((t) => ['ms', 'dur', 'delay', 'ease', 'animate'].includes(t.name.split('-')[0]!)).map((t) => t.name)
+export const leftOut = () => tokens.filter((t) => ['ms', 'dur', 'delay', 'ease', 'animate'].includes(t.family)).map((t) => t.name)
 /** The tokens nobody picks a value from: the layers and the focus ring. A component sets them, and the rules say what they are. */
-export const inside = () => tokens.filter((t) => ['z', 'focus'].includes(t.name.split('-')[0]!)).map((t) => t.name)
-
-/* ---------- the components, in the groups of design/README.md ---------- */
-
-export function componentGroups() {
-  const found: { group: string; name: string }[] = []
-  for (const line of read('design/README.md').split('\n')) {
-    const row = line.match(/^\| ([\w ]+?)\s*\| (\[.+)\|\s*$/)
-    if (row) for (const m of row[2]!.matchAll(/\[(\w+)\]\(components\//g)) found.push({ group: row[1]!, name: m[1]! })
-  }
-  return found
-}
+export const inside = () => tokens.filter((t) => ['z', 'focus'].includes(t.family)).map((t) => t.name)
 
 /** The icons in the groups of scripts/icons.ts: a comment in its list starts a group. */
 export function iconGroups() {
@@ -161,6 +150,9 @@ const iconSvg = (name: keyof typeof ICONS) =>
     .join('')}</svg>\n`
 
 /* ---------- previews ---------- */
+
+/** The cards that are not a component of the inventory: Icon (src/core/Icon.tsx) and the Type and Motion foundations. */
+export const EXTRA_CARDS = ['Icon', 'Type', 'Motion']
 
 /** What opens above the page needs room in its card: the height a card of that component gets at least. */
 const ROOM: Record<string, number> = {
@@ -242,7 +234,7 @@ async function bundle() {
       lib: { entry: `${ROOT}artifact/entry.tsx`, formats: ['iife'], name: NAMESPACE, fileName: () => 'bundle.js', cssFileName: 'bundle' },
     },
   })
-  const names = [...componentGroups().map((c) => c.name), 'Icon', 'Type', 'Motion']
+  const names = [...readmeGroups().map((c) => c.name), ...EXTRA_CARDS]
   const header = `/* @ds-bundle: ${JSON.stringify({ format: 4, namespace: NAMESPACE, components: names.map((name) => ({ name })) })} */`
   /* The page may write the script into its own HTML, where these two would end it. In a string they mean the same with the backslash. */
   const js = readFileSync(`${dir}/bundle.js`, 'utf8')
@@ -291,13 +283,6 @@ export async function serveCards(port: number) {
   await new Promise<void>((done) => server.listen(port, done))
   return server
 }
-/** Chrome: `CHROME=/path/to/chrome`, or the installed Google Chrome. Drawn without the graphics card, so a page gives the same pixels each time. */
-export async function chrome() {
-  const { chromium } = await import('playwright-core')
-  const args = ['--disable-gpu', '--force-color-profile=srgb']
-  return chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME, args } : { channel: 'chrome', args })
-}
-
 /** Draws every preview as the artifact's page does, fails on one that is empty or throws, and returns each one's height. */
 async function render(names: string[]) {
   const server = await serveCards(5183)
@@ -339,7 +324,7 @@ if (import.meta.main) {
   )
   write('project/glossary.md', read('GLOSSARY.md'))
 
-  const components = componentGroups()
+  const components = readmeGroups()
   const icons = iconGroups()
   const cards: Record<string, (height: number) => string> = {}
   for (const { group, name } of components) {

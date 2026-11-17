@@ -84,3 +84,15 @@ it('keeps its own range without `value`', async () => {
   expect(field).toHaveTextContent('Mon, Oct 12 – Fri, Oct 16')
   expect(onChange).toHaveBeenCalledTimes(1)
 })
+
+it('sends the range with a form, both days joined by a slash', () => {
+  const { container } = render(<DateRangePicker label="Unit" name="unit" defaultValue={{ from: day(2026, 11, 2), to: day(2026, 11, 13) }} />)
+  expect(container.querySelector('input[name="unit"]')).toHaveValue('2026-11-02/2026-11-13')
+})
+
+it('sends nothing before a range is picked, and nothing when disabled', () => {
+  const { container, rerender } = render(<DateRangePicker label="Unit" name="unit" />)
+  expect(container.querySelector('input[name="unit"]')).toHaveValue('')
+  rerender(<DateRangePicker label="Unit" name="unit" disabled />)
+  expect(container.querySelector('input[name="unit"]')).toBeDisabled()
+})

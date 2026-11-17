@@ -4,6 +4,7 @@ import { cva } from 'class-variance-authority'
 import { cn } from '../core/cn'
 import { Icon } from '../core/Icon'
 import type { Props } from '../core/props'
+import { fieldBox } from './Field.classes'
 import { useField } from './Field'
 
 export type SelectSize = 'sm' | 'md' | 'xl'
@@ -14,9 +15,8 @@ export type SelectProps<T extends string = string> = Props<
   'children' | 'multiple'
 >
 
-/* An error is an attempted outline on the attempted-soft ground, the look of "Not yet". The Field's error text says what is wrong. */
 const control = cva(
-  'gx-select__control peer block w-full cursor-pointer appearance-none bg-white font-control text-ellipsis text-ink shadow-edge-strong outline-0 transition-[background-color,box-shadow] duration-(--gx-dur-fast) ease-standard focus-visible:focus-ring focus-visible:outline-offset-1 disabled:cursor-default disabled:opacity-50 aria-invalid:bg-attempted-soft aria-invalid:shadow-invalid',
+  ['gx-select__control peer block cursor-pointer appearance-none bg-white font-control text-ellipsis shadow-edge-strong disabled:cursor-default', fieldBox],
   {
     variants: {
       /* sm is for a dense filter row: as high as a small button or a ChipToggle. xl has 16px text, so a phone does not zoom in on focus. */
@@ -45,18 +45,10 @@ const icon = cva('gx-select__icon pointer-events-none absolute inset-y-0 my-auto
  * keeps its own. `className` goes to the wrapper, every other prop and `ref` to the `<select>`.
  */
 export function Select<T extends string>({ options, onChange, size = 'md', label, className, ...props }: SelectProps<T>) {
-  const field = useField()
+  const field = useField(label, props.id)
   return (
     <span className={cn('gx-select relative block min-w-0', `gx-select--${size}`, className)}>
-      <select
-        id={field?.id}
-        aria-describedby={field?.describedBy}
-        aria-invalid={field?.invalid || undefined}
-        aria-label={label}
-        {...props}
-        onChange={onChange && ((event) => onChange(event.target.value as T))}
-        className={control({ size })}
-      >
+      <select {...field.props} {...props} onChange={onChange && ((event) => onChange(event.target.value as T))} className={control({ size })}>
         {options.map((o) => (
           <option key={o.value} value={o.value}>
             {o.label}

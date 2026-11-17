@@ -12,6 +12,7 @@
     "node_modules",
     "pnpm-lock.yaml",
     "src/core/icons.ts",
+    "src/core/theme-names.ts",
     "src/styles/theme.css",
     "design/tokens.json",
     "*.md"

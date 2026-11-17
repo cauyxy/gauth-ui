@@ -104,3 +104,9 @@
   --animate-spin: gx-spin calc(1s * var(--gx-ms)) linear infinite;
   --animate-sweep: gx-sweep calc(1.4s * var(--gx-ms)) ease-in-out infinite;
 }
+/* A skill level's colors: inline, so each element reads the ones its `data-level` sets (tokens.css). */
+@theme inline {
+  --color-level: var(--gx-level);
+  --color-level-ink: var(--gx-level-ink);
+  --color-level-soft: var(--gx-level-soft);
+}

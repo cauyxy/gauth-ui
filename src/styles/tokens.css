@@ -166,6 +166,37 @@
   --gx-animate-sweep: gx-sweep calc(1.4s * var(--gx-ms)) ease-in-out infinite; /* The segment of a bar with no known end */
 }
 
+/*
+ * A skill level's three colors, from the Skill levels table of design/README.md. An element with `data-level` and what
+ * is inside it take its level's colors as `bg-level` (the fill), `text-level-ink` (text on the soft ground) and
+ * `bg-level-soft` (the soft ground). theme.css gives these names; scripts/token-model.ts reads the blocks.
+ */
+[data-level='mastered'] {
+  --gx-level: var(--gx-color-mastered);
+  --gx-level-ink: var(--gx-color-mastered-ink);
+  --gx-level-soft: var(--gx-color-good-soft);
+}
+[data-level='proficient'] {
+  --gx-level: var(--gx-color-proficient);
+  --gx-level-ink: var(--gx-color-mastered-ink);
+  --gx-level-soft: var(--gx-color-good-soft);
+}
+[data-level='familiar'] {
+  --gx-level: var(--gx-color-familiar);
+  --gx-level-ink: var(--gx-color-familiar-ink);
+  --gx-level-soft: var(--gx-color-familiar-soft);
+}
+[data-level='attempted'] {
+  --gx-level: var(--gx-color-attempted);
+  --gx-level-ink: var(--gx-color-attempted-ink);
+  --gx-level-soft: var(--gx-color-attempted-soft);
+}
+[data-level='not_started'] {
+  --gx-level: var(--gx-color-track);
+  --gx-level-ink: var(--gx-color-muted);
+  --gx-level-soft: var(--gx-color-surface);
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --gx-ms: 0;

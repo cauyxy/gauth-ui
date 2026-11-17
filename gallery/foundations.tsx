@@ -5,16 +5,11 @@
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { Button, Chip } from '../src'
 import css from '../src/styles/tokens.css?raw'
+import { familyTokens, parse, type Token } from '../scripts/token-model'
 
-type Token = { name: string; value: string; usage: string }
-
-/** The tokens whose name starts with `family-`, each with the note on its line. */
-const tokens = (family: string): Token[] =>
-  [...css.matchAll(new RegExp(`^[ \\t]*--gx-(${family}-[\\w-]+):[ \\t]*(.+?);(?:[ \\t]*/\\*[ \\t]*(.*?)[ \\t]*\\*/)?$`, 'gm'))].map((m) => ({
-    name: m[1]!,
-    value: m[2]!,
-    usage: m[3] ?? '',
-  }))
+const TOKENS = parse(css)
+/** The tokens of one family, each with the note on its own line. */
+const tokens = (family: string) => familyTokens(TOKENS, family)
 
 function Row({ name, note, children }: { name: string; note: string; children: ReactNode }) {
   return (
@@ -33,22 +28,22 @@ export function TypeScale() {
       {tokens('text')
         .toReversed()
         .map((token) => (
-          <Row key={token.name} name={token.name} note={token.usage}>
+          <Row key={token.name} name={token.name} note={token.note}>
             <span className="block truncate" style={{ fontSize: `var(--gx-${token.name})` }}>
               Find the missing side
             </span>
           </Row>
         ))}
       {tokens('font-weight').map((token) => (
-        <Row key={token.name} name={token.name} note={`${token.value}. ${token.usage}`}>
+        <Row key={token.name} name={token.name} note={`${token.value}. ${token.note}`}>
           <span style={{ fontWeight: `var(--gx-${token.name})` }}>Needs support</span>
         </Row>
       ))}
       {/* The faces that are not the face of the page (they have a note on their line), each set in itself. */}
       {tokens('font')
-        .filter((token) => !token.name.startsWith('font-weight-') && token.usage)
+        .filter((token) => token.note)
         .map((token) => (
-          <Row key={token.name} name={token.name} note={token.usage}>
+          <Row key={token.name} name={token.name} note={token.note}>
             <span style={{ fontFamily: `var(--gx-${token.name})` }}>I had no regular teacher. 6² + 8² = 100</span>
           </Row>
         ))}
@@ -73,7 +68,7 @@ export function TypeSpacing() {
         const [text, style] = SAMPLE[token.name] ?? ['Find the missing side', {}]
         const spacing = token.name.startsWith('leading') ? { lineHeight: `var(--gx-${token.name})` } : { letterSpacing: `var(--gx-${token.name})` }
         return (
-          <Row key={token.name} name={token.name} note={`${token.value}. ${token.usage}`}>
+          <Row key={token.name} name={token.name} note={`${token.value}. ${token.note}`}>
             <span className="block max-w-[20rem]" style={{ ...style, ...spacing }}>
               {text}
             </span>
@@ -123,14 +118,14 @@ export function Motion() {
                   </Button>
                 )}
               </div>
-              <p className="text-xs leading-body text-pretty text-muted">{token.usage}</p>
+              <p className="text-xs leading-body text-pretty text-muted">{token.note}</p>
             </div>
           )
         })}
       </div>
       <div className="w-full">
         {[...tokens('dur'), ...tokens('delay'), ...tokens('ease')].map((token) => (
-          <Row key={token.name} name={token.name} note={token.usage}>
+          <Row key={token.name} name={token.name} note={token.note}>
             <span className="font-mono text-xs">{token.value.replace(/calc\((\d+ms) \* var\(--gx-ms\)\)/, '$1')}</span>
           </Row>
         ))}

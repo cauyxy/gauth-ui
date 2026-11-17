@@ -13,28 +13,15 @@
  *   base   a formula in a line of words, a number beside its step: both stand on one baseline
  *   size   a formula in a line of words: its numbers are as tall as the numbers in the words
  */
-import tailwind from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
-import { fileURLToPath } from 'node:url'
-import { chromium } from 'playwright-core'
-import { createServer } from 'vite'
+import { chrome, openGallery, serveGallery } from './harness.ts'
 
-const server = await createServer({
-  configFile: false,
-  root: fileURLToPath(new URL('.', import.meta.url)),
-  logLevel: 'error',
-  plugins: [react(), tailwind()],
-  server: { port: 5182, strictPort: true },
-})
-await server.listen()
-const browser = await chromium.launch({ channel: 'chrome' })
+const PORT = 5181
+const server = await serveGallery(PORT)
+const browser = await chrome()
 const lines = new Set<string>()
 
 for (const width of [1120, 375]) {
-  const page = await browser.newPage({ viewport: { width, height: 900 }, deviceScaleFactor: 2 })
-  await page.goto('http://localhost:5182/')
-  await page.waitForSelector('.g-section')
-  await page.evaluate(() => document.fonts.ready)
+  const page = await openGallery(browser, PORT, { width })
   const found = await page.evaluate(() => {
     const LABELS =
       '.gx-btn, .gx-chip, .gx-chip-toggle, .gx-follow-ups__item, .gx-segmented__option, .gx-tabs__tab, .gx-level-chip, .gx-menu__item, .gx-table__head .gx-table__cell'

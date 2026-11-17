@@ -6,6 +6,7 @@ import { Icon } from '../core/Icon'
 import { useLocale } from '../core/locale'
 import type { Props } from '../core/props'
 import { useControllable } from '../core/useControllable'
+import { fieldBoxAround } from './Field.classes'
 import { useField } from './Field'
 
 export type NumberInputSize = 'md' | 'xl'
@@ -24,19 +25,16 @@ export type NumberInputProps = Props<
   'type'
 >
 
-/* The box of an Input, with a minus and a plus inside its ends. The browser's own arrows are hidden: the buttons replace them. */
-const box = cva(
-  'gx-number-input flex min-w-0 items-center bg-white text-ink shadow-edge-strong transition-[background-color,box-shadow] duration-(--gx-dur-fast) ease-standard has-[input:focus-visible]:focus-ring has-[input:focus-visible]:outline-offset-1 has-[input:disabled]:opacity-50 has-[input[aria-invalid=true]]:bg-attempted-soft has-[input[aria-invalid=true]]:shadow-invalid',
-  {
-    variants: {
-      /* xl has 16px text, so a phone does not zoom in on focus, and 44px buttons for a finger. */
-      size: {
-        md: 'gx-number-input--md h-(--gx-h-md) rounded-lg px-0.5 text-sm',
-        xl: 'gx-number-input--xl h-(--gx-h-xl) rounded-2xl px-1 text-base',
-      },
+/* The box of a field, with a minus and a plus inside its ends. The browser's own arrows are hidden: the buttons replace them. */
+const box = cva(['gx-number-input flex min-w-0 items-center bg-white shadow-edge-strong', fieldBoxAround], {
+  variants: {
+    /* xl has 16px text, so a phone does not zoom in on focus, and 44px buttons for a finger. */
+    size: {
+      md: 'gx-number-input--md h-(--gx-h-md) rounded-lg px-0.5 text-sm',
+      xl: 'gx-number-input--xl h-(--gx-h-xl) rounded-2xl px-1 text-base',
     },
   },
-)
+})
 const step = cva(
   'gx-number-input__step grid flex-none cursor-pointer place-items-center rounded-md text-muted outline-0 transition-[color,background-color] duration-(--gx-dur-fast) ease-standard enabled:hover:bg-surface enabled:hover:text-ink focus-visible:focus-ring focus-visible:-outline-offset-2 disabled:cursor-default disabled:opacity-50',
   {
@@ -70,7 +68,7 @@ export function NumberInput({
   ...props
 }: NumberInputProps) {
   const { messages } = useLocale()
-  const field = useField()
+  const field = useField(label, props.id)
   const [value, set] = useControllable(kept, defaultValue, onChange)
   const clamp = (n: number) => Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n))
   const move = (n: number) => set(clamp((value ?? min ?? 0) + n))
@@ -89,10 +87,7 @@ export function NumberInput({
       <input
         type="number"
         inputMode="numeric"
-        id={field?.id}
-        aria-describedby={field?.describedBy}
-        aria-invalid={field?.invalid || undefined}
-        aria-label={label}
+        {...field.props}
         min={min}
         max={max}
         step={by}

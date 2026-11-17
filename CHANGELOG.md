@@ -2,6 +2,26 @@
 
 What changed in each version of `gauth-ui`, newest first. A version is on npm when its number is in `package.json` on `main`.
 
+## 0.4.0
+
+The parts behind the components each have one home: the tokens, the list of components, the box of a field, the date pickers, the colors of a skill level and the frame of a dialog. The look does not change: every picture of `gallery/pixels.ts` is the same as before, pixel for pixel.
+
+### Breaking
+
+- **`useField` returns props to spread.** It returned the Field's `{ id, labelId, describedBy, invalid }`, or `undefined` outside a Field. It is now `useField(label, id)` and returns `{ props, labelId }`: spread `props` on the element that takes focus. Inside a Field they are its `id`, `aria-describedby` and `aria-invalid`; outside one, `label` is the accessible name. `FieldControl` is the new shape.
+- **Inside a Field, a control's own `label` is not used.** `Input`, `Textarea`, `Select`, `Combobox` and `NumberInput` set `aria-label` from `label` also inside a `Field`, over the Field's label. The Field's label is now the name, as it already was for `DatePicker` and `DateRangePicker`.
+- **`Calendar` no longer takes `range`.** It marked a range for `DateRangePicker`; a calendar alone picks one day.
+
+### Added
+
+- **`DateRangePicker` goes with a form.** With `name` it sends the range as `2026-11-02/2026-11-13`: both days as YYYY-MM-DD, joined by a slash (an ISO 8601 interval), and an empty value before a range is picked. Before, `name` reached the button and a form got nothing.
+- **A skill level's colors as utilities.** On an element with `data-level` (and inside it), `bg-level`, `text-level-ink`, `bg-level-soft` and `border-level` are that level's colors. tokens.css sets them for each level, from the Skill levels table of the design rules. A product that shows a level its own way can use them.
+
+### Changed
+
+- `Input`, `Textarea`, `Select`, `Combobox` and `NumberInput` always have an `id`, also outside a `Field`.
+- `cn()` reads the theme's names from `theme-names.ts`, which `pnpm tokens` writes from tokens.css. It joins classes as before.
+
 ## 0.3.9
 
 The components are written the way React 19 expects. The look does not change: every picture of `gallery/pixels.ts` is the same as before, pixel for pixel.

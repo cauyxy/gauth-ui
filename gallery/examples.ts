@@ -2,67 +2,10 @@
 import type { ComponentType } from 'react'
 import { snippetsOf, type Snippet } from './snippet'
 
+export { GROUPS } from './groups'
+
 const modules = import.meta.glob<Record<string, ComponentType>>('./examples/*.tsx', { eager: true })
 const sources = import.meta.glob<string>('./examples/*.tsx', { eager: true, query: '?raw', import: 'default' })
-
-/** The components in the order the gallery and the docs site show them. */
-export const GROUPS: { slug: string; title: string; names: string[] }[] = [
-  {
-    slug: 'basics',
-    title: 'Basics',
-    names: [
-      'Button',
-      'IconButton',
-      'Segmented',
-      'Switch',
-      'Chip',
-      'ChipToggle',
-      'Avatar',
-      'Dot',
-      'IconBox',
-      'Panel',
-      'Stat',
-      'CoverCard',
-      'Tooltip',
-      'Popover',
-      'Meter',
-      'Progress',
-      'Spinner',
-      'Skeleton',
-    ],
-  },
-  {
-    slug: 'forms',
-    title: 'Forms',
-    names: [
-      'Field',
-      'Input',
-      'NumberInput',
-      'Textarea',
-      'Select',
-      'Combobox',
-      'DatePicker',
-      'DateRangePicker',
-      'Checkbox',
-      'RadioGroup',
-      'Slider',
-      'FileDropzone',
-    ],
-  },
-  { slug: 'overlays', title: 'Overlays and feedback', names: ['Dialog', 'Sheet', 'Menu', 'Toast', 'EmptyState', 'Callout'] },
-  {
-    slug: 'structure',
-    title: 'Structure and Gauth AI',
-    names: ['Breadcrumbs', 'PageTitle', 'Prose', 'Tabs', 'Table', 'Pagination', 'Accordion', 'Separator', 'Kbd', 'Stepper', 'Composer', 'Generating'],
-  },
-  { slug: 'conversation', title: 'Conversation', names: ['Message', 'AiStatus', 'ReplyActions', 'FollowUps', 'Quote'] },
-  {
-    slug: 'learning',
-    title: 'Learning',
-    names: ['LevelMark', 'LevelChip', 'LevelLadder', 'LevelBar', 'AnswerOption', 'AnswerFeedback', 'Reveal', 'WorkedSteps', 'StepProgress', 'StudentCard'],
-  },
-  { slug: 'math', title: 'Math', names: ['Tex', 'RichText'] },
-]
 
 /** One example: its name, its title, the code a product would write, and the component that draws it here. */
 export type Example = Snippet & { Show: ComponentType }
