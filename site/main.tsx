@@ -1,5 +1,5 @@
 /* The docs site: every component live, then the design rules and the tokens, read from this repository. Built to site/dist. */
-import { StrictMode, useEffect, useState, useSyncExternalStore, type MouseEvent } from 'react'
+import { StrictMode, useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { createRoot } from 'react-dom/client'
 import '../src/math/math.css'
 import '../gallery/gallery.css'
@@ -45,24 +45,27 @@ function onLinkClick(event: MouseEvent) {
   go(href)
 }
 
-/** Every component, live: a card for each, with all its examples. The title of a card opens the component's page. */
+/** Every component, live: a card for each, with its first example, in the order of the list of pages. The title of a card opens the component's page, which has all its examples. */
 function Home() {
   return GROUPS.map((group) => (
     <section key={group.slug}>
       <h2 className="s-group">{group.title}</h2>
       <div className="s-grid">
-        {group.names.map((name) => (
-          <section key={name} className="s-card">
-            <h3>
-              <a href={pathOf(name)}>{name}</a>
-            </h3>
-            {examplesOf(name).map((example) => (
-              <div key={example.name} className="s-card__example">
-                <example.Show />
-              </div>
-            ))}
-          </section>
-        ))}
+        {group.names.map((name) => {
+          const First = examplesOf(name)[0]?.Show
+          return (
+            <section key={name} className="s-card">
+              <h3>
+                <a href={pathOf(name)}>{name}</a>
+              </h3>
+              {First ? (
+                <div className="s-card__example">
+                  <First />
+                </div>
+              ) : null}
+            </section>
+          )
+        })}
       </div>
     </section>
   ))
@@ -143,54 +146,71 @@ function Site() {
   const path = usePath()
   const [locale, setLocale] = useState<Locale>('en')
   const page = PAGES.find((p) => p.path === path) ?? PAGES[0]!
+  const localized = page.kind === 'home' || page.kind === 'component'
+  const navRef = useRef<HTMLElement>(null)
 
-  /* A new page starts at its top, or at the component the address names. */
+  /* A new page starts at its top, or at the component the address names. The list of pages shows where the page is in it. */
   useEffect(() => {
     document.title = `${page.title} · gauth-ui`
     const target = window.location.hash ? document.getElementById(decodeURIComponent(window.location.hash.slice(1))) : null
     if (target) target.scrollIntoView()
     else window.scrollTo(0, 0)
+    const nav = navRef.current
+    const current = nav?.querySelector<HTMLElement>('[aria-current=page]')
+    if (!nav || !current || nav.clientHeight === 0) return
+    /* The part of the list in the window: its bottom can be under the window's edge. */
+    const seen = Math.min(nav.clientHeight, window.innerHeight - nav.getBoundingClientRect().top)
+    if (current.offsetTop < nav.scrollTop || current.offsetTop + current.offsetHeight > nav.scrollTop + seen)
+      nav.scrollTop = current.offsetTop - (seen - current.offsetHeight) / 2
   }, [page])
 
   return (
     <LocaleProvider locale={locale}>
       {/* Catches clicks on the links inside it, which the keyboard reaches as links. */}
       {/* oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
-      <div className="s-shell" onClick={onLinkClick}>
+      <div onClick={onLinkClick}>
+        {/* The bar's ground and line reach both edges of the window; what is on it lines up with the column under it. */}
         <header className="s-top">
-          <a href="/" className="s-brand">
-            gauth-ui
-          </a>
-          <Chip>v{pkg.version}</Chip>
-          <span className="s-top__end">
-            <Segmented label="Language of the examples" value={locale} options={LANGUAGES} onChange={setLocale} />
-          </span>
+          <div className="s-top__in">
+            <a href="/" className="s-brand">
+              gauth-ui
+            </a>
+            <Chip>v{pkg.version}</Chip>
+            {/* Only the examples speak a language; the rules, tokens and glossary are in English. */}
+            {localized ? (
+              <span className="s-top__end">
+                <Segmented label="Language of the examples" value={locale} options={LANGUAGES} onChange={setLocale} />
+              </span>
+            ) : null}
+          </div>
         </header>
-        <nav aria-label="Pages" className="s-nav">
-          {NAV.map(({ group, pages }) => (
-            <div key={group} className="s-nav__group">
-              {group ? <span className="s-nav__title">{group}</span> : null}
-              {pages.map((p) => (
-                <a key={p.path} href={p.path} aria-current={p === page ? 'page' : undefined} className="s-nav__link">
-                  {p.title}
-                </a>
-              ))}
-            </div>
-          ))}
-        </nav>
-        <div className="s-jump">
-          <Select
-            label="Page"
-            size="xl"
-            value={page.path}
-            onChange={go}
-            options={PAGES.map((p) => ({ value: p.path, label: p.group ? `${p.group} · ${p.title}` : p.title }))}
-          />
+        <div className="s-shell">
+          <nav ref={navRef} aria-label="Pages" className="s-nav">
+            {NAV.map(({ group, pages }) => (
+              <div key={group} className="s-nav__group">
+                {group ? <span className="s-nav__title">{group}</span> : null}
+                {pages.map((p) => (
+                  <a key={p.path} href={p.path} aria-current={p === page ? 'page' : undefined} className="s-nav__link">
+                    {p.title}
+                  </a>
+                ))}
+              </div>
+            ))}
+          </nav>
+          <div className="s-jump">
+            <Select
+              label="Page"
+              size="xl"
+              value={page.path}
+              onChange={go}
+              options={PAGES.map((p) => ({ value: p.path, label: p.group ? `${p.group} · ${p.title}` : p.title }))}
+            />
+          </div>
+          <main className={page.kind === 'home' ? 's-main s-main--wide' : 's-main'} lang={localized ? locale : 'en'}>
+            <h1 className="s-title">{page.title}</h1>
+            <Body page={page} />
+          </main>
         </div>
-        <main className={page.kind === 'home' ? 's-main s-main--wide' : 's-main'} lang={page.kind === 'home' || page.kind === 'component' ? locale : 'en'}>
-          <h1 className="s-title">{page.title}</h1>
-          <Body page={page} />
-        </main>
       </div>
       <Toaster />
     </LocaleProvider>
