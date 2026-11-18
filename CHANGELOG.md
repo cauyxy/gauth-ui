@@ -2,6 +2,13 @@
 
 What changed in each version of `gauth-ui`, newest first. A version is on npm when its number is in `package.json` on `main`.
 
+## 0.4.1
+
+### Added
+
+- **`LevelLadder` shows where a student was.** `was` is the level before a practice moved them. Its rung has a dashed ring in its color, and a screen reader hears "before" after its name (`messages.levelBefore`). Without `was` the ladder looks as before.
+- **15 more icons** for the frame of an app and common actions: `home`, `menu`, `sidebar-close`, `expand`, `chevrons-up-down`, `list-ordered`, `refresh`, `play`, `send`, `mail`, `lock`, `sign-out`, `trend`, `user-add`, `user-remove`.
+
 ## 0.4.0
 
 The parts behind the components each have one home: the tokens, the list of components, the box of a field, the date pickers, the colors of a skill level and the frame of a dialog. The look does not change: every picture of `gallery/pixels.ts` is the same as before, pixel for pixel.
