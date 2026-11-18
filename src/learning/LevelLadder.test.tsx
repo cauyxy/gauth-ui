@@ -30,6 +30,20 @@ it('reaches every rung at Mastered and none at Not started', () => {
   expect(screen.getByRole('list').querySelector('[aria-current]')).not.toBeInTheDocument()
 })
 
+it('rings the rung the student was on before, and says so to a screen reader', () => {
+  const { rerender } = render(<LevelLadder level="proficient" was="attempted" />)
+  const was = () => screen.getAllByRole('listitem').map((rung) => rung.hasAttribute('data-was'))
+  expect(was()).toEqual([true, false, false, false])
+  expect(names()).toEqual(['Attempted (before)', 'Familiar', 'Proficient', 'Mastered'])
+  expect(screen.getByText('(before)', { exact: false })).toHaveClass('gx-visually-hidden')
+  rerender(<LevelLadder level="familiar" was="proficient" />)
+  expect(was()).toEqual([false, false, true, false])
+  rerender(<LevelLadder level="familiar" was="familiar" />)
+  expect(was()).toEqual([false, false, false, false])
+  rerender(<LevelLadder level="familiar" was="not_started" />)
+  expect(was()).toEqual([false, false, false, false])
+})
+
 it('names the rungs in Spanish', () => {
   render(
     <LocaleProvider locale="es">

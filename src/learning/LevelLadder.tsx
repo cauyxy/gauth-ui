@@ -6,7 +6,7 @@ import { LEVELS, type Level } from '../core/messages'
 import type { Props } from '../core/props'
 import { LevelMark } from './LevelMark'
 
-export type LevelLadderProps = Props<'ol', { level: Level }, 'children'>
+export type LevelLadderProps = Props<'ol', { level: Level; was?: Level }, 'children'>
 
 /** The levels a student earns, lowest first. Not started is not a rung. */
 type Rung = Exclude<Level, 'not_started'>
@@ -30,11 +30,13 @@ function Line({ into }: { into: Rung | null }) {
 
 /**
  * The ladder with a student's place on it: the rungs up to their level are reached, and their own is the current one.
- * With `not_started` no rung is reached.
+ * With `not_started` no rung is reached. `was` is the level they had before, after a practice moved them: its rung has a
+ * dashed ring.
  */
-export function LevelLadder({ level, className, ...props }: LevelLadderProps) {
+export function LevelLadder({ level, was, className, ...props }: LevelLadderProps) {
   const { messages } = useLocale()
   const at = RUNGS.indexOf(level as Rung)
+  const wasAt = was === level ? -1 : RUNGS.indexOf(was as Rung)
   return (
     <ol {...props} className={cn('gx-level-ladder grid w-full max-w-[21.25rem] grid-cols-4', className)}>
       {RUNGS.map((rung, i) => {
@@ -44,6 +46,7 @@ export function LevelLadder({ level, className, ...props }: LevelLadderProps) {
             key={rung}
             aria-current={i === at ? 'true' : undefined}
             data-reached={i <= at ? 'true' : undefined}
+            data-was={i === wasAt ? 'true' : undefined}
             data-level={rung}
             className={cn(
               `gx-level-ladder__rung gx-level-ladder__rung--${rung}`,
@@ -52,13 +55,17 @@ export function LevelLadder({ level, className, ...props }: LevelLadderProps) {
           >
             <span className="gx-level-ladder__track flex h-[1.375rem] w-full items-center">
               <Line into={i <= at ? rung : null} />
-              {/* A rung not reached yet keeps its shape and loses its color. The current one is larger, on its level's soft ground. */}
-              <span className="gx-level-ladder__spot grid flex-none place-items-center rounded-full opacity-50 grayscale group-data-[reached]/rung:opacity-100 group-data-[reached]/rung:filter-none group-aria-[current]/rung:bg-level-soft group-aria-[current]/rung:p-1">
+              {/*
+               * A rung not reached yet keeps its shape and loses its color. The current one is larger, on its level's soft
+               * ground. The one the student was on before has a dashed ring in its color.
+               */}
+              <span className="gx-level-ladder__spot grid flex-none place-items-center rounded-full opacity-50 grayscale group-data-[reached]/rung:opacity-100 group-data-[reached]/rung:filter-none group-aria-[current]/rung:bg-level-soft group-aria-[current]/rung:p-1 group-data-[was]/rung:border-[1.5px] group-data-[was]/rung:border-dashed group-data-[was]/rung:border-level group-data-[was]/rung:p-0.5">
                 <LevelMark level={rung} size={i === at ? 14 : i < at ? 12 : 10} />
               </span>
               <Line into={next && i < at ? next : null} />
             </span>
             {messages.levels[rung]}
+            {i === wasAt ? <span className="gx-visually-hidden"> ({messages.levelBefore})</span> : null}
           </li>
         )
       })}

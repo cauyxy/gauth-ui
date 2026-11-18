@@ -35,6 +35,8 @@ export type Messages = {
   levels: Record<Level, string>
   /** One part of a level bar: "Proficient: 7". */
   levelCount: (level: string, count: number) => string
+  /** Said after the rung of a level ladder where a student was before, for a screen reader. */
+  levelBefore: string
   /** What a wrong answer is called. Never "Wrong" or "Incorrect". */
   notYet: string
   correct: string
@@ -91,6 +93,7 @@ export const en: Messages = {
   stepOf: (n, total) => `${n} of ${total}`,
   levels: { not_started: 'Not started', attempted: 'Attempted', familiar: 'Familiar', proficient: 'Proficient', mastered: 'Mastered' },
   levelCount: (level, count) => `${level}: ${count}`,
+  levelBefore: 'before',
   notYet: 'Not yet',
   correct: 'Correct',
   yourAnswer: 'Your answer',
@@ -135,6 +138,7 @@ export const es: Messages = {
   stepOf: (n, total) => `${n} de ${total}`,
   levels: { not_started: 'Sin empezar', attempted: 'Intentado', familiar: 'Familiarizado', proficient: 'Competente', mastered: 'Dominado' },
   levelCount: (level, count) => `${level}: ${count}`,
+  levelBefore: 'antes',
   notYet: 'Todavía no',
   correct: 'Correcto',
   yourAnswer: 'Tu respuesta',

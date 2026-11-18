@@ -8,3 +8,7 @@ export function TwoStudents() {
     </div>
   )
 }
+
+export function AfterPractice() {
+  return <LevelLadder level="proficient" was="familiar" />
+}
