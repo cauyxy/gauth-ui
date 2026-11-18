@@ -2,7 +2,7 @@
 
 What changed in each version of `gauth-ui`, newest first. A version is on npm when its number is in `package.json` on `main`.
 
-## Unreleased
+## 0.4.1
 
 ### Added
 
